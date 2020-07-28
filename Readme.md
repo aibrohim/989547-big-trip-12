@@ -1,7 +1,7 @@
 # Личный проект «Большое путешествие» [![Build status][travis-image]][travis-url]
 
 * Студент: [Ibrohim Alimuhammedov](https://up.htmlacademy.ru/ecmascript/12/user/989547).
-* Наставник: `Неизвестно`.
+* Наставник: `Михаил Семиколенов`.
 
 ---
 
