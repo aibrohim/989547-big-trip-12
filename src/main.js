@@ -363,40 +363,40 @@ const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
 
-const siteHeader = document.querySelector('.page-header');
-const tripInfo = siteHeader.querySelector('.trip-main');
+const siteHeader = document.querySelector(`.page-header`);
+const tripInfo = siteHeader.querySelector(`.trip-main`);
 
-render(tripInfo, createLocationCostWrapper(), 'afterbegin');
+render(tripInfo, createLocationCostWrapper(), `afterbegin`);
 
-const locationWrapper = tripInfo.querySelector('.trip-main__trip-info');
+const locationWrapper = tripInfo.querySelector(`.trip-main__trip-info`);
 
-render(locationWrapper, createLocationInfo(), 'afterbegin');
-render(locationWrapper, createCostInfo(), 'beforeend');
+render(locationWrapper, createLocationInfo(), `afterbegin`);
+render(locationWrapper, createCostInfo(), `beforeend`);
 
-const menuFilterWrapper = tripInfo.querySelector('.trip-main__trip-controls');
-const menuFilterFirstTitle = menuFilterWrapper.querySelector('h2');
+const menuFilterWrapper = tripInfo.querySelector(`.trip-main__trip-controls`);
+const menuFilterFirstTitle = menuFilterWrapper.querySelector(`h2`);
 
-render(menuFilterFirstTitle, createMenu(), 'afterend');
-render(menuFilterWrapper, createFilter(), 'beforeend');
+render(menuFilterFirstTitle, createMenu(), `afterend`);
+render(menuFilterWrapper, createFilter(), `beforeend`);
 
-const pageMain = document.querySelector('.page-body__page-main');
-const allEvents = pageMain.querySelector('.trip-events');
+const pageMain = document.querySelector(`.page-body__page-main`);
+const allEvents = pageMain.querySelector(`.trip-events`);
 
-render(allEvents, createSort(), 'beforeend');
-render(allEvents, createAddEvent(), 'beforeend');
-render(allEvents, createTripDaysList(), 'beforeend');
+render(allEvents, createSort(), `beforeend`);
+render(allEvents, createAddEvent(), `beforeend`);
+render(allEvents, createTripDaysList(), `beforeend`);
 
-const tripDaysList = allEvents.querySelector('.trip-days');
+const tripDaysList = allEvents.querySelector(`.trip-days`);
 
-render(tripDaysList, createTripDay(), 'beforeend');
+render(tripDaysList, createTripDay(), `beforeend`);
 
-const tripDay = tripDaysList.querySelector('.trip-days__item');
+const tripDay = tripDaysList.querySelector(`.trip-days__item`);
 
-render(tripDay, createTripPointsList(), 'beforeend');
+render(tripDay, createTripPointsList(), `beforeend`);
 
-const tripPointsList = tripDay.querySelector('.trip-events__list');
+const tripPointsList = tripDay.querySelector(`.trip-events__list`);
 
-for (let i = 0; i < MAX_POINTS; i++) {
-  render(tripPointsList, createTripPoint(), 'afterbegin');
-};
+for (let i = 0; i < MAX_TRIP_POINTS; i++) {
+  render(tripPointsList, createTripPoint(), `afterbegin`);
+}
 
