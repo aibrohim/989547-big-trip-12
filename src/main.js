@@ -1,6 +1,6 @@
 'use strict';
 
-const MAX_POINTS = 3;
+const MAX_TRIP_POINTS = 3;
 
 const createLocationCostWrapper = () => {
   return (
