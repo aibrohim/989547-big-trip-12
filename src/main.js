@@ -4,7 +4,7 @@ import {createCostInfo} from './view/costInfo.js';
 import {createMenu} from './view/menu.js';
 import {createFilter} from './view/filter.js';
 import {createSort} from './view/sort.js';
-import {createAddEvent} from './view/addEvent.js';
+import {createAddEvent} from './view/eventAdder.js';
 import {createTripDaysList} from './view/tripDaysList.js';
 import {createTripDay} from './view/tripDay.js';
 import {createTripPointsList} from './view/tripPointsList.js';
