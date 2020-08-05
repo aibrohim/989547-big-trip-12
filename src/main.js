@@ -1,6 +1,6 @@
 'use strict';
 
-const MAX_TRIP_POINTS = 3;
+const MAX_TRIPS_COUNT = 3;
 
 const createLocationCostWrapper = () => {
   return (
@@ -396,7 +396,7 @@ render(tripDay, createTripPointsList(), `beforeend`);
 
 const tripPointsList = tripDay.querySelector(`.trip-events__list`);
 
-for (let i = 0; i < MAX_TRIP_POINTS; i++) {
+for (let i = 0; i < MAX_TRIPS_COUNT; i++) {
   render(tripPointsList, createTripPoint(), `afterbegin`);
 }
 
