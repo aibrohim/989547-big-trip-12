@@ -9,8 +9,9 @@ import {createTripDaysList} from './view/tripDaysList.js';
 import {createTripDay} from './view/tripDay.js';
 import {createTripPointsList} from './view/tripPointsList.js';
 import {createTripPoint} from './view/tripPoint';
+import {generateTripPoint} from './mock/tripPoint.js';
 
-const MAX_TRIPS_COUNT = 3;
+const MAX_TRIPS = 20;
 
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
@@ -49,7 +50,10 @@ render(tripDay, createTripPointsList(), `beforeend`);
 
 const tripPointsList = tripDay.querySelector(`.trip-events__list`);
 
-for (let i = 0; i < MAX_TRIPS_COUNT; i++) {
-  render(tripPointsList, createTripPoint(), `afterbegin`);
+const tripPointsData = new Array(MAX_TRIPS).fill().map(generateTripPoint);
+
+for (let i = 0; i < MAX_TRIPS; i++) {
+  render(tripPointsList, createTripPoint(tripPointsData[i]), `afterbegin`);
 }
 
+console.log(tripPointsData);
