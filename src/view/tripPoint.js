@@ -1,5 +1,5 @@
 export const createTripPoint = (data) => {
-  const {type, city, offers, about, date, cost} = data;
+  const {type, city, offers, date, cost} = data;
   const {start, finish} = date;
 
   const tripStartTime = () => {
@@ -81,7 +81,7 @@ export const createTripPoint = (data) => {
 
       <h4 class="visually-hidden">Offers:</h4>
       ${offers.length === 0 ? `` : `<ul class="event__selected-offers">
-      ${offers.map((offer) => {
+      ${offers.slice(0, 3).map((offer) => {
       return `<li class="event__offer">
         <span class="event__offer-title">${offer.name}</span>
         &plus;

@@ -10,8 +10,14 @@ import {createTripDay} from './view/tripDay.js';
 import {createTripPointsList} from './view/tripPointsList.js';
 import {createTripPoint} from './view/tripPoint';
 import {generateTripPoint} from './mock/tripPoint.js';
+import {getSetDates} from "./utils.js";
 
 const MAX_TRIPS = 20;
+
+const tripPointsData = new Array(MAX_TRIPS).
+                                            fill()
+                                            .map(generateTripPoint)
+                                            .sort((a, b) => a.date.start - b.date.start);
 
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
@@ -24,8 +30,8 @@ render(tripInfo, createLocationCostWrapper(), `afterbegin`);
 
 const locationWrapper = tripInfo.querySelector(`.trip-main__trip-info`);
 
-render(locationWrapper, createLocationInfo(), `afterbegin`);
-render(locationWrapper, createCostInfo(), `beforeend`);
+render(locationWrapper, createLocationInfo(tripPointsData), `afterbegin`);
+render(locationWrapper, createCostInfo(tripPointsData), `beforeend`);
 
 const menuFilterWrapper = tripInfo.querySelector(`.trip-main__trip-controls`);
 const menuFilterFirstTitle = menuFilterWrapper.querySelector(`h2`);
@@ -37,23 +43,27 @@ const pageMain = document.querySelector(`.page-body__page-main`);
 const allEvents = pageMain.querySelector(`.trip-events`);
 
 render(allEvents, createSort(), `beforeend`);
-render(allEvents, createAddEvent(), `beforeend`);
+render(allEvents, createAddEvent(tripPointsData[0]), `beforeend`);
 render(allEvents, createTripDaysList(), `beforeend`);
 
 const tripDaysList = allEvents.querySelector(`.trip-days`);
 
-render(tripDaysList, createTripDay(), `beforeend`);
+getSetDates(tripPointsData).forEach((date, index) => {
+  const normalDate = new Date(date);
+  const filtredData = tripPointsData.filter((dataItem) => {
+    console.log(dataItem)
+    return normalDate === dataItem.date.start;
+  });
+
+  render(tripDaysList, createTripDay(normalDate, filtredData, index), `beforeend`);
+});
 
 const tripDay = tripDaysList.querySelector(`.trip-days__item`);
 
 render(tripDay, createTripPointsList(), `beforeend`);
 
-const tripPointsList = tripDay.querySelector(`.trip-events__list`);
+// const tripPointsList = tripDay.querySelector(`.trip-events__list`);
 
-const tripPointsData = new Array(MAX_TRIPS).fill().map(generateTripPoint);
-
-for (let i = 0; i < MAX_TRIPS; i++) {
-  render(tripPointsList, createTripPoint(tripPointsData[i]), `afterbegin`);
-}
-
-console.log(tripPointsData);
+// for (let i = 1; i < MAX_TRIPS; i++) {
+//   render(tripPointsList, createTripPoint(tripPointsData[i]), `afterbegin`);
+// }

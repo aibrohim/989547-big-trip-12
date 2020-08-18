@@ -1,20 +1,17 @@
 import {getRandomInteger} from "../utils.js";
-import {OFFERS, SENTENCES} from "../data.js";
+import {OFFERS, SENTENCES, TYPES_LIST, CITIES} from "../data.js";
 
 const generateType = () => {
-  const typesList = [`Taxi`, `Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`, `Check-in`, `Sightseeing`, `Restaurant`];
 
-  const randomIndex = getRandomInteger(0, typesList.length - 1);
+  const randomIndex = getRandomInteger(0, TYPES_LIST.length - 1);
 
-  return typesList[randomIndex];
+  return TYPES_LIST[randomIndex];
 };
 
 const generateCity = () => {
-  const citiesList = [`Dubai`, `Istanbul`, `Makkah`, `Kuala-Lumpur`, `New York`, `Moscow`, `Washingtop`, `California`, `Melbourne`];
+  const randomIndex = getRandomInteger(0, CITIES.length - 1);
 
-  const randomIndex = getRandomInteger(0, citiesList.length - 1);
-
-  return citiesList[randomIndex];
+  return CITIES[randomIndex];
 };
 
 const generateDescription = () => {
@@ -39,14 +36,20 @@ const generateImgLinks = () => {
 const generateTime = () => {
   const currentDate = new Date();
 
-  const randomIndex = getRandomInteger(100000, 900000000);
+  let randomSeconds = getRandomInteger(100000, 200000000);
 
-  const finishDateSeconds = currentDate.getTime() + randomIndex;
+  const startDateSeconds = currentDate.getTime() + randomSeconds;
+
+  const startDate = new Date(startDateSeconds);
+
+  randomSeconds = getRandomInteger(200000000, 400000000);
+
+  const finishDateSeconds = currentDate.getTime() + randomSeconds;
 
   const finishDate = new Date(finishDateSeconds);
 
   return {
-    start: currentDate,
+    start: startDate,
     finish: finishDate
   };
 };
