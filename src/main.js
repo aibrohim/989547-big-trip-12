@@ -8,7 +8,6 @@ import {createAddEvent} from './view/eventAdder.js';
 import {createTripDaysList} from './view/tripDaysList.js';
 import {createTripDay} from './view/tripDay.js';
 import {createTripPointsList} from './view/tripPointsList.js';
-import {createTripPoint} from './view/tripPoint';
 import {generateTripPoint} from './mock/tripPoint.js';
 import {getSetDates} from "./utils.js";
 
@@ -51,8 +50,7 @@ const tripDaysList = allEvents.querySelector(`.trip-days`);
 getSetDates(tripPointsData).forEach((date, index) => {
   const normalDate = new Date(date);
   const filtredData = tripPointsData.filter((dataItem) => {
-    console.log(dataItem)
-    return normalDate === dataItem.date.start;
+    return dataItem.date.start.toDateString() === normalDate.toDateString();
   });
 
   render(tripDaysList, createTripDay(normalDate, filtredData, index), `beforeend`);
