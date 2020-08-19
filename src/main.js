@@ -16,10 +16,10 @@ import {AFTEREND} from "./consts.js";
 
 const MAX_TRIPS = 18;
 
-const tripPointsData = new Array(MAX_TRIPS).
-                                            fill()
-                                            .map(generateTripPoint)
-                                            .sort((a, b) => a.date.start - b.date.start);
+const tripPointsData = new Array(MAX_TRIPS)
+  .fill()
+  .map(generateTripPoint)
+  .sort((a, b) => a.date.start - b.date.start);
 
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
