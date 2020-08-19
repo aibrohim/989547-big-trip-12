@@ -23,9 +23,11 @@ const generateDescription = () => {
 };
 
 const generateImgLinks = () => {
+  const MIN_IMAGES_NUMBER = 1;
+  const MAX_IMAGES_NUMBER = 10;
   const images = [];
 
-  for (let i = 0; i < getRandomInteger(1, 10); i++) {
+  for (let i = 0; i < getRandomInteger(MIN_IMAGES_NUMBER, MAX_IMAGES_NUMBER); i++) {
     let image = `http://picsum.photos/248/152?r=${Math.random()}`;
     images.push(image);
   }
@@ -34,15 +36,19 @@ const generateImgLinks = () => {
 };
 
 const generateTime = () => {
+  const MIN_RANDOM_START_SECONDS = 100000;
+  const MAX_RANDOM_START_SECONDS = 200000000;
+  const MIN_RANDOM_FINISH_SECONDS = 200000000;
+  const MAX_RANDOM_FINISH_SECONDS = 400000000;
   const currentDate = new Date();
 
-  let randomSeconds = getRandomInteger(100000, 200000000);
+  let randomSeconds = getRandomInteger(MIN_RANDOM_START_SECONDS, MAX_RANDOM_START_SECONDS);
 
   const startDateSeconds = currentDate.getTime() + randomSeconds;
 
   const startDate = new Date(startDateSeconds);
 
-  randomSeconds = getRandomInteger(200000000, 400000000);
+  randomSeconds = getRandomInteger(MIN_RANDOM_FINISH_SECONDS, MAX_RANDOM_FINISH_SECONDS);
 
   const finishDateSeconds = currentDate.getTime() + randomSeconds;
 

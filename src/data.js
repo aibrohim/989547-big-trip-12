@@ -1,4 +1,4 @@
-export const CITIES = [`Dubai`, `Istanbul`, `Makkah`, `Kuala-Lumpur`, `New York`, `Moscow`, `Washingtop`, `California`, `Melbourne`];
+export const CITIES = [`Dubai`, `Istanbul`, `Makkah`, `Kuala-Lumpur`, `New York`, `Moscow`, `Washington`, `California`, `Melbourne`];
 
 export const TYPES_LIST = [`Taxi`, `Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`, `Check-in`, `Sightseeing`, `Restaurant`];
 

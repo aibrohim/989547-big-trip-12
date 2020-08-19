@@ -1,6 +1,10 @@
 export const createTripPoint = (data) => {
   const {type, city, offers, date, cost} = data;
   const {start, finish} = date;
+  const MILLISECONDS_IN_SECOND = 1000;
+  const SECONDS_IN_DAY = 86400;
+  const SECONDS_IN_HOUR = 3600;
+  const SECONDS_IN_MINUTE = 60;
 
   const tripStartTime = () => {
     const hours = start.getHours();
@@ -19,39 +23,39 @@ export const createTripPoint = (data) => {
   const tripDuration = () => {
     const startInSecond = start.getTime();
     const finishInSecon = finish.getTime();
-    let durationSeconds = Math.floor((finishInSecon - startInSecond) / 1000);
+    let durationSeconds = Math.floor((finishInSecon - startInSecond) / MILLISECONDS_IN_SECOND);
 
     const durationDays = () => {
-      const days = Math.floor(durationSeconds / 86400);
-      durationSeconds -= (days * 86400);
+      const days = Math.floor(durationSeconds / SECONDS_IN_DAY);
+      durationSeconds -= (days * SECONDS_IN_DAY);
 
       if (days === 0) {
         return ``;
-      } else {
-        return `${days}D `;
       }
+
+      return `${days}D `;
     };
 
     const durationHours = () => {
-      const hours = Math.floor(durationSeconds / 3600);
-      durationSeconds -= (hours * 3600);
+      const hours = Math.floor(durationSeconds / SECONDS_IN_HOUR);
+      durationSeconds -= (hours * SECONDS_IN_HOUR);
 
       if (hours === 0) {
         return ``;
-      } else {
-        return `${hours}H `;
       }
+
+      return `${hours}H `;
     };
 
     const durationMinutes = () => {
-      const minutes = Math.floor(durationSeconds / 60);
-      durationSeconds -= (minutes * 60);
+      const minutes = Math.floor(durationSeconds / SECONDS_IN_MINUTE);
+      durationSeconds -= (minutes * SECONDS_IN_MINUTE);
 
       if (minutes === 0) {
         return ``;
-      } else {
-        return `${minutes}M `;
       }
+
+      return `${minutes}M `;
     };
 
     return `${durationDays()}${durationHours()}${durationMinutes()}`;
