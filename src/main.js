@@ -1,18 +1,15 @@
-import {createLocationCostWrapper} from './view/locationCostWrapper.js';
-import {createLocationInfo} from './view/locationInfo.js';
-import {createCostInfo} from './view/costInfo.js';
-import {createMenu} from './view/menu.js';
-import {createFilter} from './view/filter.js';
+import LocationCostWrapperView from './view/locationCostWrapper.js';
+import LocationInfoView from './view/locationInfo.js';
+import CostInfoView from './view/costInfo.js';
+import MenuView from './view/menu.js';
+import FilterView from './view/filter.js';
 import SortView from './view/sort.js';
-import {createAddEvent} from './view/eventAdder.js';
-import {createTripDaysList} from './view/tripDaysList.js';
-import {createTripDay} from './view/tripDay.js';
-import {createTripPointsList} from './view/tripPointsList.js';
+import EventAdderView from './view/eventAdder.js';
+import TripDaysListView from './view/tripDaysList.js';
+import TripDayView from './view/tripDay.js';
+import TripPointsListView from './view/tripPointsList.js';
 import {generateTripPoint} from './mock/tripPoint.js';
 import {getSetDates} from "./utils.js";
-import {AFTERBEGIN} from "./consts.js";
-import {BEFOREEND} from "./consts.js";
-import {AFTEREND} from "./consts.js";
 import {renderTemplate, renderElement, RenderPosition} from "./utils.js";
 
 const MAX_TRIPS = 18;
@@ -29,25 +26,25 @@ const render = (container, template, place) => {
 const siteHeader = document.querySelector(`.page-header`);
 const tripInfo = siteHeader.querySelector(`.trip-main`);
 
-renderTemplate(tripInfo, createLocationCostWrapper(), AFTERBEGIN);
+renderElement(tripInfo, new LocationCostWrapperView().getElement(), RenderPosition.AFTERBEGIN);
 
 const locationWrapper = tripInfo.querySelector(`.trip-main__trip-info`);
 
-renderTemplate(locationWrapper, createLocationInfo(tripPointsData), AFTERBEGIN);
-renderTemplate(locationWrapper, createCostInfo(tripPointsData), BEFOREEND);
+renderElement(locationWrapper, new LocationInfoView(tripPointsData).getElement(), RenderPosition.AFTERBEGIN);
+renderElement(locationWrapper, new CostInfoView(tripPointsData).getElement(), RenderPosition.BEFOREEND);
 
 const menuFilterWrapper = tripInfo.querySelector(`.trip-main__trip-controls`);
 const menuFilterFirstTitle = menuFilterWrapper.querySelector(`h2`);
 
-renderTemplate(menuFilterFirstTitle, createMenu(), AFTEREND);
-renderTemplate(menuFilterWrapper, createFilter(), BEFOREEND);
+renderElement(menuFilterFirstTitle, new MenuView().getElement(), RenderPosition.AFTEREND);
+renderElement(menuFilterWrapper, new FilterView().getElement(), RenderPosition.BEFOREEND);
 
 const pageMain = document.querySelector(`.page-body__page-main`);
 const allEvents = pageMain.querySelector(`.trip-events`);
 
 renderElement(allEvents, new SortView().getElement(), RenderPosition.AFTERBEGIN);
-renderTemplate(allEvents, createAddEvent(tripPointsData[0]), BEFOREEND);
-renderTemplate(allEvents, createTripDaysList(), BEFOREEND);
+renderElement(allEvents, new EventAdderView(tripPointsData[0]).getElement(), RenderPosition.BEFOREEND);
+renderElement(allEvents, new TripDaysListView().getElement(), RenderPosition.BEFOREEND);
 
 const tripDaysList = allEvents.querySelector(`.trip-days`);
 
@@ -57,10 +54,10 @@ getSetDates(tripPointsData).forEach((date, index) => {
     return dataItem.date.start.toDateString() === normalDate.toDateString();
   });
 
-  renderTemplate(tripDaysList, createTripDay(normalDate, filtredData, index), BEFOREEND);
+  renderElement(tripDaysList, new TripDayView(normalDate, filtredData, index).getElement(), RenderPosition.BEFOREEND);
 });
 
 const tripDay = tripDaysList.querySelector(`.trip-days__item`);
 
-renderTemplate(tripDay, createTripPointsList(), BEFOREEND);
+renderElement(tripDay, new TripPointsListView().getElement(), RenderPosition.BEFOREEND);
 

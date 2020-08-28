@@ -1,11 +1,11 @@
-export const createAddEvent = (data) => {
+import {createElement} from "../utils.js";
+
+const createAddEvent = (data) => {
   const {type, city, offers, about, date, cost} = data;
   const {start, finish} = date;
   const {description, images} = about;
 
-  return (
-    `
-    <form class="trip-events__item  event  event--edit" action="#" method="post">
+  return `<form class="trip-events__item  event  event--edit" action="#" method="post">
     <header class="event__header">
       <div class="event__type-wrapper">
         <label class="event__type  event__type-btn" for="event-type-toggle-1">
@@ -142,7 +142,28 @@ export const createAddEvent = (data) => {
         </div>
       </section>
     </section>
-  </form>
-    `
-  );
+  </form>`;
 };
+
+export default class EventAdder {
+  constructor(info) {
+    this._element = null;
+    this._info = info;
+  }
+
+  getTemplate() {
+    return createAddEvent(this._info);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

@@ -1,4 +1,6 @@
-export const createTripPoint = (data) => {
+import {createElement} from "../utils.js";
+
+const createTripPoint = (data) => {
   const {type, city, offers, date, cost} = data;
   const {start, finish} = date;
   const MILLISECONDS_IN_SECOND = 1000;
@@ -102,3 +104,26 @@ export const createTripPoint = (data) => {
     `
   );
 };
+
+export default class TripPoin {
+  constructor(data) {
+    this._element = null;
+    this._info = data;
+  }
+
+  getTemplate() {
+    return createTripPoint();
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
