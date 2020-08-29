@@ -117,15 +117,14 @@ const createAddEvent = (data) => {
 
         <div class="event__available-offers">
           ${offers.map((offer) =>
-      `<div class="event__offer-selector">
+    `<div class="event__offer-selector">
     <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" ${offer.isChecked === true ? `checked` : ``}>
             <label class="event__offer-label" for="event-offer-luggage-1">
               <span class="event__offer-title">${offer.name}</span>
               &plus;
               &euro;&nbsp;<span class="event__offer-price">${offer.cost}</span>
             </label>
-          </div>`
-    ).join(``)}
+          </div>`).join(``)}
         </div>
       </section>
 
@@ -136,8 +135,8 @@ const createAddEvent = (data) => {
         <div class="event__photos-container">
           <div class="event__photos-tape">
             ${images.map((image) =>
-      `<img class="event__photo" src="${image}" alt="Event photo">`
-    ).join(``)}
+    `<img class="event__photo" src="${image}" alt="Event photo">`
+  ).join(``)}
           </div>
         </div>
       </section>

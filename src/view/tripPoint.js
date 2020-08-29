@@ -63,9 +63,9 @@ const createTripPoint = (data) => {
     return `${durationDays()}${durationHours()}${durationMinutes()}`;
   };
 
-  return (
-    `
-    <li class="trip-events__item">
+  const filtredOffers = offers.slice().filter((offer) => offer.isChecked);
+
+  return `<li class="trip-events__item">
     <div class="event">
       <div class="event__type">
         <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
@@ -87,22 +87,20 @@ const createTripPoint = (data) => {
 
       <h4 class="visually-hidden">Offers:</h4>
       ${offers.length === 0 ? `` : `<ul class="event__selected-offers">
-      ${offers.slice(0, 3).map((offer) => {
-      return `<li class="event__offer">
+      ${filtredOffers.slice(0, 3).map((offer) => {
+    return `<li class="event__offer">
         <span class="event__offer-title">${offer.name}</span>
         &plus;
         &euro;&nbsp;<span class="event__offer-price">${offer.cost}</span>
        </li>`;
-    }).join(``)}
+  }).join(``)}
     </ul>`}
 
       <button class="event__rollup-btn" type="button">
         <span class="visually-hidden">Open event</span>
       </button>
     </div>
-  </li>
-    `
-  );
+  </li>`;
 };
 
 export default class TripPoint {

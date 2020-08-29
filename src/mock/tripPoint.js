@@ -80,6 +80,7 @@ export const generateTripPoint = () => {
       images
     },
     date,
-    cost: generateCost()
+    cost: generateCost(),
+    isFavourite: Boolean(getRandomInteger(0, 1))
   };
 };
