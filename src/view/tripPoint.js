@@ -105,14 +105,14 @@ const createTripPoint = (data) => {
   );
 };
 
-export default class TripPoin {
+export default class TripPoint {
   constructor(data) {
     this._element = null;
     this._info = data;
   }
 
   getTemplate() {
-    return createTripPoint();
+    return createTripPoint(this._info);
   }
 
   getElement() {
