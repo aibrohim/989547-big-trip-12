@@ -17,9 +17,9 @@ export const OFFERS = new Map([
       isChecked: false
     },
     {
-      name: `Add luggage`,
-      cost: `35`,
-      isChecked: false
+      name: `Order Uber`,
+      cost: `20`,
+      isChecked: true
     },
     {
       name: `Add luggage`,
@@ -29,7 +29,7 @@ export const OFFERS = new Map([
     {
       name: `Add luggage`,
       cost: `35`,
-      isChecked: false
+      isChecked: true
     }
   ]],
   [`Train`, [

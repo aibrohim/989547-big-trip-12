@@ -1,11 +1,11 @@
-export const createAddEvent = (data) => {
+import {createElement} from "../utils.js";
+
+const createAddEvent = (data) => {
   const {type, city, offers, about, date, cost} = data;
   const {start, finish} = date;
   const {description, images} = about;
 
-  return (
-    `
-    <form class="trip-events__item  event  event--edit" action="#" method="post">
+  return `<form class="trip-events__item  event  event--edit" action="#" method="post">
     <header class="event__header">
       <div class="event__type-wrapper">
         <label class="event__type  event__type-btn" for="event-type-toggle-1">
@@ -117,15 +117,14 @@ export const createAddEvent = (data) => {
 
         <div class="event__available-offers">
           ${offers.map((offer) =>
-      `<div class="event__offer-selector">
+    `<div class="event__offer-selector">
     <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" ${offer.isChecked === true ? `checked` : ``}>
             <label class="event__offer-label" for="event-offer-luggage-1">
               <span class="event__offer-title">${offer.name}</span>
               &plus;
               &euro;&nbsp;<span class="event__offer-price">${offer.cost}</span>
             </label>
-          </div>`
-    ).join(``)}
+          </div>`).join(``)}
         </div>
       </section>
 
@@ -136,13 +135,34 @@ export const createAddEvent = (data) => {
         <div class="event__photos-container">
           <div class="event__photos-tape">
             ${images.map((image) =>
-      `<img class="event__photo" src="${image}" alt="Event photo">`
-    ).join(``)}
+    `<img class="event__photo" src="${image}" alt="Event photo">`
+  ).join(``)}
           </div>
         </div>
       </section>
     </section>
-  </form>
-    `
-  );
+  </form>`;
 };
+
+export default class EventAdder {
+  constructor(info) {
+    this._element = null;
+    this._info = info;
+  }
+
+  getTemplate() {
+    return createAddEvent(this._info);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
