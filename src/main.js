@@ -14,7 +14,7 @@ import {generateTripPoint} from './mock/tripPoint.js';
 import {getSetDates} from "./utils.js";
 import {render, RenderPosition} from "./utils.js";
 
-const MAX_TRIPS = 0;
+const MAX_TRIPS = 15;
 
 const renderPoint = (tripPointsListElement, tripPointInfo) => {
   const pointComponent = new TripPointView(tripPointInfo);
