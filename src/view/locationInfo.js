@@ -1,4 +1,4 @@
-import {createElement} from "../utils.js";
+import AbstractView from "./Abstract.js";
 
 const createLocationInfo = (data) => {
   const directions = () => {
@@ -19,25 +19,13 @@ const createLocationInfo = (data) => {
             </div>`;
 };
 
-export default class LocationInfo {
+export default class LocationInfo extends AbstractView {
   constructor(data) {
-    this._element = null;
+    super();
     this._info = data;
   }
 
   getTemplate() {
     return createLocationInfo(this._info);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
