@@ -21,8 +21,8 @@ export default class Board {
   }
 
   init(data) {
-    this._pointsData = data;
-    this._defaultData = data.slice();
+    this._pointsData = data.slice();
+    this._sourcedData = data.slice();
 
     if (this._pointsData.length === 0) {
       this._renderNoPoints();
@@ -63,11 +63,13 @@ export default class Board {
 
     switch (sortType) {
       case SortType.TIME:
-        this._defaultData.sort(sortTime);
+        this._pointsData.sort(sortTime);
         break;
       case SortType.PRICE:
-        this._defaultData.sort(sortPrice);
+        this._pointsData.sort(sortPrice);
         break;
+      default:
+        this._pointsData = this._sourcedData.slice();
     }
 
     this._currentSortType = sortType;
@@ -80,10 +82,9 @@ export default class Board {
 
     this._sortTasks(sortType);
     this._clearPoints();
-    this._renderTripDaysList();
-    getSetDates(this._defaultData).forEach((date, index) => {
+    getSetDates(this._pointsData).forEach((date, index) => {
       const normalDate = new Date(date);
-      const filtredData = this._defaultData.filter((dataItem) => {
+      const filtredData = this._pointsData.filter((dataItem) => {
         return dataItem.date.start.toDateString() === normalDate.toDateString();
       });
 
