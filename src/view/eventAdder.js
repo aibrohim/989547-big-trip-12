@@ -1,4 +1,4 @@
-import {createElement} from "../utils.js";
+import AbstractView from "./Abstract.js";
 
 const createAddEvent = (data) => {
   const {type, city, offers, about, date, cost} = data;
@@ -144,25 +144,13 @@ const createAddEvent = (data) => {
   </form>`;
 };
 
-export default class EventAdder {
+export default class EventAdder extends AbstractView {
   constructor(info) {
-    this._element = null;
+    super();
     this._info = info;
   }
 
   getTemplate() {
     return createAddEvent(this._info);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

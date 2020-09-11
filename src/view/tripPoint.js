@@ -1,4 +1,4 @@
-import {createElement} from "../utils.js";
+import AbstractView from "./Abstract.js";
 
 const createTripPoint = (data) => {
   const {type, city, offers, date, cost} = data;
@@ -103,25 +103,24 @@ const createTripPoint = (data) => {
   </li>`;
 };
 
-export default class TripPoint {
+export default class TripPoint extends AbstractView {
   constructor(data) {
-    this._element = null;
+    super();
     this._info = data;
+    this._editClickHandler = this._editClickHandler.bind(this);
   }
 
   getTemplate() {
     return createTripPoint(this._info);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _editClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.editClick();
   }
 
-  removeElement() {
-    this._element = null;
+  setEditClickHandler(callback) {
+    this._callback.editClick = callback;
+    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._editClickHandler);
   }
 }

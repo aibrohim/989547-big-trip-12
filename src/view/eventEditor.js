@@ -1,4 +1,4 @@
-import {createElement} from "../utils.js";
+import AbstractView from "./Abstract.js";
 
 const createEventAdder = (data) => {
   const {type, city, offers, date, cost, isFavourite} = data;
@@ -144,25 +144,35 @@ const createEventAdder = (data) => {
 </form>`;
 };
 
-export default class EventEditor {
+export default class EventEditor extends AbstractView {
   constructor(info) {
-    this._element = null;
+    super();
     this._info = info;
+
+    this._pointOpenClikHandler = this._pointOpenClikHandler.bind(this);
+    this._pointEscPress = this._pointEscPress.bind(this);
+  }
+
+  _pointEscPress() {
+    this._callback.escPress();
+  }
+
+  _pointOpenClikHandler(evt) {
+    evt.preventDefault();
+    this._callback.poinOpenClick();
   }
 
   getTemplate() {
     return createEventAdder(this._info);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  setPointOpenHandler(callback) {
+    this._callback.poinOpenClick = callback;
+    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._pointOpenClikHandler);
   }
 
-  removeElement() {
-    this._element = null;
+  setEscPressHandler(callback) {
+    this._pointEscPress = callback;
+    this.getElement().addEventListener(`submit`, this._pointEscPress);
   }
 }

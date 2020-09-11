@@ -1,4 +1,4 @@
-import {getRandomInteger} from "../utils.js";
+import {getRandomInteger} from "../utils/common.js";
 import {OFFERS, SENTENCES, TYPES_LIST, CITIES} from "../data.js";
 
 const generateType = () => {
