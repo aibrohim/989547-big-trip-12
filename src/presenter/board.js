@@ -33,26 +33,11 @@ export default class Board {
     if (this._pointsData.length > 0) {
       this._renderTripDaysList();
 
-      getSetDates(this._pointsData).forEach((date, index) => {
-        const normalDate = new Date(date);
-        const filtredData = this._pointsData.filter((dataItem) => {
-          return dataItem.date.start.toDateString() === normalDate.toDateString();
-        });
-
-        this._tripDayComponent = new TripDayView(normalDate, filtredData, index);
-        this._renderTripDay(filtredData);
-
-        this._tripPointsListComponent = new TripPointsListView();
-        this._renderTripPointsList();
-
-        filtredData.forEach((dataItem) => {
-          this._renderPoint(dataItem);
-        });
-      });
+      this._defaultRendering(this._pointsData);
     }
   }
 
-  _sortTasks(sortType) {
+  _sortPoints(sortType) {
     const sortTime = (a, b) => {
       const firstDate = a.date.finish - a.date.start;
       const secondDate = b.date.finish - b.date.start;
@@ -80,16 +65,32 @@ export default class Board {
       return;
     }
 
-    this._sortTasks(sortType);
+    this._sortPoints(sortType);
     this._clearPoints();
-    getSetDates(this._pointsData).forEach((date, index) => {
+
+    if (sortType === SortType.DEFAULT) {
+      this._defaultRendering(this._pointsData);
+    } else {
+      this._tripDayComponent = new TripDayView();
+      this._renderTripDay();
+      this._tripPointsListComponent = new TripPointsListView();
+      this._renderTripPointsList();
+      this._pointsData.forEach((element) => {
+        this._renderPoint(element);
+      });
+    }
+
+  }
+
+  _defaultRendering(data) {
+    getSetDates(data).forEach((date, index) => {
       const normalDate = new Date(date);
-      const filtredData = this._pointsData.filter((dataItem) => {
+      const filtredData = data.filter((dataItem) => {
         return dataItem.date.start.toDateString() === normalDate.toDateString();
       });
 
-      this._tripDayComponent = new TripDayView(normalDate, filtredData, index);
-      this._renderTripDay(filtredData);
+      this._tripDayComponent = new TripDayView(normalDate, index);
+      this._renderTripDay();
 
       this._tripPointsListComponent = new TripPointsListView();
       this._renderTripPointsList();
