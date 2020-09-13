@@ -7,18 +7,22 @@ import TripPointView from './../view/tripPoint.js';
 import NoPointView from './../view/noPoint.js';
 import {render, RenderPosition, replace} from './../utils/render.js';
 import {getSetDates} from "./../utils/point.js";
+import {SortType} from "./../consts.js";
 
 export default class Board {
   constructor(boardContainer) {
     this._boardContainer = boardContainer;
+    this._defaultSortType = SortType.DEFAULT;
 
     this._sortComponent = new SortView();
     this._tripDaysListComponent = new TripDaysListView();
     this._noPointsComponent = new NoPointView();
+    this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
   }
 
   init(data) {
-    this._pointsData = data;
+    this._pointsData = data.slice();
+    this._sourcedData = data.slice();
 
     if (this._pointsData.length === 0) {
       this._renderNoPoints();
@@ -29,27 +33,77 @@ export default class Board {
     if (this._pointsData.length > 0) {
       this._renderTripDaysList();
 
-      getSetDates(this._pointsData).forEach((date, index) => {
-        const normalDate = new Date(date);
-        const filtredData = this._pointsData.filter((dataItem) => {
-          return dataItem.date.start.toDateString() === normalDate.toDateString();
-        });
+      this._defaultRendering(this._pointsData);
+    }
+  }
 
-        this._tripDayComponent = new TripDayView(normalDate, filtredData, index);
-        this._renderTripDay(filtredData);
+  _sortPoints(sortType) {
+    const sortTime = (a, b) => {
+      const firstDate = a.date.finish - a.date.start;
+      const secondDate = b.date.finish - b.date.start;
+      return secondDate - firstDate;
+    };
 
-        this._tripPointsListComponent = new TripPointsListView();
-        this._renderTripPointsList();
+    const sortPrice = (a, b) => b.cost - a.cost;
 
-        filtredData.forEach((dataItem) => {
-          this._renderPoint(dataItem);
-        });
+    switch (sortType) {
+      case SortType.TIME:
+        this._pointsData.sort(sortTime);
+        break;
+      case SortType.PRICE:
+        this._pointsData.sort(sortPrice);
+        break;
+      default:
+        this._pointsData = this._sourcedData.slice();
+    }
+
+    this._currentSortType = sortType;
+  }
+
+  _handleSortTypeChange(sortType) {
+    if (this._currentSortType === sortType) {
+      return;
+    }
+
+    this._sortPoints(sortType);
+    this._clearPoints();
+
+    if (sortType === SortType.DEFAULT) {
+      this._defaultRendering(this._pointsData);
+    } else {
+      this._tripDayComponent = new TripDayView();
+      this._renderTripDay();
+      this._tripPointsListComponent = new TripPointsListView();
+      this._renderTripPointsList();
+      this._pointsData.forEach((element) => {
+        this._renderPoint(element);
       });
     }
+
+  }
+
+  _defaultRendering(data) {
+    getSetDates(data).forEach((date, index) => {
+      const normalDate = new Date(date);
+      const filtredData = data.filter((dataItem) => {
+        return dataItem.date.start.toDateString() === normalDate.toDateString();
+      });
+
+      this._tripDayComponent = new TripDayView(normalDate, index);
+      this._renderTripDay();
+
+      this._tripPointsListComponent = new TripPointsListView();
+      this._renderTripPointsList();
+
+      filtredData.forEach((dataItem) => {
+        this._renderPoint(dataItem);
+      });
+    });
   }
 
   _renderSort() {
     render(this._boardContainer, this._sortComponent, RenderPosition.AFTERBEGIN);
+    this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
   }
 
   _renderNoPoints() {
@@ -66,6 +120,10 @@ export default class Board {
 
   _renderTripPointsList() {
     render(this._tripDayComponent, this._tripPointsListComponent, RenderPosition.BEFOREEND);
+  }
+
+  _clearPoints() {
+    this._tripDaysListComponent.getElement().innerHTML = ``;
   }
 
   _renderPoint(tripPointInfo) {
