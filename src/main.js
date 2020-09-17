@@ -14,6 +14,8 @@ const tripPointsData = new Array(MAX_TRIPS)
   .map(generateTripPoint)
   .sort((a, b) => a.date.start - b.date.start);
 
+window.data = tripPointsData;
+
 const siteHeader = document.querySelector(`.page-header`);
 const tripInfo = siteHeader.querySelector(`.trip-main`);
 

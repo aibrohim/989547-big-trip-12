@@ -1,6 +1,8 @@
 import {getRandomInteger} from "../utils/common.js";
 import {OFFERS, SENTENCES, TYPES_LIST, CITIES} from "../data.js";
 
+const generateId = () => Date.now() + parseInt(Math.random() * 1000, 10);
+
 const generateType = () => {
 
   const randomIndex = getRandomInteger(0, TYPES_LIST.length - 1);
@@ -65,6 +67,7 @@ const generateCost = () => {
 };
 
 export const generateTripPoint = () => {
+  const id = generateId();
   const type = generateType();
   const city = generateCity();
   const description = generateDescription();
@@ -72,6 +75,7 @@ export const generateTripPoint = () => {
   const date = generateTime();
 
   return {
+    id,
     type,
     city,
     offers: OFFERS.get(type),

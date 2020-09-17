@@ -106,6 +106,7 @@ const createTripPoint = (data) => {
 export default class TripPoint extends AbstractView {
   constructor(data) {
     super();
+
     this._info = data;
     this._editClickHandler = this._editClickHandler.bind(this);
   }

@@ -151,6 +151,11 @@ export default class EventEditor extends AbstractView {
 
     this._pointOpenClikHandler = this._pointOpenClikHandler.bind(this);
     this._pointEscPress = this._pointEscPress.bind(this);
+    this._favouriteClickHandler = this._favouriteClickHandler.bind(this);
+  }
+
+  _favouriteClickHandler() {
+    this._callback.favouriteClick();
   }
 
   _pointEscPress() {
@@ -162,8 +167,19 @@ export default class EventEditor extends AbstractView {
     this._callback.poinOpenClick();
   }
 
+
   getTemplate() {
     return createEventAdder(this._info);
+  }
+
+  _saveHandler(evt) {
+    evt.preventDefault();
+    this._callback.saveHandler(this._info);
+  }
+
+  setFavouriteClick(callback) {
+    this._callback.favouriteClick = callback;
+    this.getElement().querySelector(`.event__favorite-btn`).addEventListener(`click`, this._favouriteClickHandler);
   }
 
   setPointOpenHandler(callback) {
@@ -172,7 +188,7 @@ export default class EventEditor extends AbstractView {
   }
 
   setEscPressHandler(callback) {
-    this._pointEscPress = callback;
+    this._saveHandler = callback;
     this.getElement().addEventListener(`submit`, this._pointEscPress);
   }
 }
