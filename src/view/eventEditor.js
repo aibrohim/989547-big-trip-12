@@ -152,6 +152,7 @@ export default class EventEditor extends AbstractView {
     this._pointOpenClikHandler = this._pointOpenClikHandler.bind(this);
     this._pointEscPress = this._pointEscPress.bind(this);
     this._favouriteClickHandler = this._favouriteClickHandler.bind(this);
+    this._saveHandler = this._saveHandler.bind(this);
   }
 
   _favouriteClickHandler() {
@@ -188,7 +189,12 @@ export default class EventEditor extends AbstractView {
   }
 
   setEscPressHandler(callback) {
-    this._saveHandler = callback;
+    this._pointEscPress = callback;
     this.getElement().addEventListener(`submit`, this._pointEscPress);
+  }
+
+  setSubmitHandler(callback) {
+    this._saveHandler = callback;
+    this.getElement().addEventListener(`submit`, this._saveHandler);
   }
 }

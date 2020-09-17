@@ -45,6 +45,7 @@ export default class Board {
   _handlePointChange(updatePoint) {
     this._pointsData = updateItem(this._pointsData, updatePoint);
     this._sourcedData = updateItem(this._sourcedData, updatePoint);
+    console.log(updatePoint);
     this._pointPresenters[updatePoint.id].init(updatePoint);
   }
 
@@ -117,8 +118,8 @@ export default class Board {
   }
 
   _renderPoint(data) {
-    const point = new Point(this._handlePointChange);
-    point.init(data, this._tripPointsListComponent);
+    const point = new Point(this._tripPointsListComponent, this._handlePointChange);
+    point.init(data);
     this._pointPresenters[data.id] = point;
   }
 
