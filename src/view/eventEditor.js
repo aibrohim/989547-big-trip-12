@@ -178,7 +178,6 @@ export default class EventEditor extends AbstractView {
 
   _typeChangeHandler(evt) {
     const eventTypePresenter = document.querySelector(`.event__type-icon`);
-    console.log(eventTypePresenter);
 
     if (evt.target.tagName !== `LABEL`) {
       return;
