@@ -1,4 +1,4 @@
-import AbstractView from "./Abstract.js";
+import Smart from "./Smart.js";
 
 const createEventAdder = (data) => {
   const {type, city, offers, date, cost, isFavourite} = data;
@@ -19,37 +19,37 @@ const createEventAdder = (data) => {
 
           <div class="event__type-item">
             <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi" ${type.toLowerCase() === `taxi` ? `checked` : ``}>
-            <label class="event__type-label  event__type-label--taxi" data-type="taxi" for="event-type-taxi-1">Taxi</label>
+            <label class="event__type-label  event__type-label--taxi" data-type="Taxi" for="event-type-taxi-1">Taxi</label>
           </div>
 
           <div class="event__type-item">
             <input id="event-type-bus-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus" ${type.toLowerCase() === `bus` ? `checked` : ``}>
-            <label class="event__type-label  event__type-label--bus" data-type="bus" for="event-type-bus-1">Bus</label>
+            <label class="event__type-label  event__type-label--bus" data-type="Bus" for="event-type-bus-1">Bus</label>
           </div>
 
           <div class="event__type-item">
             <input id="event-type-train-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train" ${type.toLowerCase() === `train` ? `checked` : ``}>
-            <label class="event__type-label  event__type-label--train" data-type="train" for="event-type-train-1">Train</label>
+            <label class="event__type-label  event__type-label--train" data-type="Train" for="event-type-train-1">Train</label>
           </div>
 
           <div class="event__type-item">
             <input id="event-type-ship-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="ship" ${type.toLowerCase() === `ship` ? `checked` : ``}>
-            <label class="event__type-label  event__type-label--ship" data-type="ship" for="event-type-ship-1">Ship</label>
+            <label class="event__type-label  event__type-label--ship" data-type="Ship" for="event-type-ship-1">Ship</label>
           </div>
 
           <div class="event__type-item">
             <input id="event-type-transport-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="transport" ${type.toLowerCase() === `transport` ? `checked` : ``}>
-            <label class="event__type-label  event__type-label--transport" data-type="transport" for="event-type-transport-1">Transport</label>
+            <label class="event__type-label  event__type-label--transport" data-type="Transport" for="event-type-transport-1">Transport</label>
           </div>
 
           <div class="event__type-item">
             <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive" ${type.toLowerCase() === `drive` ? `checked` : ``}>
-            <label class="event__type-label  event__type-label--drive" data-type="drive" for="event-type-drive-1">Drive</label>
+            <label class="event__type-label  event__type-label--drive" data-type="Drive" for="event-type-drive-1">Drive</label>
           </div>
 
           <div class="event__type-item">
             <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" ${type.toLowerCase() === `flight` ? `checked` : ``}>
-            <label class="event__type-label  event__type-label--flight" data-type="flight" for="event-type-flight-1">Flight</label>
+            <label class="event__type-label  event__type-label--flight" data-type="Flight" for="event-type-flight-1">Flight</label>
           </div>
         </fieldset>
 
@@ -58,17 +58,17 @@ const createEventAdder = (data) => {
 
           <div class="event__type-item">
             <input id="event-type-check-in-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="check-in" ${type.toLowerCase() === `check-in` ? `checked` : ``}>
-            <label class="event__type-label  event__type-label--check-in" data-type="check-in"  for="event-type-check-in-1">Check-in</label>
+            <label class="event__type-label  event__type-label--check-in" data-type="Check-in"  for="event-type-check-in-1">Check-in</label>
           </div>
 
           <div class="event__type-item">
             <input id="event-type-sightseeing-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="sightseeing" ${type.toLowerCase() === `sightseeeing` ? `checked` : ``}>
-            <label class="event__type-label  event__type-label--sightseeing" data-type="sightseeing" for="event-type-sightseeing-1">Sightseeing</label>
+            <label class="event__type-label  event__type-label--sightseeing" data-type="Sightseeing" for="event-type-sightseeing-1">Sightseeing</label>
           </div>
 
           <div class="event__type-item">
             <input id="event-type-restaurant-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="restaurant" ${type.toLowerCase() === `restaurant` ? `checked` : ``}>
-            <label class="event__type-label  event__type-label--restaurant" data-type="restaurant" for="event-type-restaurant-1">Restaurant</label>
+            <label class="event__type-label  event__type-label--restaurant" data-type="Restaurant" for="event-type-restaurant-1">Restaurant</label>
           </div>
         </fieldset>
       </div>
@@ -144,10 +144,10 @@ const createEventAdder = (data) => {
 </form>`;
 };
 
-export default class EventEditor extends AbstractView {
-  constructor(info) {
+export default class EventEditor extends Smart {
+  constructor(data) {
     super();
-    this._info = info;
+    this._data = data;
 
     this._pointOpenClikHandler = this._pointOpenClikHandler.bind(this);
     this._pointEscPress = this._pointEscPress.bind(this);
@@ -155,7 +155,11 @@ export default class EventEditor extends AbstractView {
     this._saveHandler = this._saveHandler.bind(this);
     this._typeChangeHandler = this._typeChangeHandler.bind(this);
 
-    this.getElement().querySelector(`.event__type-list`).addEventListener(`click`, this._typeChangeHandler);
+    this._setInnerHandlers();
+  }
+
+  resetData(data) {
+    this.updateData(data);
   }
 
   _favouriteClickHandler() {
@@ -173,7 +177,7 @@ export default class EventEditor extends AbstractView {
 
 
   getTemplate() {
-    return createEventAdder(this._info);
+    return createEventAdder(this._data);
   }
 
   _typeChangeHandler(evt) {
@@ -184,34 +188,18 @@ export default class EventEditor extends AbstractView {
     this.updateData({type: evt.target.dataset.type});
   }
 
+  _setInnerHandlers() {
+    this.getElement().querySelector(`.event__type-list`).addEventListener(`click`, this._typeChangeHandler);
+  }
+
+  restoreHandlers() {
+    this._setInnerHandlers();
+    this.setSubmitHandler(this._callback.saveHandler);
+  }
+
   _saveHandler(evt) {
     evt.preventDefault();
-    this._callback.saveHandler(this._info);
-  }
-
-  updateData(updateData) {
-    if (!updateData) {
-      return;
-    }
-
-    this._info = Object.assign(
-        {},
-        this._info,
-        updateData
-    );
-
-    this.updateElement();
-  }
-
-  updateElement() {
-    let prevElement = this.getElement();
-    const parent = prevElement.parentElement;
-    this.removeElement();
-
-    const newElement = this.getElement();
-
-    parent.replaceChild(newElement, prevElement);
-    prevElement = null;
+    this._callback.saveHandler(this._data);
   }
 
   setFavouriteClick(callback) {
