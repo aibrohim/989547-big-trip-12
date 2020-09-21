@@ -231,6 +231,6 @@ export default class EventEditor extends AbstractView {
 
   setSubmitHandler(callback) {
     this._callback.saveHandler = callback;
-    this.getElement().addEventListener(`submit`, this._saveHandler);
+    this.getElement().querySelector(`.event__save-btn`).addEventListener(`click`, this._saveHandler);
   }
 }
