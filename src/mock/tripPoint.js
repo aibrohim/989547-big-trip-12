@@ -51,7 +51,7 @@ const generateFromDate = () => {
 }
 
 const generateToDate = () => {
-  const MIN_RANDOM_FINISH_SECONDS = 200000000;
+  const MIN_RANDOM_FINISH_SECONDS = 300000000;
   const MAX_RANDOM_FINISH_SECONDS = 400000000;
   const currentDate = new Date();
 
@@ -75,7 +75,7 @@ export const generateTripPoint = () => {
   const description = generateDescription();
   const images = generateImgLinks();
   const dateFrom = generateFromDate();
-  const dateTo = generateFromDate();
+  const dateTo = generateToDate();
 
   return {
     id,

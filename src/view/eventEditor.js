@@ -4,7 +4,8 @@ import flatpickr from "flatpickr";
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 
 const createEventAdder = (data) => {
-  const {type, city, offers, dateFrom, dateTo, cost, isFavourite} = data;
+  const {type, city, offers, about, dateFrom, dateTo, cost, isFavourite} = data;
+  const {description, images} = about;
 
   return `<form class="event  event--edit" action="#" method="post">
   <header class="event__header">
@@ -131,10 +132,10 @@ const createEventAdder = (data) => {
       <div class="event__available-offers">
 
       <div class="event__available-offers">
-      ${offers.map((offer) =>
+      ${offers.map((offer, index) =>
     `<div class="event__offer-selector">
-        <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" ${offer.isChecked === true ? `checked` : ``}>
-        <label class="event__offer-label" for="event-offer-luggage-1">
+        <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${index}" type="checkbox" name="event-offer-luggage" ${offer.isChecked === true ? `checked` : ``}>
+        <label class="event__offer-label" for="event-offer-luggage-${index}">
           <span class="event__offer-title">${offer.name}</span>
           &plus;
           &euro;&nbsp;<span class="event__offer-price">${offer.cost}</span>
@@ -142,6 +143,18 @@ const createEventAdder = (data) => {
       </div>`).join(``)}
       </div>
     </section>
+    <section class="event__section  event__section--destination">
+        <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+        <p class="event__destination-description">${description}</p>
+
+        <div class="event__photos-container">
+          <div class="event__photos-tape">
+            ${images.map((image) =>
+    `<img class="event__photo" src="${image}" alt="Event photo">`
+  ).join(``)}
+          </div>
+        </div>
+      </section>
   </section>
 </form>`;
 };
@@ -150,18 +163,22 @@ export default class EventEditor extends Smart {
   constructor(data) {
     super();
     this._data = data;
-    this._datePicker = null;
+    this._dateFromPicker = null;
+    this._dateToPicker = null;
 
     this._pointOpenClikHandler = this._pointOpenClikHandler.bind(this);
     this._pointEscPress = this._pointEscPress.bind(this);
     this._favouriteClickHandler = this._favouriteClickHandler.bind(this);
     this._saveHandler = this._saveHandler.bind(this);
     this._typeChangeHandler = this._typeChangeHandler.bind(this);
-    this._setDatePicker = this._setDatePicker.bind(this);
+    this._setDateFromPicker = this._setDateFromPicker.bind(this);
     this._startDateChangeHandler = this._startDateChangeHandler.bind(this);
+    this._setDateToPicker = this._setDateToPicker.bind(this);
+    this._endDateChangeHandler = this._endDateChangeHandler.bind(this);
 
     this._setInnerHandlers();
-    this._setDatePicker();
+    this._setDateToPicker();
+    this._setDateFromPicker();
   }
 
   resetData(data) {
@@ -193,8 +210,17 @@ export default class EventEditor extends Smart {
     this.updateData({type: evt.target.dataset.type});
   }
 
-  _setDatePicker() {
-    this._datePicker = flatpickr(
+  _setDateFromPicker() {
+    if ((this._data.dateTo - this._data.dateFrom) <= 0) {
+      this.getElement().querySelector(`#event-end-time-1`).setCustomValidity(`Привет!`);
+    }
+
+    if (this._dateFromPicker) {
+      this._dateFromPicker.destroy();
+      this._dateFromPicker = null;
+    }
+
+    this._dateFromPicker = flatpickr(
         this.getElement().querySelector(`#event-start-time-1`),
         {
           enableTime: true,
@@ -205,19 +231,50 @@ export default class EventEditor extends Smart {
     );
   }
 
+  _setDateToPicker() {
+    if ((this._data.dateTo - this._data.dateFrom) <= 0) {
+      console.log(this.getElement().querySelector(`#event-end-time-1`));
+      this.getElement().querySelector(`#event-end-time-1`).setCustomValidity(`Привет!`);
+    }
+
+    if (this._dateToPicker) {
+      this._dateToPicker.destroy();
+      this._dateToPicker = null;
+    }
+
+    this._dateToPicker = flatpickr(
+        this.getElement().querySelector(`#event-end-time-1`),
+        {
+          enableTime: true,
+          defaultDate: this._data.dateTo,
+          dateFormat: `d/m/y H:i`,
+          onChange: this._endDateChangeHandler
+        }
+    );
+  }
+
   _startDateChangeHandler([userDate]) {
     this.updateData({
       dateFrom: userDate
     });
   }
 
+  _endDateChangeHandler([userDate]) {
+    this.updateData({
+      dateTo: userDate
+    });
+  }
+
   _setInnerHandlers() {
     this.getElement().querySelector(`.event__type-list`).addEventListener(`click`, this._typeChangeHandler);
-    this.getElement().querySelector(`#event-start-time-1`).addEventListener(`change`, this._setDatePicker);
+    this.getElement().querySelector(`#event-start-time-1`).addEventListener(`change`, this._setDateFromPicker);
+    this.getElement().querySelector(`#event-end-time-1`).addEventListener(`change`, this._setDateToPicker);
   }
 
   restoreHandlers() {
     this._setInnerHandlers();
+    this._setDateFromPicker();
+    this._setDateToPicker();
     this.setSubmitHandler(this._callback.saveHandler);
   }
 

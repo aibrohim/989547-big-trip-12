@@ -46,14 +46,13 @@ export default class Board {
   _handlePointChange(updatePoint) {
     this._pointsData = updateItem(this._pointsData, updatePoint);
     this._sourcedData = updateItem(this._sourcedData, updatePoint);
-    console.log(updatePoint);
     this._pointPresenters[updatePoint.id].init(updatePoint);
   }
 
   _sortPoints(sortType) {
     const sortTime = (a, b) => {
       const firstDate = a.dateFrom - a.dateTo;
-      const secondDate = b.dateTo - b.dateFrom;
+      const secondDate = b.dateFrom - b.dateTo;
       return secondDate - firstDate;
     };
 
