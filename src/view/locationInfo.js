@@ -7,9 +7,9 @@ const createLocationInfo = (data) => {
     }
     return data.map((information) => information.city).join(` - `);
   };
-  const sortedData = data.slice().sort((a, b) => a.date.start - b.date.start);
-  const minDate = sortedData[0].date.start;
-  const maxDate = sortedData.slice(-1)[0].date.start;
+  const sortedData = data.slice().sort((a, b) => a.dateFrom - b.dateTo);
+  const minDate = sortedData[0].dateFrom;
+  const maxDate = sortedData.slice(-1)[0].dateFrom;
   const monthBoolean = minDate.getMonth() === maxDate.getMonth();
 
   return `<div class="trip-info__main">

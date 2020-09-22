@@ -52,8 +52,8 @@ export default class Board {
 
   _sortPoints(sortType) {
     const sortTime = (a, b) => {
-      const firstDate = a.date.finish - a.date.start;
-      const secondDate = b.date.finish - b.date.start;
+      const firstDate = a.dateFrom - a.dateTo;
+      const secondDate = b.dateTo - b.dateFrom;
       return secondDate - firstDate;
     };
 
@@ -102,7 +102,7 @@ export default class Board {
     getSetDates(data).forEach((date, index) => {
       const normalDate = new Date(date);
       const filtredData = data.filter((dataItem) => {
-        return dataItem.date.start.toDateString() === normalDate.toDateString();
+        return dataItem.dateFrom.toDateString() === normalDate.toDateString();
       });
 
       this._tripDayComponent = new TripDayView(normalDate, index);

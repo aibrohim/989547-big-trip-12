@@ -1,8 +1,10 @@
 import Smart from "./Smart.js";
+import flatpickr from "flatpickr";
+
+import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 
 const createEventAdder = (data) => {
-  const {type, city, offers, date, cost, isFavourite} = data;
-  const {start, finish} = date;
+  const {type, city, offers, dateFrom, dateTo, cost, isFavourite} = data;
 
   return `<form class="event  event--edit" action="#" method="post">
   <header class="event__header">
@@ -90,12 +92,12 @@ const createEventAdder = (data) => {
         <label class="visually-hidden" for="event-start-time-1">
           From
         </label>
-        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${start.getDate()}/${start.getMonth() + 1}/${start.getFullYear().toString().slice(2, 4)} ${start.getHours()}:${start.getMinutes()}">
+        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dateFrom.getDate()}/${dateFrom.getMonth() + 1}/${dateFrom.getFullYear().toString().slice(2, 4)} ${dateFrom.getHours()}:${dateFrom.getMinutes()}">
         &mdash;
         <label class="visually-hidden" for="event-end-time-1">
           To
         </label>
-        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${finish.getDate()}/${finish.getMonth() + 1}/${finish.getFullYear().toString().slice(2, 4)} ${finish.getHours()}:${finish.getMinutes()}">
+        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dateTo.getDate()}/${dateTo.getMonth() + 1}/${dateTo.getFullYear().toString().slice(2, 4)} ${dateTo.getHours()}:${dateTo.getMinutes()}">
       </div>
 
     <div class="event__field-group  event__field-group--price">
@@ -148,14 +150,18 @@ export default class EventEditor extends Smart {
   constructor(data) {
     super();
     this._data = data;
+    this._datePicker = null;
 
     this._pointOpenClikHandler = this._pointOpenClikHandler.bind(this);
     this._pointEscPress = this._pointEscPress.bind(this);
     this._favouriteClickHandler = this._favouriteClickHandler.bind(this);
     this._saveHandler = this._saveHandler.bind(this);
     this._typeChangeHandler = this._typeChangeHandler.bind(this);
+    this._setDatePicker = this._setDatePicker.bind(this);
+    this._startDateChangeHandler = this._startDateChangeHandler.bind(this);
 
     this._setInnerHandlers();
+    this._setDatePicker();
   }
 
   resetData(data) {
@@ -175,7 +181,6 @@ export default class EventEditor extends Smart {
     this._callback.poinOpenClick();
   }
 
-
   getTemplate() {
     return createEventAdder(this._data);
   }
@@ -188,8 +193,27 @@ export default class EventEditor extends Smart {
     this.updateData({type: evt.target.dataset.type});
   }
 
+  _setDatePicker() {
+    this._datePicker = flatpickr(
+        this.getElement().querySelector(`#event-start-time-1`),
+        {
+          enableTime: true,
+          defaultDate: this._data.dateFrom,
+          dateFormat: `d/m/y H:i`,
+          onChange: this._startDateChangeHandler
+        }
+    );
+  }
+
+  _startDateChangeHandler([userDate]) {
+    this.updateData({
+      dateFrom: userDate
+    });
+  }
+
   _setInnerHandlers() {
     this.getElement().querySelector(`.event__type-list`).addEventListener(`click`, this._typeChangeHandler);
+    this.getElement().querySelector(`#event-start-time-1`).addEventListener(`change`, this._setDatePicker);
   }
 
   restoreHandlers() {

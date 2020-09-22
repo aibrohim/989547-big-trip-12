@@ -1,30 +1,29 @@
 import AbstractView from "./Abstract.js";
 
 const createTripPoint = (data) => {
-  const {type, city, offers, date, cost} = data;
-  const {start, finish} = date;
+  const {type, city, offers, dateFrom, dateTo, cost} = data;
   const MILLISECONDS_IN_SECOND = 1000;
   const SECONDS_IN_DAY = 86400;
   const SECONDS_IN_HOUR = 3600;
   const SECONDS_IN_MINUTE = 60;
 
   const tripStartTime = () => {
-    const hours = start.getHours();
-    const minutes = start.getMinutes();
+    const hours = dateFrom.getHours();
+    const minutes = dateFrom.getMinutes();
 
     return `${hours}:${minutes}`;
   };
 
   const tripFinishTime = () => {
-    const hours = finish.getHours();
-    const minutes = finish.getMinutes();
+    const hours = dateTo.getHours();
+    const minutes = dateTo.getMinutes();
 
     return `${hours}:${minutes}`;
   };
 
   const tripDuration = () => {
-    const startInSecond = start.getTime();
-    const finishInSecon = finish.getTime();
+    const startInSecond = dateFrom.getTime();
+    const finishInSecon = dateTo.getTime();
     let durationSeconds = Math.floor((finishInSecon - startInSecond) / MILLISECONDS_IN_SECOND);
 
     const durationDays = () => {
@@ -74,9 +73,9 @@ const createTripPoint = (data) => {
 
       <div class="event__schedule">
         <p class="event__time">
-          <time class="event__start-time" datetime="${start.toISOString()}">${tripStartTime()}</time>
+          <time class="event__start-time" datetime="${dateFrom.toISOString()}">${tripStartTime()}</time>
           &mdash;
-          <time class="event__end-time" datetime="${finish.toISOString()}">${tripFinishTime()}</time>
+          <time class="event__end-time" datetime="${dateTo.toISOString()}">${tripFinishTime()}</time>
         </p>
         <p class="event__duration">${tripDuration()}</p>
       </div>

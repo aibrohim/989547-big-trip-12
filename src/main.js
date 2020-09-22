@@ -12,7 +12,7 @@ const MAX_TRIPS = 19;
 const tripPointsData = new Array(MAX_TRIPS)
   .fill()
   .map(generateTripPoint)
-  .sort((a, b) => a.date.start - b.date.start);
+  .sort((a, b) => a.dateFrom - b.dateTo);
 
 const siteHeader = document.querySelector(`.page-header`);
 const tripInfo = siteHeader.querySelector(`.trip-main`);
