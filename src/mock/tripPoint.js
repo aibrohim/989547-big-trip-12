@@ -48,7 +48,7 @@ const generateFromDate = () => {
   const startDate = new Date(startDateSeconds);
 
   return startDate;
-}
+};
 
 const generateToDate = () => {
   const MIN_RANDOM_FINISH_SECONDS = 300000000;

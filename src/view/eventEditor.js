@@ -233,7 +233,6 @@ export default class EventEditor extends Smart {
 
   _setDateToPicker() {
     if ((this._data.dateTo - this._data.dateFrom) <= 0) {
-      console.log(this.getElement().querySelector(`#event-end-time-1`));
       this.getElement().querySelector(`#event-end-time-1`).setCustomValidity(`Привет!`);
     }
 
