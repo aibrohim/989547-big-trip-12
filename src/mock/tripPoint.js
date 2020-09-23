@@ -1,6 +1,8 @@
 import {getRandomInteger} from "../utils/common.js";
 import {OFFERS, SENTENCES, TYPES_LIST, CITIES} from "../data.js";
 
+const generateId = () => Date.now() + parseInt(Math.random() * 1000, 10);
+
 const generateType = () => {
 
   const randomIndex = getRandomInteger(0, TYPES_LIST.length - 1);
@@ -35,29 +37,31 @@ const generateImgLinks = () => {
   return images;
 };
 
-const generateTime = () => {
+const generateFromDate = () => {
   const MIN_RANDOM_START_SECONDS = 100000;
   const MAX_RANDOM_START_SECONDS = 200000000;
-  const MIN_RANDOM_FINISH_SECONDS = 200000000;
+  const currentDate = new Date();
+
+  const randomSeconds = getRandomInteger(MIN_RANDOM_START_SECONDS, MAX_RANDOM_START_SECONDS);
+
+  const startDateSeconds = currentDate.getTime() + randomSeconds;
+  const startDate = new Date(startDateSeconds);
+
+  return startDate;
+};
+
+const generateToDate = () => {
+  const MIN_RANDOM_FINISH_SECONDS = 300000000;
   const MAX_RANDOM_FINISH_SECONDS = 400000000;
   const currentDate = new Date();
 
-  let randomSeconds = getRandomInteger(MIN_RANDOM_START_SECONDS, MAX_RANDOM_START_SECONDS);
-
-  const startDateSeconds = currentDate.getTime() + randomSeconds;
-
-  const startDate = new Date(startDateSeconds);
-
-  randomSeconds = getRandomInteger(MIN_RANDOM_FINISH_SECONDS, MAX_RANDOM_FINISH_SECONDS);
+  const randomSeconds = getRandomInteger(MIN_RANDOM_FINISH_SECONDS, MAX_RANDOM_FINISH_SECONDS);
 
   const finishDateSeconds = currentDate.getTime() + randomSeconds;
 
   const finishDate = new Date(finishDateSeconds);
 
-  return {
-    start: startDate,
-    finish: finishDate
-  };
+  return finishDate;
 };
 
 const generateCost = () => {
@@ -65,13 +69,16 @@ const generateCost = () => {
 };
 
 export const generateTripPoint = () => {
+  const id = generateId();
   const type = generateType();
   const city = generateCity();
   const description = generateDescription();
   const images = generateImgLinks();
-  const date = generateTime();
+  const dateFrom = generateFromDate();
+  const dateTo = generateToDate();
 
   return {
+    id,
     type,
     city,
     offers: OFFERS.get(type),
@@ -79,7 +86,8 @@ export const generateTripPoint = () => {
       description,
       images
     },
-    date,
+    dateFrom,
+    dateTo,
     cost: generateCost(),
     isFavourite: Boolean(getRandomInteger(0, 1))
   };

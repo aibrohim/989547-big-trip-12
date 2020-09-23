@@ -7,12 +7,12 @@ import BoardView from './presenter/board.js';
 import {generateTripPoint} from './mock/tripPoint.js';
 import {render, RenderPosition} from "./utils/render.js";
 
-const MAX_TRIPS = 15;
+const MAX_TRIPS = 19;
 
 const tripPointsData = new Array(MAX_TRIPS)
   .fill()
   .map(generateTripPoint)
-  .sort((a, b) => a.date.start - b.date.start);
+  .sort((a, b) => a.dateFrom - b.dateTo);
 
 const siteHeader = document.querySelector(`.page-header`);
 const tripInfo = siteHeader.querySelector(`.trip-main`);

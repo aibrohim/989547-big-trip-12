@@ -1,8 +1,11 @@
-import AbstractView from "./Abstract.js";
+import Smart from "./Smart.js";
+import flatpickr from "flatpickr";
+
+import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 
 const createEventAdder = (data) => {
-  const {type, city, offers, date, cost, isFavourite} = data;
-  const {start, finish} = date;
+  const {type, city, offers, about, dateFrom, dateTo, cost, isFavourite} = data;
+  const {description, images} = about;
 
   return `<form class="event  event--edit" action="#" method="post">
   <header class="event__header">
@@ -18,38 +21,38 @@ const createEventAdder = (data) => {
           <legend class="visually-hidden">Transfer</legend>
 
           <div class="event__type-item">
-            <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi">
-            <label class="event__type-label  event__type-label--taxi" for="event-type-taxi-1">Taxi</label>
+            <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi" ${type.toLowerCase() === `taxi` ? `checked` : ``}>
+            <label class="event__type-label  event__type-label--taxi" data-type="Taxi" for="event-type-taxi-1">Taxi</label>
           </div>
 
           <div class="event__type-item">
-            <input id="event-type-bus-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus">
-            <label class="event__type-label  event__type-label--bus" for="event-type-bus-1">Bus</label>
+            <input id="event-type-bus-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus" ${type.toLowerCase() === `bus` ? `checked` : ``}>
+            <label class="event__type-label  event__type-label--bus" data-type="Bus" for="event-type-bus-1">Bus</label>
           </div>
 
           <div class="event__type-item">
-            <input id="event-type-train-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train">
-            <label class="event__type-label  event__type-label--train" for="event-type-train-1">Train</label>
+            <input id="event-type-train-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train" ${type.toLowerCase() === `train` ? `checked` : ``}>
+            <label class="event__type-label  event__type-label--train" data-type="Train" for="event-type-train-1">Train</label>
           </div>
 
           <div class="event__type-item">
-            <input id="event-type-ship-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="ship">
-            <label class="event__type-label  event__type-label--ship" for="event-type-ship-1">Ship</label>
+            <input id="event-type-ship-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="ship" ${type.toLowerCase() === `ship` ? `checked` : ``}>
+            <label class="event__type-label  event__type-label--ship" data-type="Ship" for="event-type-ship-1">Ship</label>
           </div>
 
           <div class="event__type-item">
-            <input id="event-type-transport-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="transport">
-            <label class="event__type-label  event__type-label--transport" for="event-type-transport-1">Transport</label>
+            <input id="event-type-transport-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="transport" ${type.toLowerCase() === `transport` ? `checked` : ``}>
+            <label class="event__type-label  event__type-label--transport" data-type="Transport" for="event-type-transport-1">Transport</label>
           </div>
 
           <div class="event__type-item">
-            <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive">
-            <label class="event__type-label  event__type-label--drive" for="event-type-drive-1">Drive</label>
+            <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive" ${type.toLowerCase() === `drive` ? `checked` : ``}>
+            <label class="event__type-label  event__type-label--drive" data-type="Drive" for="event-type-drive-1">Drive</label>
           </div>
 
           <div class="event__type-item">
-            <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" checked>
-            <label class="event__type-label  event__type-label--flight" for="event-type-flight-1">Flight</label>
+            <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" ${type.toLowerCase() === `flight` ? `checked` : ``}>
+            <label class="event__type-label  event__type-label--flight" data-type="Flight" for="event-type-flight-1">Flight</label>
           </div>
         </fieldset>
 
@@ -57,18 +60,18 @@ const createEventAdder = (data) => {
           <legend class="visually-hidden">Activity</legend>
 
           <div class="event__type-item">
-            <input id="event-type-check-in-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="check-in">
-            <label class="event__type-label  event__type-label--check-in" for="event-type-check-in-1">Check-in</label>
+            <input id="event-type-check-in-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="check-in" ${type.toLowerCase() === `check-in` ? `checked` : ``}>
+            <label class="event__type-label  event__type-label--check-in" data-type="Check-in"  for="event-type-check-in-1">Check-in</label>
           </div>
 
           <div class="event__type-item">
-            <input id="event-type-sightseeing-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="sightseeing">
-            <label class="event__type-label  event__type-label--sightseeing" for="event-type-sightseeing-1">Sightseeing</label>
+            <input id="event-type-sightseeing-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="sightseeing" ${type.toLowerCase() === `sightseeeing` ? `checked` : ``}>
+            <label class="event__type-label  event__type-label--sightseeing" data-type="Sightseeing" for="event-type-sightseeing-1">Sightseeing</label>
           </div>
 
           <div class="event__type-item">
-            <input id="event-type-restaurant-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="restaurant">
-            <label class="event__type-label  event__type-label--restaurant" for="event-type-restaurant-1">Restaurant</label>
+            <input id="event-type-restaurant-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="restaurant" ${type.toLowerCase() === `restaurant` ? `checked` : ``}>
+            <label class="event__type-label  event__type-label--restaurant" data-type="Restaurant" for="event-type-restaurant-1">Restaurant</label>
           </div>
         </fieldset>
       </div>
@@ -90,12 +93,12 @@ const createEventAdder = (data) => {
         <label class="visually-hidden" for="event-start-time-1">
           From
         </label>
-        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${start.getDate()}/${start.getMonth() + 1}/${start.getFullYear().toString().slice(2, 4)} ${start.getHours()}:${start.getMinutes()}">
+        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dateFrom.getDate()}/${dateFrom.getMonth() + 1}/${dateFrom.getFullYear().toString().slice(2, 4)} ${dateFrom.getHours()}:${dateFrom.getMinutes()}">
         &mdash;
         <label class="visually-hidden" for="event-end-time-1">
           To
         </label>
-        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${finish.getDate()}/${finish.getMonth() + 1}/${finish.getFullYear().toString().slice(2, 4)} ${finish.getHours()}:${finish.getMinutes()}">
+        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dateTo.getDate()}/${dateTo.getMonth() + 1}/${dateTo.getFullYear().toString().slice(2, 4)} ${dateTo.getHours()}:${dateTo.getMinutes()}">
       </div>
 
     <div class="event__field-group  event__field-group--price">
@@ -129,10 +132,10 @@ const createEventAdder = (data) => {
       <div class="event__available-offers">
 
       <div class="event__available-offers">
-      ${offers.map((offer) =>
+      ${offers.map((offer, index) =>
     `<div class="event__offer-selector">
-        <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" ${offer.isChecked === true ? `checked` : ``}>
-        <label class="event__offer-label" for="event-offer-luggage-1">
+        <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${index}" type="checkbox" name="event-offer-luggage" ${offer.isChecked === true ? `checked` : ``}>
+        <label class="event__offer-label" for="event-offer-luggage-${index}">
           <span class="event__offer-title">${offer.name}</span>
           &plus;
           &euro;&nbsp;<span class="event__offer-price">${offer.cost}</span>
@@ -140,17 +143,50 @@ const createEventAdder = (data) => {
       </div>`).join(``)}
       </div>
     </section>
+    <section class="event__section  event__section--destination">
+        <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+        <p class="event__destination-description">${description}</p>
+
+        <div class="event__photos-container">
+          <div class="event__photos-tape">
+            ${images.map((image) =>
+    `<img class="event__photo" src="${image}" alt="Event photo">`
+  ).join(``)}
+          </div>
+        </div>
+      </section>
   </section>
 </form>`;
 };
 
-export default class EventEditor extends AbstractView {
-  constructor(info) {
+export default class EventEditor extends Smart {
+  constructor(data) {
     super();
-    this._info = info;
+    this._data = data;
+    this._dateFromPicker = null;
+    this._dateToPicker = null;
 
     this._pointOpenClikHandler = this._pointOpenClikHandler.bind(this);
     this._pointEscPress = this._pointEscPress.bind(this);
+    this._favouriteClickHandler = this._favouriteClickHandler.bind(this);
+    this._saveHandler = this._saveHandler.bind(this);
+    this._typeChangeHandler = this._typeChangeHandler.bind(this);
+    this._setDateFromPicker = this._setDateFromPicker.bind(this);
+    this._startDateChangeHandler = this._startDateChangeHandler.bind(this);
+    this._setDateToPicker = this._setDateToPicker.bind(this);
+    this._endDateChangeHandler = this._endDateChangeHandler.bind(this);
+
+    this._setInnerHandlers();
+    this._setDateToPicker();
+    this._setDateFromPicker();
+  }
+
+  resetData(data) {
+    this.updateData(data);
+  }
+
+  _favouriteClickHandler() {
+    this._callback.favouriteClick();
   }
 
   _pointEscPress() {
@@ -163,7 +199,92 @@ export default class EventEditor extends AbstractView {
   }
 
   getTemplate() {
-    return createEventAdder(this._info);
+    return createEventAdder(this._data);
+  }
+
+  _typeChangeHandler(evt) {
+    if (evt.target.tagName !== `LABEL`) {
+      return;
+    }
+
+    this.updateData({type: evt.target.dataset.type});
+  }
+
+  _setDateFromPicker() {
+    if ((this._data.dateTo - this._data.dateFrom) <= 0) {
+      this.getElement().querySelector(`#event-end-time-1`).setCustomValidity(`Привет!`);
+    }
+
+    if (this._dateFromPicker) {
+      this._dateFromPicker.destroy();
+      this._dateFromPicker = null;
+    }
+
+    this._dateFromPicker = flatpickr(
+        this.getElement().querySelector(`#event-start-time-1`),
+        {
+          enableTime: true,
+          defaultDate: this._data.dateFrom,
+          dateFormat: `d/m/y H:i`,
+          onChange: this._startDateChangeHandler
+        }
+    );
+  }
+
+  _setDateToPicker() {
+    if ((this._data.dateTo - this._data.dateFrom) <= 0) {
+      this.getElement().querySelector(`#event-end-time-1`).setCustomValidity(`Привет!`);
+    }
+
+    if (this._dateToPicker) {
+      this._dateToPicker.destroy();
+      this._dateToPicker = null;
+    }
+
+    this._dateToPicker = flatpickr(
+        this.getElement().querySelector(`#event-end-time-1`),
+        {
+          enableTime: true,
+          defaultDate: this._data.dateTo,
+          dateFormat: `d/m/y H:i`,
+          onChange: this._endDateChangeHandler
+        }
+    );
+  }
+
+  _startDateChangeHandler([userDate]) {
+    this.updateData({
+      dateFrom: userDate
+    });
+  }
+
+  _endDateChangeHandler([userDate]) {
+    this.updateData({
+      dateTo: userDate
+    });
+  }
+
+  _setInnerHandlers() {
+    this.getElement().querySelector(`.event__type-list`).addEventListener(`click`, this._typeChangeHandler);
+    this.getElement().querySelector(`#event-start-time-1`).addEventListener(`change`, this._setDateFromPicker);
+    this.getElement().querySelector(`#event-end-time-1`).addEventListener(`change`, this._setDateToPicker);
+  }
+
+  restoreHandlers() {
+    this._setInnerHandlers();
+    this._setDateFromPicker();
+    this._setDateToPicker();
+    this.setSubmitHandler(this._callback.saveHandler);
+  }
+
+  _saveHandler(evt) {
+    evt.preventDefault();
+    this._callback.saveHandler(this._data);
+  }
+
+  setFavouriteClick(callback) {
+    this._callback.favouriteClick = callback;
+    this.getElement().querySelector(`.event__favorite-btn`).addEventListener(`click`, this._favouriteClickHandler);
   }
 
   setPointOpenHandler(callback) {
@@ -174,5 +295,10 @@ export default class EventEditor extends AbstractView {
   setEscPressHandler(callback) {
     this._pointEscPress = callback;
     this.getElement().addEventListener(`submit`, this._pointEscPress);
+  }
+
+  setSubmitHandler(callback) {
+    this._callback.saveHandler = callback;
+    this.getElement().querySelector(`.event__save-btn`).addEventListener(`click`, this._saveHandler);
   }
 }
