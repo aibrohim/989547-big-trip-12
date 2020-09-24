@@ -211,10 +211,6 @@ export default class EventEditor extends Smart {
   }
 
   _setDateFromPicker() {
-    if ((this._data.dateTo - this._data.dateFrom) <= 0) {
-      this.getElement().querySelector(`#event-end-time-1`).setCustomValidity(`Привет!`);
-    }
-
     if (this._dateFromPicker) {
       this._dateFromPicker.destroy();
       this._dateFromPicker = null;
@@ -223,19 +219,17 @@ export default class EventEditor extends Smart {
     this._dateFromPicker = flatpickr(
         this.getElement().querySelector(`#event-start-time-1`),
         {
-          enableTime: true,
-          defaultDate: this._data.dateFrom,
-          dateFormat: `d/m/y H:i`,
-          onChange: this._startDateChangeHandler
+          'enableTime': true,
+          'defaultDate': this._data.dateFrom,
+          'dateFormat': `d/m/y H:i`,
+          'maxDate': this._data.dateTo,
+          'time_24hr': true,
+          'onChange': this._startDateChangeHandler
         }
     );
   }
 
   _setDateToPicker() {
-    if ((this._data.dateTo - this._data.dateFrom) <= 0) {
-      this.getElement().querySelector(`#event-end-time-1`).setCustomValidity(`Привет!`);
-    }
-
     if (this._dateToPicker) {
       this._dateToPicker.destroy();
       this._dateToPicker = null;
@@ -244,10 +238,12 @@ export default class EventEditor extends Smart {
     this._dateToPicker = flatpickr(
         this.getElement().querySelector(`#event-end-time-1`),
         {
-          enableTime: true,
-          defaultDate: this._data.dateTo,
-          dateFormat: `d/m/y H:i`,
-          onChange: this._endDateChangeHandler
+          'enableTime': true,
+          'defaultDate': this._data.dateTo,
+          'dateFormat': `d/m/y H:i`,
+          'minDate': this._data.dateFrom,
+          'time_24hr': true,
+          'onChange': this._endDateChangeHandler
         }
     );
   }
@@ -255,13 +251,13 @@ export default class EventEditor extends Smart {
   _startDateChangeHandler([userDate]) {
     this.updateData({
       dateFrom: userDate
-    });
+    }, true);
   }
 
   _endDateChangeHandler([userDate]) {
     this.updateData({
       dateTo: userDate
-    });
+    }, true);
   }
 
   _setInnerHandlers() {
@@ -279,6 +275,11 @@ export default class EventEditor extends Smart {
 
   _saveHandler(evt) {
     evt.preventDefault();
+    if ((this._data.dateFrom - this._data.dateTo) >= 0) {
+      this.getElement().querySelector(`#event-start-time-1`).setCustomValidity(`heeey`);
+      alert(`to'g'irlasen bomidimi`);
+      return;
+    }
     this._callback.saveHandler(this._data);
   }
 
