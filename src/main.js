@@ -4,8 +4,9 @@ import CostInfoView from './view/costInfo.js';
 import MenuView from './view/menu.js';
 import FilterView from './view/filter.js';
 import BoardView from './presenter/board.js';
-import {generateTripPoint} from './mock/tripPoint.js';
+import {generateTripPoint, generateOffer, destination} from './mock/tripPoint.js';
 import {render, RenderPosition} from "./utils/render.js";
+import PointsModel from "./models/points.js";
 
 const MAX_TRIPS = 19;
 
@@ -13,6 +14,10 @@ const tripPointsData = new Array(MAX_TRIPS)
   .fill()
   .map(generateTripPoint)
   .sort((a, b) => a.dateFrom - b.dateTo);
+
+const pointsModel = new PointsModel();
+pointsModel.setPoints(tripPointsData);
+
 
 const siteHeader = document.querySelector(`.page-header`);
 const tripInfo = siteHeader.querySelector(`.trip-main`);
@@ -36,7 +41,7 @@ render(menuFilterWrapper, filterComponent, RenderPosition.BEFOREEND);
 const pageMain = document.querySelector(`.page-body__page-main`);
 const allEvents = pageMain.querySelector(`.trip-events`);
 
-const boardComponent = new BoardView(allEvents);
+const boardComponent = new BoardView(allEvents, pointsModel);
 
-boardComponent.init(tripPointsData);
+boardComponent.init();
 

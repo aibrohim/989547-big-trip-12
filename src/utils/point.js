@@ -8,3 +8,11 @@ export const getSetDates = (data) => {
 
   return sortedDates;
 };
+
+export const sortTime = (a, b) => {
+  const firstDate = a.dateFrom - a.dateTo;
+  const secondDate = b.dateFrom - b.dateTo;
+  return secondDate - firstDate;
+};
+
+export const sortPrice = (a, b) => b.cost - a.cost;

@@ -2,6 +2,7 @@ import TripPointView from "./../view/tripPoint.js";
 import EventEditorView from "./../view/eventEditor.js";
 import {replace, render, RenderPosition, remove} from "./../utils/render.js";
 import TripPointsList from "../view/tripPointsList.js";
+import {UserAction, UpdateType} from "../consts.js";
 
 const Mode = {
   DEFAULT: `DEFAULT`,
@@ -24,6 +25,7 @@ export default class Point {
     this._onEscPress = this._onEscPress.bind(this);
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
     this._changeFavouriteHandler = this._changeFavouriteHandler.bind(this);
+    this._handleDeleteClick = this._handleDeleteClick.bind(this);
   }
 
   init(data) {
@@ -39,6 +41,7 @@ export default class Point {
     this._eventEditorComponent.setEscPressHandler(this._replaceEditToPoint);
     this._eventEditorComponent.setFavouriteClick(this._changeFavouriteHandler);
     this._eventEditorComponent.setSubmitHandler(this._handleFormSubmit);
+    this._eventEditorComponent.setDeleteHandler(this._handleDeleteClick);
 
     if (prevPointComponent === null || prevEditComponent === null) {
       render(this._parentElement, this._tripPointComponent, RenderPosition.BEFOREEND);
@@ -78,6 +81,8 @@ export default class Point {
 
   _changeFavouriteHandler() {
     this._changeData(
+        UserAction.UPDATE_POINT,
+        UpdateType.MINOR,
         Object.assign(
             {},
             this._data,
@@ -89,7 +94,20 @@ export default class Point {
   }
 
   _handleFormSubmit(data) {
-    this._changeData(data);
+    this._changeData(
+        UserAction.UPDATE_POINT,
+        UpdateType.MINOR,
+        data
+    );
+    this._replaceEditToPoint();
+  }
+
+  _handleDeleteClick(data) {
+    this._changeData(
+        UserAction.DELETE_POINT,
+        UpdateType.MINOR,
+        data
+    );
     this._replaceEditToPoint();
   }
 

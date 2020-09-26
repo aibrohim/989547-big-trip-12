@@ -1,5 +1,6 @@
 import Smart from "./Smart.js";
 import flatpickr from "flatpickr";
+import {UserAction, UpdateType} from "../consts.js";
 
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 
@@ -175,6 +176,7 @@ export default class EventEditor extends Smart {
     this._startDateChangeHandler = this._startDateChangeHandler.bind(this);
     this._setDateToPicker = this._setDateToPicker.bind(this);
     this._endDateChangeHandler = this._endDateChangeHandler.bind(this);
+    this._deleteHandler = this._deleteHandler.bind(this);
 
     this._setInnerHandlers();
     this._setDateToPicker();
@@ -195,7 +197,7 @@ export default class EventEditor extends Smart {
 
   _pointOpenClikHandler(evt) {
     evt.preventDefault();
-    this._callback.poinOpenClick();
+    this._callback.pointOpenClick();
   }
 
   getTemplate() {
@@ -259,9 +261,12 @@ export default class EventEditor extends Smart {
   }
 
   _endDateChangeHandler([userDate]) {
-    this.updateData({
-      dateTo: userDate
-    });
+    this.updateData(
+        UserAction.UPDATE_POINT,
+        UpdateType.MINOR,
+        {
+          dateTo: userDate
+        });
   }
 
   _setInnerHandlers() {
@@ -277,18 +282,13 @@ export default class EventEditor extends Smart {
     this.setSubmitHandler(this._callback.saveHandler);
   }
 
-  _saveHandler(evt) {
-    evt.preventDefault();
-    this._callback.saveHandler(this._data);
-  }
-
   setFavouriteClick(callback) {
     this._callback.favouriteClick = callback;
     this.getElement().querySelector(`.event__favorite-btn`).addEventListener(`click`, this._favouriteClickHandler);
   }
 
   setPointOpenHandler(callback) {
-    this._callback.poinOpenClick = callback;
+    this._callback.pointOpenClick = callback;
     this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._pointOpenClikHandler);
   }
 
@@ -297,8 +297,22 @@ export default class EventEditor extends Smart {
     this.getElement().addEventListener(`submit`, this._pointEscPress);
   }
 
+  _saveHandler(evt) {
+    evt.preventDefault();
+    this._callback.saveHandler(this._data);
+  }
+
   setSubmitHandler(callback) {
     this._callback.saveHandler = callback;
-    this.getElement().querySelector(`.event__save-btn`).addEventListener(`click`, this._saveHandler);
+    this.getElement().addEventListener(`submit`, this._saveHandler);
+  }
+
+  _deleteHandler() {
+    this._callback.deleteHandler(this._data);
+  }
+
+  setDeleteHandler(callback) {
+    this._callback.deleteHandler = callback;
+    this.getElement().querySelector(`.event__reset-btn`).addEventListener(`click`, this._deleteHandler);
   }
 }
