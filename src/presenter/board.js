@@ -66,23 +66,25 @@ export default class Board {
     if (this._currentSortType === SortType.DEFAULT) {
       this._defaultRendering();
     } else {
-      this._tripDayComponent = new TripDayView();
-      this._renderTripDay();
-      this._daysPresenters.push(this._tripDayComponent);
-
-      this._tripPointsListComponent = new TripPointsListView();
-      this._renderTripPointsList();
-      this._tripPointsLists.push(this._tripPointsListComponent);
-
-      this._getPoints().forEach((element) => {
-        this._renderPoint(element);
-      });
+      this._sortRendering();
     }
+  }
 
+  _sortRendering() {
+    this._tripDayComponent = new TripDayView();
+    this._renderTripDay();
+    this._daysPresenters.push(this._tripDayComponent);
+
+    this._tripPointsListComponent = new TripPointsListView();
+    this._renderTripPointsList();
+    this._tripPointsLists.push(this._tripPointsListComponent);
+
+    this._getPoints().forEach((element) => {
+      this._renderPoint(element);
+    });
   }
 
   _defaultRendering() {
-    console.log(this._getPoints());
     getSetDates(this._getPoints()).forEach((date, index) => {
       const normalDate = new Date(date);
       const filtredData = this._getPoints().slice().filter((dataItem) => {
@@ -133,8 +135,11 @@ export default class Board {
         this._pointPresenters[data.id].init(data);
         break;
       case UpdateType.MINOR:
-        this._clearBoard();
-        this._defaultRendering();
+        this._clearPoints();
+        if (this._currentSortType === SortType.DEFAULT) {
+          this._defaultRendering();
+        }
+        this._sortRendering();
         break;
       case UpdateType.Major:
         this._clearBoard({resetSortType: true});
