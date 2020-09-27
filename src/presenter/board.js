@@ -180,7 +180,7 @@ export default class Board {
           this._sortRendering();
         }
         break;
-      case UpdateType.Major:
+      case UpdateType.MAJOR:
         this._clearBoard({resetSortType: true});
         this._renderSort();
         this._defaultRendering();
@@ -234,7 +234,6 @@ export default class Board {
 
     if (resetSortType) {
       this._currentSortType = SortType.DEFAULT;
-      console.log(`salomlaar`);
     }
   }
 

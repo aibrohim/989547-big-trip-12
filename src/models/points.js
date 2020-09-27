@@ -15,7 +15,7 @@ export default class Points extends Observer {
   }
 
   updatePoint(updateType, update) {
-    const index = this._points.findIndex((point) => point.id === update.id)
+    const index = this._points.findIndex((point) => point.id === update.id);
 
     if (index === -1) {
       throw new Error(`Can't update existing point`);

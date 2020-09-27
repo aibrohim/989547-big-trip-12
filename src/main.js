@@ -4,7 +4,7 @@ import CostInfoView from './view/costInfo.js';
 import MenuView from './view/menu.js';
 import BoardView from './presenter/board.js';
 import FilterView from './presenter/filter.js';
-import {generateTripPoint, generateOffer, destination} from './mock/tripPoint.js';
+import {generateTripPoint} from './mock/tripPoint.js';
 import {render, RenderPosition} from "./utils/render.js";
 import PointsModel from "./models/points.js";
 import FiltersModel from "./models/filter.js";

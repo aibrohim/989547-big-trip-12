@@ -1,6 +1,5 @@
 import Smart from "./Smart.js";
 import flatpickr from "flatpickr";
-import {UserAction, UpdateType} from "../consts.js";
 
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 
