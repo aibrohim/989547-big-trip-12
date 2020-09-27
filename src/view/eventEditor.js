@@ -107,7 +107,7 @@ const createEventAdder = (data) => {
         <span class="visually-hidden">Price</span>
         &euro;
       </label>
-      <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${cost}">
+      <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${cost}">
     </div>
 
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -177,6 +177,7 @@ export default class EventEditor extends Smart {
     this._setDateToPicker = this._setDateToPicker.bind(this);
     this._endDateChangeHandler = this._endDateChangeHandler.bind(this);
     this._deleteHandler = this._deleteHandler.bind(this);
+    this._priceChangeHandler = this._priceChangeHandler.bind(this);
 
     this._setInnerHandlers();
     this._setDateToPicker();
@@ -213,10 +214,6 @@ export default class EventEditor extends Smart {
   }
 
   _setDateFromPicker() {
-    if ((this._data.dateTo - this._data.dateFrom) <= 0) {
-      this.getElement().querySelector(`#event-end-time-1`).setCustomValidity(`Привет!`);
-    }
-
     if (this._dateFromPicker) {
       this._dateFromPicker.destroy();
       this._dateFromPicker = null;
@@ -234,10 +231,6 @@ export default class EventEditor extends Smart {
   }
 
   _setDateToPicker() {
-    if ((this._data.dateTo - this._data.dateFrom) <= 0) {
-      this.getElement().querySelector(`#event-end-time-1`).setCustomValidity(`Привет!`);
-    }
-
     if (this._dateToPicker) {
       this._dateToPicker.destroy();
       this._dateToPicker = null;
@@ -262,17 +255,21 @@ export default class EventEditor extends Smart {
 
   _endDateChangeHandler([userDate]) {
     this.updateData(
-        UserAction.UPDATE_POINT,
-        UpdateType.MINOR,
         {
           dateTo: userDate
         });
+  }
+
+  _priceChangeHandler(evt) {
+    const inputValue = evt.target.value;
+    this.updateData({cost: inputValue});
   }
 
   _setInnerHandlers() {
     this.getElement().querySelector(`.event__type-list`).addEventListener(`click`, this._typeChangeHandler);
     this.getElement().querySelector(`#event-start-time-1`).addEventListener(`change`, this._setDateFromPicker);
     this.getElement().querySelector(`#event-end-time-1`).addEventListener(`change`, this._setDateToPicker);
+    this.getElement().querySelector(`#event-price-1`).addEventListener(`change`, this._priceChangeHandler);
   }
 
   restoreHandlers() {

@@ -16,3 +16,11 @@ export const sortTime = (a, b) => {
 };
 
 export const sortPrice = (a, b) => b.cost - a.cost;
+
+export const isDatesEqual = (dateA, dateB) => {
+  if (dateA.toString === dateB.toString) {
+    return true;
+  }
+
+  return false;
+};

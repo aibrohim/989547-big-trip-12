@@ -3,6 +3,7 @@ import EventEditorView from "./../view/eventEditor.js";
 import {replace, render, RenderPosition, remove} from "./../utils/render.js";
 import TripPointsList from "../view/tripPointsList.js";
 import {UserAction, UpdateType} from "../consts.js";
+import {isDatesEqual} from "../utils/point.js";
 
 const Mode = {
   DEFAULT: `DEFAULT`,
@@ -79,10 +80,14 @@ export default class Point {
     }
   }
 
+  changeTypeHandler(callback) {
+    this._updateType = callback;
+  }
+
   _changeFavouriteHandler() {
     this._changeData(
         UserAction.UPDATE_POINT,
-        UpdateType.MINOR,
+        UpdateType.PATCH,
         Object.assign(
             {},
             this._data,
@@ -94,9 +99,13 @@ export default class Point {
   }
 
   _handleFormSubmit(data) {
+    const isMinorUpdate = isDatesEqual(this._data.dateFrom, data.dateFrom)
+    || isDatesEqual(this._data.dateTo, data.dateTo)
+    || this._data.cost === data.cost;
+
     this._changeData(
         UserAction.UPDATE_POINT,
-        UpdateType.MINOR,
+        isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
         data
     );
     this._replaceEditToPoint();
@@ -105,10 +114,10 @@ export default class Point {
   _handleDeleteClick(data) {
     this._changeData(
         UserAction.DELETE_POINT,
-        UpdateType.MINOR,
+        this._updateType ? this._updateType : UpdateType.PATCH,
         data
     );
-    this._replaceEditToPoint();
+    remove(this._eventEditorComponent);
   }
 
   resetView() {
