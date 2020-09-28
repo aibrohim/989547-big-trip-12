@@ -22,10 +22,10 @@ const createLocationInfo = (data) => {
 export default class LocationInfo extends AbstractView {
   constructor(data) {
     super();
-    this._info = data;
+    this._data = data;
   }
 
   getTemplate() {
-    return createLocationInfo(this._info);
+    return createLocationInfo(this._data);
   }
 }

@@ -4,6 +4,7 @@ import CostInfoView from './view/costInfo.js';
 import MenuView from './view/menu.js';
 import BoardView from './presenter/board.js';
 import FilterView from './presenter/filter.js';
+import LocationCost from './presenter/locationCost.js';
 import {generateTripPoint} from './mock/tripPoint.js';
 import {render, RenderPosition} from "./utils/render.js";
 import PointsModel from "./models/points.js";
@@ -28,8 +29,9 @@ const locationCostWrapperComponent = new LocationCostWrapperView();
 render(tripInfo, locationCostWrapperComponent, RenderPosition.AFTERBEGIN);
 
 if (tripPointsData.length > 0) {
-  render(locationCostWrapperComponent, new LocationInfoView(tripPointsData), RenderPosition.AFTERBEGIN);
-  render(locationCostWrapperComponent, new CostInfoView(tripPointsData), RenderPosition.BEFOREEND);
+  const locationCost = new LocationCost(locationCostWrapperComponent, pointsModel);
+  locationCost.init();
+  // render(locationCostWrapperComponent, new CostInfoView(pointsModel), RenderPosition.BEFOREEND);
 }
 
 const menuFilterWrapper = tripInfo.querySelector(`.trip-main__trip-controls`);

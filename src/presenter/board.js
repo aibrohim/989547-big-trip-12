@@ -53,7 +53,7 @@ export default class Board {
         return filtredPoints.sort(sortPrice);
     }
 
-    return filtredPoints;
+    return filtredPoints.sort((a, b) => a.dateFrom - b.dateTo);
   }
 
   _handleSortTypeChange(sortType) {
@@ -94,9 +94,11 @@ export default class Board {
       this._renderTripDaysList();
     }
 
-    getSetDates(this._getPoints()).forEach((date, index) => {
+    const data = this._getPoints().sort((a, b) => a.dateFrom - b.dateFrom);
+
+    getSetDates(data).forEach((date, index) => {
       const normalDate = new Date(date);
-      const filtredData = this._getPoints().slice().filter((dataItem) => {
+      const filtredData = data.slice().filter((dataItem) => {
         return dataItem.dateFrom.toDateString() === normalDate.toDateString();
       });
 
@@ -173,7 +175,8 @@ export default class Board {
 
         break;
       case UpdateType.MINOR:
-        this._clearPoints();
+        this._clearBoard();
+        this._renderSort();
         if (this._currentSortType === SortType.DEFAULT) {
           this._defaultRendering();
         } else {
