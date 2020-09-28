@@ -4,7 +4,6 @@ const createLocationInfo = (data) => {
   const sortedData = data.slice().sort((a, b) => a.dateFrom - b.dateFrom);
 
   const directions = () => {
-    console.log(sortedData);
     if (sortedData.length > 3) {
       return `${sortedData[0].city} - ... - ${sortedData.slice(-1)[0].city}`;
     }

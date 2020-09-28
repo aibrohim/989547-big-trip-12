@@ -3,9 +3,105 @@ import flatpickr from "flatpickr";
 
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 
-const createEventAdder = (data) => {
-  const {type, city, offers, about, dateFrom, dateTo, cost, isFavourite} = data;
-  const {description, images} = about;
+const BLANK_POINT = {
+  type: `taxi`,
+  price: 0,
+  offers: [],
+  destination: {
+    city: ``,
+  },
+  dateFrom: new Date(),
+  dateTo: new Date(),
+  isFavorite: true,
+};
+
+const createFavoriteInputTemplate = (event) => {
+  if (!event.id) {
+    return ``;
+  }
+
+  return (
+    `<input id="event-${event.id}" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" ${event.isFavorite ? `checked` : ``}>
+      <label class="event__favorite-btn" for="event-${event.id}">
+      <span class="visually-hidden">Add to favorite</span>
+      <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
+        <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145 8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z"/>
+      </svg>
+    </label>`
+  );
+};
+
+const createRollupButtonTemplate = (event) => {
+  if (!event.id) {
+    return ``;
+  }
+
+  return (
+    `<button class="event__rollup-btn" type="button">
+      <span class="visually-hidden">Open event</span>
+    </button>`
+  );
+
+};
+
+const getOffers = (offers, type) => {
+  if (type === `Check-in`) {
+    type = `checkIn`;
+    return offers[type];
+  }
+  return offers[type.toLowerCase()];
+};
+
+const createDestinationTemplate = (event) => {
+  if (event.destination === null || !event.destination.description || !event.destination.pictures) {
+    return ``;
+  }
+
+  return (
+    `<h3 class="event__section-title  event__section-title--destination">Destination</h3>
+      <p class="event__destination-description">
+        ${event.destination.description}
+      </p>
+
+    <div class="event__photos-container">
+      <div class="event__photos-tape">
+      ${event.destination.pictures.map((photoURL) =>
+      (`<img class="event__photo" src="${photoURL.src}" alt="${photoURL.description}">`))
+      .join(``)}
+      </div>
+    </div>`
+  );
+};
+
+const createListOffersTemplate = (offers) => {
+  if (offers === null || offers.length === 0) {
+    return ``;
+  }
+
+  return (
+    `<section class="event__section  event__section--offers">
+    <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+
+    <div class="event__available-offers">
+
+    <div class="event__available-offers">
+    ${offers.map((offer, index) =>
+      `<div class="event__offer-selector">
+        <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${index}" value="${offer.name}" type="checkbox" name="event-offer-luggage" ${offer.isChecked === true ? `checked` : ``}>
+        <label class="event__offer-label" for="event-offer-luggage-${index}" data-offer-name="${offer.name}">
+          <span class="event__offer-title">${offer.name}</span>
+          &plus;
+          &euro;&nbsp;<span class="event__offer-price">${offer.cost}</span>
+        </label>
+      </div>`).join(``)}
+    </div>
+  </section>`
+  );
+};
+
+const createEventAdder = (data, offers, destinations) => {
+  const {type, city, dateFrom, dateTo, destination, cost, isFavourite} = data;
+  const destinationTemplate = createDestinationTemplate(data);
 
   return `<form class="event  event--edit" action="#" method="post">
   <header class="event__header">
@@ -83,9 +179,7 @@ const createEventAdder = (data) => {
       </label>
       <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${city}" list="destination-list-1">
       <datalist id="destination-list-1">
-        <option value="Amsterdam"></option>
-        <option value="Geneva"></option>
-        <option value="Chamonix"></option>
+        ${Object.keys(destinations).map((key) => `<option value="${key}"></option>`)}
       </datalist>
     </div>
 
@@ -126,43 +220,20 @@ const createEventAdder = (data) => {
   </header>
 
   <section class="event__details">
-    <section class="event__section  event__section--offers">
-      <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-
-      <div class="event__available-offers">
-
-      <div class="event__available-offers">
-      ${offers.map((offer, index) =>
-    `<div class="event__offer-selector">
-        <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${index}" type="checkbox" name="event-offer-luggage" ${offer.isChecked === true ? `checked` : ``}>
-        <label class="event__offer-label" for="event-offer-luggage-${index}">
-          <span class="event__offer-title">${offer.name}</span>
-          &plus;
-          &euro;&nbsp;<span class="event__offer-price">${offer.cost}</span>
-        </label>
-      </div>`).join(``)}
-      </div>
-    </section>
+    ${createListOffersTemplate(getOffers(offers, type))}
     <section class="event__section  event__section--destination">
-        <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-        <p class="event__destination-description">${description}</p>
-
-        <div class="event__photos-container">
-          <div class="event__photos-tape">
-            ${images.map((image) =>
-    `<img class="event__photo" src="${image}" alt="Event photo">`
-  ).join(``)}
-          </div>
-        </div>
+        ${destinationTemplate}
       </section>
   </section>
 </form>`;
 };
 
 export default class EventEditor extends Smart {
-  constructor(data) {
+  constructor(data, offers, destinations) {
     super();
-    this._data = data;
+    this._data = data || BLANK_POINT;
+    this._offers = offers;
+    this._destinations = destinations;
     this._dateFromPicker = null;
     this._dateToPicker = null;
 
@@ -177,6 +248,7 @@ export default class EventEditor extends Smart {
     this._endDateChangeHandler = this._endDateChangeHandler.bind(this);
     this._deleteHandler = this._deleteHandler.bind(this);
     this._priceChangeHandler = this._priceChangeHandler.bind(this);
+    this._cityChangeHandler = this._cityChangeHandler.bind(this);
 
     this._setInnerHandlers();
     this._setDateToPicker();
@@ -201,7 +273,7 @@ export default class EventEditor extends Smart {
   }
 
   getTemplate() {
-    return createEventAdder(this._data);
+    return createEventAdder(this._data, this._offers, this._destinations);
   }
 
   _typeChangeHandler(evt) {
@@ -260,15 +332,34 @@ export default class EventEditor extends Smart {
   }
 
   _priceChangeHandler(evt) {
-    const inputValue = evt.target.value;
-    this.updateData({cost: inputValue});
+    const inputValue = parseInt(evt.target.value, 10);
+    this.updateData({cost: inputValue}, true);
   }
+
+  _cityChangeHandler(evt) {
+    this.updateData({city: evt.target.value});
+  }
+
+  // _offerClickHandler() {
+  //   const checkedTitles = Array
+  //     .from(this.getElement().querySelectorAll(`.event__offer-checkbox`))
+  //     .filter((element) => element.checked)
+  //     .map((element) => element.value);
+
+  //   const offers = getOffers(this._offers, this._data.type)
+  //                   .filter((offer) => checkedTitles.includes(offer.name));
+
+  //   this.updateData({
+  //     offers,
+  //   }, true);
+  // }
 
   _setInnerHandlers() {
     this.getElement().querySelector(`.event__type-list`).addEventListener(`click`, this._typeChangeHandler);
     this.getElement().querySelector(`#event-start-time-1`).addEventListener(`change`, this._setDateFromPicker);
     this.getElement().querySelector(`#event-end-time-1`).addEventListener(`change`, this._setDateToPicker);
     this.getElement().querySelector(`#event-price-1`).addEventListener(`change`, this._priceChangeHandler);
+    this.getElement().querySelector(`#event-destination-1`).addEventListener(`change`, this._cityChangeHandler);
   }
 
   restoreHandlers() {
@@ -293,8 +384,19 @@ export default class EventEditor extends Smart {
     this.getElement().addEventListener(`submit`, this._pointEscPress);
   }
 
+  static parsePointToData(point, offers) {
+    return Object.assign(
+        {},
+        point,
+        {
+          "offers": getOffers(offers, point.type)
+        }
+    );
+  }
+
   _saveHandler(evt) {
     evt.preventDefault();
+    // this._offerClickHandler();
     this._callback.saveHandler(this._data);
   }
 

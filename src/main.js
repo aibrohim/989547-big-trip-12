@@ -9,6 +9,8 @@ import {generateTripPoint} from './mock/tripPoint.js';
 import {render, RenderPosition} from "./utils/render.js";
 import PointsModel from "./models/points.js";
 import FiltersModel from "./models/filter.js";
+import OffersModel from "./models/offers.js";
+import offersMocks from "./mock/offers.js";
 
 const MAX_TRIPS = 15;
 
@@ -22,6 +24,11 @@ pointsModel.setPoints(tripPointsData);
 
 const filterModel = new FiltersModel();
 
+const offersModel = new OffersModel();
+const offersArray = Array.from(Object.values(offersMocks));
+console.log(offersArray);
+offersModel.setOffers(offersArray);
+
 const siteHeader = document.querySelector(`.page-header`);
 const tripInfo = siteHeader.querySelector(`.trip-main`);
 
@@ -31,7 +38,6 @@ render(tripInfo, locationCostWrapperComponent, RenderPosition.AFTERBEGIN);
 if (tripPointsData.length > 0) {
   const locationCost = new LocationCost(locationCostWrapperComponent, pointsModel);
   locationCost.init();
-  // render(locationCostWrapperComponent, new CostInfoView(pointsModel), RenderPosition.BEFOREEND);
 }
 
 const menuFilterWrapper = tripInfo.querySelector(`.trip-main__trip-controls`);
@@ -44,8 +50,13 @@ const filterPresenter = new FilterView(menuFilterWrapper, filterModel, pointsMod
 const pageMain = document.querySelector(`.page-body__page-main`);
 const allEvents = pageMain.querySelector(`.trip-events`);
 
-const boardComponent = new BoardView(allEvents, pointsModel, filterModel);
+const boardComponent = new BoardView(allEvents, pointsModel, filterModel, offersModel);
 
 filterPresenter.init();
 boardComponent.init();
+
+document.querySelector(`.trip-main__event-add-btn`).addEventListener(`click`, (evt) => {
+  evt.preventDefault();
+  boardComponent.createPoint();
+});
 

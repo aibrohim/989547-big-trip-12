@@ -4,18 +4,20 @@ import TripDayView from './../view/tripDay.js';
 import TripPointsListView from './../view/tripPointsList.js';
 import NoPointView from './../view/noPoint.js';
 import Point from './point.js';
+import PointAdder from './newPoint.js';
 import {render, RenderPosition, remove} from './../utils/render.js';
 import {getSetDates} from "./../utils/point.js";
-import {SortType, UserAction, UpdateType} from "./../consts.js";
+import {SortType, UserAction, UpdateType, FilterType} from "./../consts.js";
 import {sortTime, sortPrice} from "./../utils/point.js";
 import {filter} from "./../utils/filter.js";
 
 export default class Board {
-  constructor(boardContainer, pointsModel, filterModel) {
+  constructor(boardContainer, pointsModel, filterModel, offersModel) {
     this._boardContainer = boardContainer;
     this._pointsModel = pointsModel;
     this._filterModel = filterModel;
     this._defaultSortType = SortType.DEFAULT;
+    this._offersModel = offersModel;
 
     this._pointPresenters = {};
     this._daysPresenters = [];
@@ -34,11 +36,19 @@ export default class Board {
 
     this._pointsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
+
+    this._pointAdderPresenter = new PointAdder(this._sortComponent, this._handleViewAction);
   }
 
   init() {
     this._renderSort();
     this._defaultRendering();
+  }
+
+  createPoint() {
+    this._currentSortType = SortType.DEFAULT;
+    this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+    this._pointAdderPresenter.init(this._offersModel.getOffers());
   }
 
   _getPoints() {
@@ -176,7 +186,9 @@ export default class Board {
         break;
       case UpdateType.MINOR:
         this._clearBoard();
-        this._renderSort();
+        if (this._getPoints().length > 0) {
+          this._renderSort();
+        }
         if (this._currentSortType === SortType.DEFAULT) {
           this._defaultRendering();
         } else {
@@ -185,7 +197,9 @@ export default class Board {
         break;
       case UpdateType.MAJOR:
         this._clearBoard({resetSortType: true});
-        this._renderSort();
+        if (this._getPoints().length > 0) {
+          this._renderSort();
+        }
         this._defaultRendering();
         break;
     }
