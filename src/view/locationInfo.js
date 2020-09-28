@@ -1,15 +1,18 @@
 import AbstractView from "./Abstract.js";
 
 const createLocationInfo = (data) => {
+  const sortedData = data.slice().sort((a, b) => a.dateFrom - b.dateFrom);
+
   const directions = () => {
-    if (data.length > 3) {
-      return `${data[0].city} - ... - ${data.slice(-1)[0].city}`;
+    console.log(sortedData);
+    if (sortedData.length > 3) {
+      return `${sortedData[0].city} - ... - ${sortedData.slice(-1)[0].city}`;
     }
-    return data.map((information) => information.city).join(` - `);
+    return sortedData.map((information) => information.city).join(` - `);
   };
-  const sortedData = data.slice().sort((a, b) => a.dateFrom - b.dateTo);
+
   const minDate = sortedData[0].dateFrom;
-  const maxDate = sortedData.slice(-1)[0].dateFrom;
+  const maxDate = sortedData.slice(-1)[0].dateTo;
   const monthBoolean = minDate.getMonth() === maxDate.getMonth();
 
   return `<div class="trip-info__main">

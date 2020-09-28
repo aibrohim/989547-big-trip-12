@@ -35,6 +35,7 @@ export default class LocationCost {
   }
 
   _handleModelEvent() {
+    console.log(`salom`);
     this.init();
   }
 }
