@@ -27,7 +27,7 @@ export default class Point {
     this._replaceEditToPoint = this._replaceEditToPoint.bind(this);
     this._onEscPress = this._onEscPress.bind(this);
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
-    this._changeFavouriteHandler = this._changeFavouriteHandler.bind(this);
+    this._changeFavoriteHandler = this._changeFavoriteHandler.bind(this);
     this._handleDeleteClick = this._handleDeleteClick.bind(this);
   }
 
@@ -42,7 +42,7 @@ export default class Point {
     this._tripPointComponent.setEditClickHandler(this._replacePointToEdit);
     this._eventEditorComponent.setPointOpenHandler(this._replaceEditToPoint);
     this._eventEditorComponent.setEscPressHandler(this._replaceEditToPoint);
-    this._eventEditorComponent.setFavouriteClick(this._changeFavouriteHandler);
+    this._eventEditorComponent.setFavoriteClick(this._changeFavoriteHandler);
     this._eventEditorComponent.setSubmitHandler(this._handleFormSubmit);
     this._eventEditorComponent.setDeleteHandler(this._handleDeleteClick);
 
@@ -86,7 +86,7 @@ export default class Point {
     this._updateType = callback;
   }
 
-  _changeFavouriteHandler() {
+  _changeFavoriteHandler() {
     this._changeData(
         UserAction.UPDATE_POINT,
         UpdateType.PATCH,
@@ -94,7 +94,7 @@ export default class Point {
             {},
             this._data,
             {
-              isFavourite: !this._data.isFavourite
+              "is_favorite": !this._data.is_favorite
             }
         )
     );

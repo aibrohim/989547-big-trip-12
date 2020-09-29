@@ -15,7 +15,7 @@ const createListOffersTemplate = (offers) => {
 };
 
 const createTripPoint = (data) => {
-  const {type, city, dateFrom, dateTo, cost, offers} = data;
+  const {type, city, dateFrom, dateTo, "base_price": basePrice, offers} = data;
   const MILLISECONDS_IN_SECOND = 1000;
   const SECONDS_IN_DAY = 86400;
   const SECONDS_IN_HOUR = 3600;
@@ -93,7 +93,7 @@ const createTripPoint = (data) => {
       </div>
 
       <p class="event__price">
-        &euro;&nbsp;<span class="event__price-value">${cost}</span>
+        &euro;&nbsp;<span class="event__price-value">${basePrice}</span>
       </p>
 
       <h4 class="visually-hidden">Offers:</h4>

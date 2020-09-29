@@ -79,9 +79,9 @@ export const generateTripPoint = () => {
     city,
     dateFrom,
     dateTo,
-    cost: generateCost(),
-    isFavourite: Boolean(getRandomInteger(0, 1)),
+    "base_price": generateCost(),
+    "is_favorite": Boolean(getRandomInteger(0, 1)),
     destination,
-    offers: checkedOffers
+    "offers": checkedOffers
   };
 };

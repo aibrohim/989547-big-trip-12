@@ -5,14 +5,14 @@ import he from "he";
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 
 const BLANK_POINT = {
-  type: `Taxi`,
-  city: ``,
-  price: 0,
-  offers: [],
-  destination: {},
-  dateFrom: new Date(),
-  dateTo: new Date(),
-  isFavorite: true,
+  "type": `Taxi`,
+  "city": ``,
+  "price": 0,
+  "offers": [],
+  "destination": {},
+  "dateFrom": new Date(),
+  "dateTo": new Date(),
+  "is_favorite": true,
 };
 
 const createFavoriteInputTemplate = (event) => {
@@ -21,7 +21,7 @@ const createFavoriteInputTemplate = (event) => {
   }
 
   return (
-    `<input id="event-${event.id}" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" ${event.isFavorite ? `checked` : ``}>
+    `<input id="event-${event.id}" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" ${event.is_favorite ? `checked` : ``}>
       <label class="event__favorite-btn" for="event-${event.id}">
       <span class="visually-hidden">Add to favorite</span>
       <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
@@ -103,7 +103,7 @@ const createNewOfferTemplate = (offer, isChecked) => {
 };
 
 const createEventAdder = (data, offers, destinations) => {
-  const {type, city, dateFrom, dateTo, cost, id} = data;
+  const {type, city, dateFrom, dateTo, "base_price": basePrice, id} = data;
   const createOffersList = createListOffersTemplate(getOffers(offers, type), data.offers);
 
   const destinationTemplate = createDestinationTemplate(data);
@@ -208,7 +208,7 @@ const createEventAdder = (data, offers, destinations) => {
         <span class="visually-hidden">Price</span>
         &euro;
       </label>
-      <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${cost}">
+      <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${basePrice}">
     </div>
 
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -241,7 +241,7 @@ export default class EventEditor extends Smart {
 
     this._pointOpenClikHandler = this._pointOpenClikHandler.bind(this);
     this._pointEscPress = this._pointEscPress.bind(this);
-    this._favouriteClickHandler = this._favouriteClickHandler.bind(this);
+    this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
     this._saveHandler = this._saveHandler.bind(this);
     this._typeChangeHandler = this._typeChangeHandler.bind(this);
     this._setDateFromPicker = this._setDateFromPicker.bind(this);
@@ -262,7 +262,7 @@ export default class EventEditor extends Smart {
     this.updateData(data);
   }
 
-  _favouriteClickHandler() {
+  _favoriteClickHandler() {
     this._callback.favouriteClick();
   }
 
@@ -343,7 +343,7 @@ export default class EventEditor extends Smart {
     } else {
       saveButton.disabled = false;
     }
-    this.updateData({cost: priceInputValue}, true);
+    this.updateData({basePrice: priceInputValue}, true);
   }
 
   _cityChangeHandler() {
@@ -384,9 +384,9 @@ export default class EventEditor extends Smart {
     this.setSubmitHandler(this._callback.saveHandler);
   }
 
-  setFavouriteClick(callback) {
+  setFavoriteClick(callback) {
     this._callback.favouriteClick = callback;
-    this.getElement().querySelector(`.event__favorite-btn`).addEventListener(`click`, this._favouriteClickHandler);
+    this.getElement().querySelector(`.event__favorite-btn`).addEventListener(`click`, this._favoriteClickHandler);
   }
 
   setPointOpenHandler(callback) {
