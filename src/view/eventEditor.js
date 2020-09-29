@@ -1,15 +1,15 @@
 import Smart from "./Smart.js";
 import flatpickr from "flatpickr";
+import he from "he";
 
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 
 const BLANK_POINT = {
-  type: `taxi`,
+  type: `Taxi`,
+  city: ``,
   price: 0,
   offers: [],
-  destination: {
-    city: ``,
-  },
+  destination: {},
   dateFrom: new Date(),
   dateTo: new Date(),
   isFavorite: true,
@@ -100,10 +100,10 @@ const createListOffersTemplate = (offers) => {
 };
 
 const createEventAdder = (data, offers, destinations) => {
-  const {type, city, dateFrom, dateTo, destination, cost, isFavourite} = data;
+  const {type, city, dateFrom, dateTo, destination, cost, isFavourite, id} = data;
   const destinationTemplate = createDestinationTemplate(data);
 
-  return `<form class="event  event--edit" action="#" method="post">
+  return `<form class="event  event--edit ${id ? `` : `trip-events__item`}" action="#" method="post">
   <header class="event__header">
     <div class="event__type-wrapper">
       <label class="event__type  event__type-btn" for="event-type-toggle-1">
@@ -249,6 +249,7 @@ export default class EventEditor extends Smart {
     this._deleteHandler = this._deleteHandler.bind(this);
     this._priceChangeHandler = this._priceChangeHandler.bind(this);
     this._cityChangeHandler = this._cityChangeHandler.bind(this);
+    this._pointEscPress = this._pointEscPress.bind(this);
 
     this._setInnerHandlers();
     this._setDateToPicker();
@@ -332,12 +333,23 @@ export default class EventEditor extends Smart {
   }
 
   _priceChangeHandler(evt) {
-    const inputValue = parseInt(evt.target.value, 10);
-    this.updateData({cost: inputValue}, true);
+    const saveButton = this.getElement().querySelector(`.event__save-btn`);
+    const priceInput = this.getElement().querySelector(`#event-price-1`);
+    const priceInputValue = parseInt(priceInput.value, 10);
+    if (priceInputValue <= 0) {
+      saveButton.disabled = true;
+    } else {
+      saveButton.disabled = false;
+    }
+    this.updateData({cost: priceInputValue}, true);
   }
 
-  _cityChangeHandler(evt) {
-    this.updateData({city: evt.target.value});
+  _cityChangeHandler() {
+    const cityInputValue = this.getElement().querySelector(`#event-destination-1`).value;
+    this.updateData({
+      city: he.encode(cityInputValue),
+      destination: this._destinations[cityInputValue]
+    });
   }
 
   // _offerClickHandler() {
@@ -360,6 +372,7 @@ export default class EventEditor extends Smart {
     this.getElement().querySelector(`#event-end-time-1`).addEventListener(`change`, this._setDateToPicker);
     this.getElement().querySelector(`#event-price-1`).addEventListener(`change`, this._priceChangeHandler);
     this.getElement().querySelector(`#event-destination-1`).addEventListener(`change`, this._cityChangeHandler);
+    this.getElement().querySelector(`.event__reset-btn`).addEventListener(`click`, this._deleteHandler);
   }
 
   restoreHandlers() {
@@ -379,8 +392,12 @@ export default class EventEditor extends Smart {
     this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._pointOpenClikHandler);
   }
 
+  _pointEscPress(evt) {
+    this._callback.pointEscPress(evt);
+  }
+
   setEscPressHandler(callback) {
-    this._pointEscPress = callback;
+    this._callback.pointEscPress = callback;
     this.getElement().addEventListener(`submit`, this._pointEscPress);
   }
 
@@ -402,10 +419,11 @@ export default class EventEditor extends Smart {
 
   setSubmitHandler(callback) {
     this._callback.saveHandler = callback;
-    this.getElement().addEventListener(`submit`, this._saveHandler);
+    this.getElement().querySelector(`.event__save-btn`).addEventListener(`click`, this._saveHandler);
   }
 
-  _deleteHandler() {
+  _deleteHandler(evt) {
+    evt.preventDefault();
     this._callback.deleteHandler(this._data);
   }
 

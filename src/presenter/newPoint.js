@@ -3,6 +3,7 @@ import {replace, render, RenderPosition, remove} from "./../utils/render.js";
 import {UserAction, UpdateType} from "../consts.js";
 import {isDatesEqual} from "../utils/point.js";
 import offers from "./../mock/offers.js";
+import {generateId} from "./../mock/tripPoint.js";
 
 const Mode = {
   DEFAULT: `DEFAULT`,
@@ -29,34 +30,36 @@ export default class Point {
     this._eventAdderComponent = new EventAdderView(null, offers, destinations);
     render(this._parentElement, this._eventAdderComponent, RenderPosition.AFTEREND);
 
-    this._eventAdderComponent.setEscPressHandler(this._replaceEditToPoint);
     this._eventAdderComponent.setSubmitHandler(this._handleFormSubmit);
     this._eventAdderComponent.setDeleteHandler(this._handleDeleteClick);
 
-    if (this._mode === Mode.EDITING) {
-      replace(this._eventAdderComponent, prevEditComponent);
+    document.addEventListener(`keydown`, this._onEscPress);
+    if (this._eventAdderComponent) {
+      document.querySelector(`.trip-main__event-add-btn`).disabled = true;
+    } else {
+      document.querySelector(`.trip-main__event-add-btn`).disabled = false;
     }
   }
 
   _onEscPress(evt) {
-    if (evt.key === `Escape`) {
-      evt.preventDefault();
-      this._eventAdderComponent.resetData(this._data);
-      this._replaceEditToPoint();
+    if (evt.key === `Escape` || evt.key === `Esc`) {
+      this.destroy();
       document.removeEventListener(`keydown`, this._onEscPress);
     }
   }
 
   _handleFormSubmit(data) {
     this._changeData(
-        UserAction.UPDATE_POINT,
+        UserAction.ADD_POINT,
         UpdateType.MAJOR,
-        data
+        Object.assign({id: generateId()}, data)
     );
-    this._replaceEditToPoint();
+    console.log(data);
+    this.destroy();
   }
 
   _handleDeleteClick() {
+    remove(this._eventAdderComponent);
     this.destroy();
   }
 
@@ -64,11 +67,6 @@ export default class Point {
     if (this._eventAdderComponent === null) {
       return;
     }
-
-    if (this._destroyCallback !== null) {
-      this._destroyCallback();
-    }
-
     remove(this._eventAdderComponent);
     this._eventAdderComponent = null;
 

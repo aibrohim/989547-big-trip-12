@@ -10,6 +10,7 @@ import {getSetDates} from "./../utils/point.js";
 import {SortType, UserAction, UpdateType, FilterType} from "./../consts.js";
 import {sortTime, sortPrice} from "./../utils/point.js";
 import {filter} from "./../utils/filter.js";
+import destinations from '../mock/destination.js';
 
 export default class Board {
   constructor(boardContainer, pointsModel, filterModel, offersModel) {
@@ -37,18 +38,22 @@ export default class Board {
     this._pointsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
 
-    this._pointAdderPresenter = new PointAdder(this._sortComponent, this._handleViewAction);
+    // this._renderSort();
+    // this._pointAdderPresenter = new PointAdder(this._sortComponent, this._handleViewAction);
   }
 
   init() {
-    this._renderSort();
+    if (this._sortComponent === null) {
+      this._renderSort();
+    }
     this._defaultRendering();
   }
 
   createPoint() {
     this._currentSortType = SortType.DEFAULT;
     this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
-    this._pointAdderPresenter.init(this._offersModel.getOffers());
+    this._pointAdderPresenter = new PointAdder(this._sortComponent, this._handleViewAction);
+    this._pointAdderPresenter.init(destinations);
   }
 
   _getPoints() {
@@ -136,6 +141,9 @@ export default class Board {
   }
 
   _handlePointChange() {
+    if (this._pointAdderPresenter) {
+      this._pointAdderPresenter.destroy();
+    }
     Object.values(this._pointPresenters).forEach((presenter) => presenter.resetView());
   }
 
@@ -148,28 +156,7 @@ export default class Board {
         this._pointsModel.addPoint(updateType, update);
         break;
       case UserAction.DELETE_POINT:
-        const arrayWithUpdate = this._tripDays.findIndex((array) => array.includes(update));
-        const deletedPointIndex = this._tripDays[arrayWithUpdate].findIndex((point) => point.id === update.id);
-
-        this._tripDays[arrayWithUpdate] = [
-          ...this._tripDays[arrayWithUpdate].slice(0, deletedPointIndex),
-          ...this._tripDays[arrayWithUpdate].slice(deletedPointIndex + 1),
-        ];
-        const findNullArray = this._tripDays.findIndex((array) => array.length === 0);
-
-
         this._pointsModel.deletePoint(updateType, update);
-
-        if (this._tripDays[findNullArray] >= 0) {
-          this._clearBoard();
-          this._renderSort();
-          if (this._currentSortType === SortType.DEFAULT) {
-            this._defaultRendering();
-          } else {
-            this._sortRendering();
-          }
-        }
-
         break;
     }
   }
@@ -233,6 +220,9 @@ export default class Board {
   }
 
   _clearBoard({resetSortType = false} = {}) {
+    if (this._pointAdderPresenter) {
+      this._pointAdderPresenter.destroy();
+    }
     Object
       .values(this._pointPresenters)
       .forEach((presenter) => {
