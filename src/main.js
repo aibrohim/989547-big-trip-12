@@ -1,6 +1,4 @@
 import LocationCostWrapperView from './view/locationCostWrapper.js';
-import LocationInfoView from './view/locationInfo.js';
-import CostInfoView from './view/costInfo.js';
 import MenuView from './view/menu.js';
 import BoardView from './presenter/board.js';
 import FilterView from './presenter/filter.js';

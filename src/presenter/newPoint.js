@@ -1,14 +1,8 @@
 import EventAdderView from "./../view/eventEditor.js";
-import {replace, render, RenderPosition, remove} from "./../utils/render.js";
+import {render, RenderPosition, remove} from "./../utils/render.js";
 import {UserAction, UpdateType} from "../consts.js";
-import {isDatesEqual} from "../utils/point.js";
 import offers from "./../mock/offers.js";
 import {generateId} from "./../mock/tripPoint.js";
-
-const Mode = {
-  DEFAULT: `DEFAULT`,
-  EDITING: `EDITING`
-};
 
 export default class Point {
   constructor(parentElement, changeData) {
@@ -25,7 +19,6 @@ export default class Point {
   init(destinations) {
     this._offers = offers;
     this._destinations = destinations;
-    const prevEditComponent = this._eventAdderComponent;
 
     this._eventAdderComponent = new EventAdderView(null, offers, destinations);
     render(this._parentElement, this._eventAdderComponent, RenderPosition.AFTEREND);
@@ -50,7 +43,6 @@ export default class Point {
         UpdateType.MAJOR,
         Object.assign({id: generateId()}, data)
     );
-    console.log(data);
     this.destroy();
   }
 
