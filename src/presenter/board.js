@@ -43,7 +43,6 @@ export default class Board {
 
     this._pointsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
-    console.log(`hello`);
     this._defaultRendering();
   }
 
@@ -258,7 +257,6 @@ export default class Board {
   }
 
   destroy() {
-    console.log(`salom`);
     this._clearBoard({resetSortType: true});
 
     remove(this._tripDaysListComponent);

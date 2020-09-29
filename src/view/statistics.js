@@ -38,15 +38,15 @@ const renderChart = (chartCtx, chartType, events) => {
 
     switch (chartType) {
       case ChartType.MONEY:
-        chartData[eventType].number += event.price;
+        chartData[eventType].number += event.base_price;
         break;
       case ChartType.TRANSPORT:
         chartFormat = `x`;
         chartData[eventType].number++;
         break;
       case ChartType.TIME_SPENT:
-        const startMoment = moment(event.startDate);
-        const finishMoment = moment(event.endDate);
+        const startMoment = moment(event.dateFrom);
+        const finishMoment = moment(event.dateTo);
         const timeDiff = moment.duration(finishMoment.diff(startMoment));
         const millisecondsHours = 3600000;
 

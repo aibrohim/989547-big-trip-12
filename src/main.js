@@ -10,7 +10,8 @@ import FiltersModel from "./models/filter.js";
 import OffersModel from "./models/offers.js";
 import offersMocks from "./mock/offers.js";
 import Statistics from "./view/statistics.js";
-import {MenuItem, UpdateType, FilterType} from "./consts.js";
+import {MenuItem} from "./consts.js";
+import {remove} from "./utils/render.js";
 
 const MAX_TRIPS = 15;
 
@@ -49,15 +50,18 @@ const menuFilterFirstTitle = menuFilterWrapper.querySelector(`h2`);
 const menuComponent = new MenuView();
 render(menuFilterFirstTitle, menuComponent, RenderPosition.AFTEREND);
 const filterPresenter = new FilterView(menuFilterWrapper, filterModel, pointsModel);
+const statsComponent = new Statistics(pointsModel.getPoints());
 
 const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
     case MenuItem.POINTS:
+      if (statsComponent) {
+        remove(statsComponent);
+      }
       boardPresenter.init();
       break;
     case MenuItem.STATISTICS:
       boardPresenter.destroy();
-      const statsComponent = new Statistics(pointsModel.getPoints());
       render(allEvents, statsComponent, RenderPosition.AFTEREND);
       break;
   }
