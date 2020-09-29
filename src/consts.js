@@ -32,3 +32,32 @@ export const MenuItem = {
   STATISTICS: `STATISTICS`
 };
 
+export const EVENT_ACTION = {
+  types: [
+    `Taxi`,
+    `Bus`,
+    `Train`,
+    `Ship`,
+    `Transport`,
+    `Drive`,
+    `Flight`,
+  ],
+  activities: [
+    `Check-in`,
+    `Sightseeing`,
+    `Restaurant`,
+  ],
+};
+
+export const typeToEmoji = {
+  'TAXI': `🚕`,
+  'BUS': `🚌`,
+  'TRAIN': `🚂`,
+  'SHIP': `🛳`,
+  'TRANSPORT': `🚊`,
+  'DRIVE': `🚗`,
+  'FLIGHT': `✈️`,
+  'CHECK-IN': `🏨`,
+  'SIGHTSEEING': `🏛`,
+  'RESTAURANT': `🍴`,
+};

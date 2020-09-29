@@ -1,176 +1,78 @@
-import Smart from './smart.js';
-import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-// import moment from 'moment';
-// import 'moment-duration-format';
+import Chart from 'chart.js';
+import moment from "moment";
 
-const BAR_HEIGHT = 55;
-const TRANSPORT_TYPES = [
-  `Taxi`,
-  `Bus`,
-  `Train`,
-  `Ship`,
-  `Transport`,
-  `Drive`,
-  `Flight`,
-];
+import {EVENT_ACTION, typeToEmoji} from "../consts.js";
+import AbstractView from "./abstract.js";
+import {capitalizeFirstLetter} from "../utils/common.js";
 
-const getUniqueTypes = (events) => [...new Set(events.map((event) => event.type.toUpperCase()))];
-const getPriceByType = (events, type) => events.filter((event) => event.type.toUpperCase() === type).reduce((accumulator, currentValue) => accumulator + Number(currentValue.price), 0);
-const getMoneyStats = (events) => getUniqueTypes(events).map((type) => getPriceByType(events, type));
-
-const getTransportTypeCount = (events, type) => events.filter((event) => event.type.toUpperCase() === type).length;
-const getUniqueTransportEvents = (events) => getUniqueTypes(events.filter((event) => TRANSPORT_TYPES.some((type) => type.toUpperCase() === event.type.toUpperCase())));
-const getTransportStats = (events) => getUniqueTransportEvents(events).map((type) => getTransportTypeCount(events, type));
-
-const timeByType = (events, type) => events.filter((event) => event.type.toUpperCase() === type).reduce((accumulator, currentValue) => accumulator + currentValue.endTime - currentValue.startTime, 0);
-const getTimeSpentStats = (events) => getUniqueTypes(events).map((type) => timeByType(events, type));
-
-const renderMoneyChart = (ctx, events) => {
-  return new Chart(ctx, {
-    plugins: [ChartDataLabels],
-    type: `horizontalBar`,
-    data: {
-      labels: getUniqueTypes(events),
-      datasets: [{
-        data: getMoneyStats(events),
-        backgroundColor: `#ffffff`,
-        hoverBackgroundColor: `#ffffff`,
-        anchor: `start`
-      }]
-    },
-    options: {
-      plugins: {
-        datalabels: {
-          font: {
-            size: 13
-          },
-          color: `#000000`,
-          anchor: `end`,
-          align: `start`,
-          formatter: (val) => `€ ${val}`
-        }
-      },
-      title: {
-        display: true,
-        text: `MONEY`,
-        fontColor: `#000000`,
-        fontSize: 23,
-        position: `left`
-      },
-      scales: {
-        yAxes: [{
-          ticks: {
-            fontColor: `#000000`,
-            padding: 5,
-            fontSize: 13,
-          },
-          gridLines: {
-            display: false,
-            drawBorder: false
-          },
-          barThickness: 44,
-        }],
-        xAxes: [{
-          ticks: {
-            display: false,
-            beginAtZero: true,
-          },
-          gridLines: {
-            display: false,
-            drawBorder: false
-          },
-          minBarLength: 50
-        }],
-      },
-      legend: {
-        display: false
-      },
-      tooltips: {
-        enabled: false,
-      }
-    }
-  });
+const BAR_HEIGHT = 45;
+const ChartType = {
+  MONEY: `MONEY`,
+  TRANSPORT: `TRANSPORT`,
+  TIME_SPENT: `TIME SPENT`,
 };
 
-const renderTransportChart = (ctx, events) => {
-  return new Chart(ctx, {
-    plugins: [ChartDataLabels],
-    type: `horizontalBar`,
-    data: {
-      labels: getUniqueTransportEvents(events),
-      datasets: [{
-        data: getTransportStats(events),
-        backgroundColor: `#ffffff`,
-        hoverBackgroundColor: `#ffffff`,
-        anchor: `start`
-      }]
-    },
-    options: {
-      plugins: {
-        datalabels: {
-          font: {
-            size: 13
-          },
-          color: `#000000`,
-          anchor: `end`,
-          align: `start`,
-          formatter: (val) => `${val}x`
-        }
-      },
-      title: {
-        display: true,
-        text: `TRANSPORT`,
-        fontColor: `#000000`,
-        fontSize: 23,
-        position: `left`
-      },
-      scales: {
-        yAxes: [{
-          ticks: {
-            fontColor: `#000000`,
-            padding: 5,
-            fontSize: 13,
-          },
-          gridLines: {
-            display: false,
-            drawBorder: false
-          },
-          barThickness: 44,
-        }],
-        xAxes: [{
-          ticks: {
-            display: false,
-            beginAtZero: true,
-          },
-          gridLines: {
-            display: false,
-            drawBorder: false
-          },
-          minBarLength: 50
-        }],
-      },
-      legend: {
-        display: false
-      },
-      tooltips: {
-        enabled: false,
-      }
+const renderChart = (chartCtx, chartType, events) => {
+  let chartFormat = ``;
+  const chartData = {};
+
+  const filteredEvents = events
+    .slice()
+    .filter((event) => {
+      const type = capitalizeFirstLetter(event.type);
+      return Object.values(EVENT_ACTION.types).includes(type);
+    });
+
+  const isTransport = chartType === ChartType.TRANSPORT ? filteredEvents : events;
+
+  isTransport.forEach((event) => {
+    const eventType = event.type.toUpperCase();
+
+    if (!chartData[eventType]) {
+      chartData[eventType] = {
+        eventType,
+        number: 0
+      };
+    }
+
+    switch (chartType) {
+      case ChartType.MONEY:
+        chartData[eventType].number += event.price;
+        break;
+      case ChartType.TRANSPORT:
+        chartFormat = `x`;
+        chartData[eventType].number++;
+        break;
+      case ChartType.TIME_SPENT:
+        const startMoment = moment(event.startDate);
+        const finishMoment = moment(event.endDate);
+        const timeDiff = moment.duration(finishMoment.diff(startMoment));
+        const millisecondsHours = 3600000;
+
+        chartFormat = `H`;
+        chartData[eventType].number += Math.round(timeDiff / millisecondsHours);
+        break;
     }
   });
-};
 
-const renderTimeSpentChart = (ctx, events) => {
-  return new Chart(ctx, {
+  const sortedData = Object.entries(chartData).sort((a, b) => {
+    return b[1].number - a[1].number;
+  });
+
+  chartCtx.height = BAR_HEIGHT * Object.keys(chartData).length;
+
+  return new Chart(chartCtx, {
     plugins: [ChartDataLabels],
     type: `horizontalBar`,
     data: {
-      labels: getUniqueTypes(events),
+      labels: sortedData.map((data) => `${typeToEmoji[data[0]]} ${data[0]}`),
       datasets: [{
-        data: getTimeSpentStats(events).map((duration) => moment.duration(duration).format(`h`)),
+        data: sortedData.map((data) => data[1].number),
         backgroundColor: `#ffffff`,
         hoverBackgroundColor: `#ffffff`,
-        anchor: `start`
+        anchor: `start`,
+        minBarLength: 50,
       }]
     },
     options: {
@@ -182,12 +84,12 @@ const renderTimeSpentChart = (ctx, events) => {
           color: `#000000`,
           anchor: `end`,
           align: `start`,
-          formatter: (val) => `${val}H`
+          formatter: (val) => `${chartType === ChartType.MONEY ? `€` : ``} ${val}${chartFormat}`
         }
       },
       title: {
         display: true,
-        text: `TIME SPENT`,
+        text: chartType,
         fontColor: `#000000`,
         fontSize: 23,
         position: `left`
@@ -247,13 +149,15 @@ const createStatsTemplate = () => {
   );
 };
 
-export default class Stats extends Smart {
+export default class Stats extends AbstractView {
   constructor(events) {
     super();
+
     this._events = events;
+
     this._moneyChart = null;
     this._transportChart = null;
-    this._timeSpentChart = null;
+    this._timeSpendCtx = null;
 
     this._setCharts();
   }
@@ -263,16 +167,13 @@ export default class Stats extends Smart {
   }
 
   _setCharts() {
-    const moneyCha = this.getElement().querySelector(`.statistics__chart--money`);
+    const moneyCtx = this.getElement().querySelector(`.statistics__chart--money`);
     const transportCtx = this.getElement().querySelector(`.statistics__chart--transport`);
     const timeSpendCtx = this.getElement().querySelector(`.statistics__chart--time`);
 
-    moneyCha.height = BAR_HEIGHT * 6;
-    transportCtx.height = BAR_HEIGHT * 4;
-    timeSpendCtx.height = BAR_HEIGHT * 4;
-
-    this._moneyChart = renderMoneyChart(moneyCha, this._events);
-    this._transportChart = renderTransportChart(transportCtx, this._events);
-    // this._timeSpentChart = renderTimeSpentChart(timeSpendCtx, this._events);
+    this._moneyChart = renderChart(moneyCtx, ChartType.MONEY, this._events);
+    this._transportChart = renderChart(transportCtx, ChartType.TRANSPORT, this._events);
+    this._timeSpendCtx = renderChart(timeSpendCtx, ChartType.TIME_SPENT, this._events);
   }
 }
+
