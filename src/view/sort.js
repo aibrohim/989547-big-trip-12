@@ -1,4 +1,4 @@
-import AbstractView from "../view/Abstract";
+import AbstractView from "./abstract";
 import {SortType} from "../consts.js";
 
 const createSort = () => {

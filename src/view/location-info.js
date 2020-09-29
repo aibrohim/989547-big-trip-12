@@ -1,4 +1,4 @@
-import AbstractView from "./Abstract.js";
+import AbstractView from "./abstract.js";
 
 const createLocationInfo = (data) => {
   const sortedData = data.slice().sort((a, b) => a.dateFrom - b.dateFrom);

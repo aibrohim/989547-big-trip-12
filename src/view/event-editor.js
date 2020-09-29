@@ -1,4 +1,4 @@
-import Smart from "./Smart.js";
+import Smart from "./smart.js";
 import flatpickr from "flatpickr";
 import he from "he";
 
@@ -343,7 +343,7 @@ export default class EventEditor extends Smart {
     } else {
       saveButton.disabled = false;
     }
-    this.updateData({basePrice: priceInputValue}, true);
+    this.updateData({"base_price": priceInputValue}, true);
   }
 
   _cityChangeHandler() {

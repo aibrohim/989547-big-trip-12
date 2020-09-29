@@ -1,15 +1,16 @@
-import LocationCostWrapperView from './view/locationCostWrapper.js';
-import MenuView from './view/menu.js';
-import BoardView from './presenter/board.js';
-import FilterView from './presenter/filter.js';
-import LocationCost from './presenter/locationCost.js';
-import {generateTripPoint} from './mock/tripPoint.js';
+import LocationCostWrapperView from "./view/location-cost-wrapper.js";
+import MenuView from "./view/menu.js";
+import BoardView from "./presenter/board.js";
+import FilterView from "./presenter/filter.js";
+import LocationCost from "./presenter/location-cost.js";
+import {generateTripPoint} from "./mock/trip-point.js";
 import {render, RenderPosition} from "./utils/render.js";
 import PointsModel from "./models/points.js";
 import FiltersModel from "./models/filter.js";
 import OffersModel from "./models/offers.js";
 import offersMocks from "./mock/offers.js";
-import {MenuItem} from "./consts.js";
+import Statistics from "./view/statistics.js";
+import {MenuItem, UpdateType, FilterType} from "./consts.js";
 
 const MAX_TRIPS = 15;
 
@@ -21,7 +22,8 @@ const tripPointsData = new Array(MAX_TRIPS)
 const pointsModel = new PointsModel();
 pointsModel.setPoints(tripPointsData);
 
-const filterModel = new FiltersModel();
+const pageMain = document.querySelector(`.page-body__page-main`);
+const allEvents = pageMain.querySelector(`.trip-events`);
 
 const offersModel = new OffersModel();
 const offersArray = Array.from(Object.values(offersMocks));
@@ -29,6 +31,9 @@ offersModel.setOffers(offersArray);
 
 const siteHeader = document.querySelector(`.page-header`);
 const tripInfo = siteHeader.querySelector(`.trip-main`);
+
+const filterModel = new FiltersModel();
+const boardPresenter = new BoardView(allEvents, pointsModel, filterModel, offersModel);
 
 const locationCostWrapperComponent = new LocationCostWrapperView();
 render(tripInfo, locationCostWrapperComponent, RenderPosition.AFTERBEGIN);
@@ -48,28 +53,23 @@ const filterPresenter = new FilterView(menuFilterWrapper, filterModel, pointsMod
 const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
     case MenuItem.TASKS:
-      // Показать доску
-      // Скрыть статистику
+      boardPresenter.init();
       break;
     case MenuItem.STATISTICS:
-      // Скрыть доску
-      // Показать статистику
+      boardPresenter.destroy();
+      const statsComponent = new Statistics();
+      render(allEvents, statsComponent, RenderPosition.AFTEREND);
       break;
   }
 };
 
 menuComponent.setMenuClickHandler(handleSiteMenuClick);
 
-const pageMain = document.querySelector(`.page-body__page-main`);
-const allEvents = pageMain.querySelector(`.trip-events`);
-
-const boardComponent = new BoardView(allEvents, pointsModel, filterModel, offersModel);
-
 filterPresenter.init();
-boardComponent.init();
+boardPresenter.init();
 
 document.querySelector(`.trip-main__event-add-btn`).addEventListener(`click`, (evt) => {
   evt.preventDefault();
-  boardComponent.createPoint();
+  boardPresenter.createPoint();
 });
 

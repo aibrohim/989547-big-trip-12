@@ -1,4 +1,4 @@
-import AbstractView from "./Abstract.js";
+import AbstractView from "./abstract.js";
 
 const createListOffersTemplate = (offers) => {
   if (offers === null || offers.length === 0) {

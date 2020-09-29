@@ -1,8 +1,8 @@
-import EventAdderView from "./../view/eventEditor.js";
-import {render, RenderPosition, remove} from "./../utils/render.js";
+import EventAdderView from "../view/event-editor.js";
+import {render, RenderPosition, remove} from "../utils/render.js";
 import {UserAction, UpdateType} from "../consts.js";
-import offers from "./../mock/offers.js";
-import {generateId} from "./../mock/tripPoint.js";
+import offers from "../mock/offers.js";
+import {generateId} from "../mock/trip-point.js";
 
 export default class Point {
   constructor(parentElement, changeData) {

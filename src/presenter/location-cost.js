@@ -1,5 +1,5 @@
-import LocationInfoView from "./../view/locationInfo.js";
-import CostInfoView from "./../view/costInfo";
+import LocationInfoView from "../view/location-info.js";
+import CostInfoView from "../view/cost-info";
 import {render, RenderPosition, replace, remove} from "../utils/render.js";
 
 export default class LocationCost {

@@ -1,4 +1,4 @@
-import AbstractView from "./Abstract.js";
+import AbstractView from "./abstract.js";
 
 const createLocationCostWrapper = () => {
   return `<section class="trip-main__trip-info  trip-info">

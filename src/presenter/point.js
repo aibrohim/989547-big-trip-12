@@ -1,7 +1,7 @@
-import TripPointView from "./../view/tripPoint.js";
-import EventEditorView from "./../view/eventEditor.js";
+import TripPointView from "./../view/trip-point.js";
+import EventEditorView from "./../view/event-editor.js";
 import {replace, render, RenderPosition, remove} from "./../utils/render.js";
-import TripPointsList from "../view/tripPointsList.js";
+import TripPointsList from "../view/trip-points-list.js";
 import {UserAction, UpdateType} from "../consts.js";
 import {isDatesEqual} from "../utils/point.js";
 import offers from "./../mock/offers.js";

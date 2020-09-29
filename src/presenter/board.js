@@ -1,16 +1,16 @@
-import SortView from './../view/sort.js';
-import TripDaysListView from './../view/tripDaysList.js';
-import TripDayView from './../view/tripDay.js';
-import TripPointsListView from './../view/tripPointsList.js';
-import NoPointView from './../view/noPoint.js';
-import Point from './point.js';
-import PointAdder from './newPoint.js';
-import {render, RenderPosition, remove} from './../utils/render.js';
+import SortView from "./../view/sort.js";
+import TripDaysListView from "./../view/trip-days-list.js";
+import TripDayView from "./../view/trip-day.js";
+import TripPointsListView from "./../view/trip-points-list.js";
+import NoPointView from "./../view/no-point.js";
+import Point from "./point.js";
+import PointAdder from "./new-point.js";
+import {render, RenderPosition, remove} from "./../utils/render.js";
 import {getSetDates} from "./../utils/point.js";
 import {SortType, UserAction, UpdateType, FilterType} from "./../consts.js";
 import {sortTime, sortPrice} from "./../utils/point.js";
 import {filter} from "./../utils/filter.js";
-import destinations from '../mock/destination.js';
+import destinations from "../mock/destination.js";
 
 export default class Board {
   constructor(boardContainer, pointsModel, filterModel, offersModel) {
@@ -34,18 +34,16 @@ export default class Board {
     this._handlePointChange = this._handlePointChange.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleViewAction = this._handleViewAction.bind(this);
-
-    this._pointsModel.addObserver(this._handleModelEvent);
-    this._filterModel.addObserver(this._handleModelEvent);
-
-    // this._renderSort();
-    // this._pointAdderPresenter = new PointAdder(this._sortComponent, this._handleViewAction);
   }
 
   init() {
     if (this._sortComponent === null) {
       this._renderSort();
     }
+
+    this._pointsModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
+
     this._defaultRendering();
   }
 
@@ -257,5 +255,15 @@ export default class Board {
         presenter.destroy();
       });
     this._pointPresenters = {};
+  }
+
+  destroy() {
+    console.log(`salom`);
+    this._clearBoard({resetSortType: true});
+
+    remove(this._tripDaysListComponent);
+
+    this._pointsModel.removeObserver(this._handleModelEvent);
+    this._filterModel.removeObserver(this._handleModelEvent);
   }
 }

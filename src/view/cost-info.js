@@ -1,4 +1,4 @@
-import AbstractView from "./Abstract.js";
+import AbstractView from "./abstract.js";
 
 const createCostInfo = (data) => {
   const totalPrice = data.reduce((total, currentData) => {

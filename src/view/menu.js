@@ -1,4 +1,4 @@
-import AbstractView from "./Abstract.js";
+import AbstractView from "./abstract.js";
 import {MenuItem} from "./../consts.js";
 
 const createMenu = () => {
@@ -22,6 +22,13 @@ export default class Menu extends AbstractView {
 
   _menuClickHandler(evt) {
     evt.preventDefault();
+    if (evt.target.classList.contains(`trip-tabs__btn--active`)) {
+      return;
+    }
+    this.getElement().querySelectorAll(`a`).forEach((element) => {
+      element.classList.remove(`trip-tabs__btn--active`);
+    });
+    evt.target.classList.add(`trip-tabs__btn--active`);
     this._callback.menuClickHandler(evt.target.dataset.menuname);
   }
 

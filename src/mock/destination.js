@@ -10,11 +10,11 @@ const generateDescription = () => {
 };
 
 const generateImgLinks = () => {
-  const MIN_IMAGES_NUMBER = 1;
-  const MAX_IMAGES_NUMBER = 10;
+  const MIN_IMAGES_COUNT = 1;
+  const MAX_IMAGES_COUNT = 10;
   const images = [];
 
-  for (let i = 0; i < getRandomInteger(MIN_IMAGES_NUMBER, MAX_IMAGES_NUMBER); i++) {
+  for (let i = 0; i < getRandomInteger(MIN_IMAGES_COUNT, MAX_IMAGES_COUNT); i++) {
     let image = `http://picsum.photos/248/152?r=${Math.random()}`;
     images.push({
       src: image,
