@@ -1,96 +1,126 @@
-export default {
-  taxi: [
-    {
-      name: `Order Uber`,
-      cost: `20`,
-      isChecked: true
-    }
-  ],
-  bus: [
-    {
-      name: `Add luggage`,
-      cost: `35`,
-      isChecked: false
-    },
-    {
-      name: `Order Uber`,
-      cost: `20`,
-      isChecked: true
-    }
-  ],
-  train: [
-    {
-      name: `Switch to comfort`,
-      cost: `120`,
-      isChecked: true
-    },
-    {
-      name: `Add luggage`,
-      cost: `65`,
-      isChecked: false
-    }
-  ],
-  ship: [
-    {
-      name: `Switch to comfort`,
-      cost: `120`,
-      isChecked: true
-    },
-    {
-      name: `Add luggage`,
-      cost: `65`,
-      isChecked: true
-    },
-    {
-      name: `Order Uber`,
-      cost: `15`,
-      isChecked: false
-    }
-  ],
-  transport: [
-    {
-      name: `Lunch in city`,
-      cost: `80`,
-      isChecked: false
-    },
-    {
-      name: `Book tickets`,
-      cost: `65`,
-      isChecked: true
-    }
-  ],
-  drive: [
-    {
-      name: `Add luggage`,
-      cost: `20`,
-      isChecked: false
-    }
-  ],
-  flight: [
-    {
-      name: `Switch to comfort`,
-      cost: `80`,
-      isChecked: false
-    }
-  ],
-  checkIn: [],
-  sightseeing: [
-    {
-      name: `Add breakfast`,
-      cost: `5`,
-      isChecked: true
-    }
-  ],
-  restaurant: [
-    {
-      name: `Lunch in city`,
-      cost: `50`,
-      isChecked: false
-    },
-    {
-      name: `Order Uber`,
-      cost: `25`,
-      isChecked: true
-    }
-  ],
-};
+export default [
+  {
+    type: `taxi`,
+    offers: [
+      {
+        title: `Order Uber`,
+        cost: `20`,
+        isChecked: true
+      }
+    ]
+  },
+  {
+    type: `bus`,
+    offers: [
+      {
+        title: `Add luggage`,
+        cost: `35`,
+        isChecked: false
+      },
+      {
+        title: `Order Uber`,
+        cost: `20`,
+        isChecked: true
+      }
+    ],
+  },
+  {
+    type: `train`,
+    offers: [
+      {
+        title: `Switch to comfort`,
+        cost: `120`,
+        isChecked: true
+      },
+      {
+        title: `Add luggage`,
+        cost: `65`,
+        isChecked: false
+      }
+    ]
+  },
+  {
+    type: `ship`,
+    offers: [
+      {
+        title: `Switch to comfort`,
+        cost: `120`,
+        isChecked: true
+      },
+      {
+        title: `Add luggage`,
+        cost: `65`,
+        isChecked: true
+      },
+      {
+        title: `Order Uber`,
+        cost: `15`,
+        isChecked: false
+      }
+    ]
+  },
+  {
+    type: `transport`,
+    offers: [
+      {
+        title: `Lunch in city`,
+        cost: `80`,
+        isChecked: false
+      },
+      {
+        title: `Book tickets`,
+        cost: `65`,
+        isChecked: true
+      }
+    ]
+  },
+  {
+    type: `drive`,
+    offers: [
+      {
+        title: `Add luggage`,
+        cost: `20`,
+        isChecked: false
+      }
+    ]
+  },
+  {
+    type: `flight`,
+    offers: [
+      {
+        title: `Switch to comfort`,
+        cost: `80`,
+        isChecked: false
+      }
+    ]
+  },
+  {
+    type: `check-in`,
+    offers: [],
+  },
+  {
+    type: `sightseeing`,
+    offers: [
+      {
+        title: `Add breakfast`,
+        cost: `5`,
+        isChecked: true
+      }
+    ]
+  },
+  {
+    type: `restaurant`,
+    offers: [
+      {
+        title: `Lunch in city`,
+        cost: `50`,
+        isChecked: false
+      },
+      {
+        title: `Order Uber`,
+        cost: `25`,
+        isChecked: true
+      }
+    ]
+  }
+];

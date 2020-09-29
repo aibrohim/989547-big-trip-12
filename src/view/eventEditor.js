@@ -44,12 +44,8 @@ const createRollupButtonTemplate = (event) => {
 
 };
 
-const getOffers = (offers, type) => {
-  if (type === `Check-in`) {
-    type = `checkIn`;
-    return offers[type];
-  }
-  return offers[type.toLowerCase()];
+export const getOffers = (offers, type) => {
+  return offers.find((it) => it.type === type.toLowerCase()).offers;
 };
 
 const createDestinationTemplate = (event) => {
@@ -73,35 +69,44 @@ const createDestinationTemplate = (event) => {
   );
 };
 
-const createListOffersTemplate = (offers) => {
+const createListOffersTemplate = (offers, isChecked) => {
   if (offers === null || offers.length === 0) {
     return ``;
   }
 
   return (
-    `<section class="event__section  event__section--offers">
-    <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-
+    `<h3 class="event__section-title  event__section-title--offers">Offers</h3>
     <div class="event__available-offers">
+    ${offers
+        .map((offer) => createNewOfferTemplate(
+            offer,
+            isChecked.some((it) => it.title === offer.title)
+        )).join(``)}
+    </div>`
+  );
+};
 
-    <div class="event__available-offers">
-    ${offers.map((offer, index) =>
-      `<div class="event__offer-selector">
-        <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${index}" value="${offer.name}" type="checkbox" name="event-offer-luggage" ${offer.isChecked === true ? `checked` : ``}>
-        <label class="event__offer-label" for="event-offer-luggage-${index}" data-offer-name="${offer.name}">
-          <span class="event__offer-title">${offer.name}</span>
-          &plus;
-          &euro;&nbsp;<span class="event__offer-price">${offer.cost}</span>
-        </label>
-      </div>`).join(``)}
-    </div>
-  </section>`
+const createNewOfferTemplate = (offer, isChecked) => {
+  const offerNameId = offer.title.split(` `).join(`-`).toLowerCase();
+
+
+  return (
+    `<div class="event__offer-selector">
+      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offerNameId}" type="checkbox" name="event-offer-${offerNameId}" ${isChecked ? `checked` : ``} value="${offer.title}">
+      <label class="event__offer-label" for="event-offer-${offerNameId}">
+        <span class="event__offer-title">${offer.title}</span>
+        &plus;
+        &euro;&nbsp;<span class="event__offer-price">${offer.price}</span>
+      </label>
+    </div>`
   );
 };
 
 const createEventAdder = (data, offers, destinations) => {
-  const {type, city, dateFrom, dateTo, destination, cost, isFavourite, id} = data;
+  const {type, city, dateFrom, dateTo, cost, isFavourite, id} = data;
+  const createOffersList = createListOffersTemplate(getOffers(offers, type), data.offers);
   const destinationTemplate = createDestinationTemplate(data);
+
 
   return `<form class="event  event--edit ${id ? `` : `trip-events__item`}" action="#" method="post">
   <header class="event__header">
@@ -220,7 +225,9 @@ const createEventAdder = (data, offers, destinations) => {
   </header>
 
   <section class="event__details">
-    ${createListOffersTemplate(getOffers(offers, type))}
+    <section class="event__section  event__section--offers">
+    ${createOffersList}
+    </section>
     <section class="event__section  event__section--destination">
         ${destinationTemplate}
       </section>
@@ -332,7 +339,7 @@ export default class EventEditor extends Smart {
         });
   }
 
-  _priceChangeHandler(evt) {
+  _priceChangeHandler() {
     const saveButton = this.getElement().querySelector(`.event__save-btn`);
     const priceInput = this.getElement().querySelector(`#event-price-1`);
     const priceInputValue = parseInt(priceInput.value, 10);
@@ -352,19 +359,19 @@ export default class EventEditor extends Smart {
     });
   }
 
-  // _offerClickHandler() {
-  //   const checkedTitles = Array
-  //     .from(this.getElement().querySelectorAll(`.event__offer-checkbox`))
-  //     .filter((element) => element.checked)
-  //     .map((element) => element.value);
+  _offerClickHandler(evt) {
+    const checkedTitles = Array
+      .from(this.getElement().querySelectorAll(`.event__offer-checkbox`))
+      .filter((element) => element.checked)
+      .map((element) => element.value);
 
-  //   const offers = getOffers(this._offers, this._data.type)
-  //                   .filter((offer) => checkedTitles.includes(offer.name));
+    const offers = getOffers(this._offers, this._data.type)
+                    .filter((offer) => checkedTitles.includes(offer.title));
 
-  //   this.updateData({
-  //     offers,
-  //   }, true);
-  // }
+    this.updateData({
+      offers,
+    }, true);
+  }
 
   _setInnerHandlers() {
     this.getElement().querySelector(`.event__type-list`).addEventListener(`click`, this._typeChangeHandler);
@@ -373,6 +380,7 @@ export default class EventEditor extends Smart {
     this.getElement().querySelector(`#event-price-1`).addEventListener(`change`, this._priceChangeHandler);
     this.getElement().querySelector(`#event-destination-1`).addEventListener(`change`, this._cityChangeHandler);
     this.getElement().querySelector(`.event__reset-btn`).addEventListener(`click`, this._deleteHandler);
+    this.getElement().querySelector(`.event__section--offers`).addEventListener(`change`, this._offerClickHandler);
   }
 
   restoreHandlers() {
@@ -413,7 +421,7 @@ export default class EventEditor extends Smart {
 
   _saveHandler(evt) {
     evt.preventDefault();
-    // this._offerClickHandler();
+    this._offerClickHandler();
     this._callback.saveHandler(this._data);
   }
 

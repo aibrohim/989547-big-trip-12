@@ -1,13 +1,5 @@
 import AbstractView from "./Abstract.js";
 
-const getOffers = (offers, type) => {
-  if (type === `Check-in`) {
-    type = `checkIn`;
-    return offers[type].slice().filter((offer) => offer.isChecked);
-  }
-  return offers[type.toLowerCase()].slice().filter((offer) => offer.isChecked);
-};
-
 const createListOffersTemplate = (offers) => {
   if (offers === null || offers.length === 0) {
     return ``;
@@ -15,15 +7,15 @@ const createListOffersTemplate = (offers) => {
 
   return offers.slice(0, 3).map((offer) => {
     return `<li class="event__offer">
-          <span class="event__offer-title">${offer.name}</span>
+          <span class="event__offer-title">${offer.title}</span>
           &plus;
           &euro;&nbsp;<span class="event__offer-price">${offer.cost}</span>
          </li>`;
   }).join(``);
 };
 
-const createTripPoint = (data, offers) => {
-  const {type, city, dateFrom, dateTo, cost} = data;
+const createTripPoint = (data) => {
+  const {type, city, dateFrom, dateTo, cost, offers} = data;
   const MILLISECONDS_IN_SECOND = 1000;
   const SECONDS_IN_DAY = 86400;
   const SECONDS_IN_HOUR = 3600;
@@ -109,7 +101,7 @@ const createTripPoint = (data, offers) => {
       ${offers.length === 0 ? `` : `<ul class="event__selected-offers">
 
 
-        ${createListOffersTemplate(getOffers(offers, type))}
+        ${createListOffersTemplate(offers)}
 
 
     </ul>`}
@@ -123,11 +115,10 @@ const createTripPoint = (data, offers) => {
 };
 
 export default class TripPoint extends AbstractView {
-  constructor(data, offers) {
+  constructor(data) {
     super();
 
     this._info = data;
-    this._offers = offers;
     this._editClickHandler = this._editClickHandler.bind(this);
   }
 

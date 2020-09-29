@@ -11,6 +11,7 @@ import PointsModel from "./models/points.js";
 import FiltersModel from "./models/filter.js";
 import OffersModel from "./models/offers.js";
 import offersMocks from "./mock/offers.js";
+import {MenuItem} from "./consts.js";
 
 const MAX_TRIPS = 15;
 
@@ -26,7 +27,6 @@ const filterModel = new FiltersModel();
 
 const offersModel = new OffersModel();
 const offersArray = Array.from(Object.values(offersMocks));
-console.log(offersArray);
 offersModel.setOffers(offersArray);
 
 const siteHeader = document.querySelector(`.page-header`);
@@ -46,6 +46,21 @@ const menuFilterFirstTitle = menuFilterWrapper.querySelector(`h2`);
 const menuComponent = new MenuView();
 render(menuFilterFirstTitle, menuComponent, RenderPosition.AFTEREND);
 const filterPresenter = new FilterView(menuFilterWrapper, filterModel, pointsModel);
+
+const handleSiteMenuClick = (menuItem) => {
+  switch (menuItem) {
+    case MenuItem.TASKS:
+      // Показать доску
+      // Скрыть статистику
+      break;
+    case MenuItem.STATISTICS:
+      // Скрыть доску
+      // Показать статистику
+      break;
+  }
+};
+
+menuComponent.setMenuClickHandler(handleSiteMenuClick);
 
 const pageMain = document.querySelector(`.page-body__page-main`);
 const allEvents = pageMain.querySelector(`.trip-events`);

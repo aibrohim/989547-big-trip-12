@@ -34,11 +34,7 @@ export default class Point {
     this._eventAdderComponent.setDeleteHandler(this._handleDeleteClick);
 
     document.addEventListener(`keydown`, this._onEscPress);
-    if (this._eventAdderComponent) {
-      document.querySelector(`.trip-main__event-add-btn`).disabled = true;
-    } else {
-      document.querySelector(`.trip-main__event-add-btn`).disabled = false;
-    }
+    document.querySelector(`.trip-main__event-add-btn`).disabled = true;
   }
 
   _onEscPress(evt) {
@@ -69,7 +65,7 @@ export default class Point {
     }
     remove(this._eventAdderComponent);
     this._eventAdderComponent = null;
-
+    document.querySelector(`.trip-main__event-add-btn`).disabled = false;
     document.removeEventListener(`keydown`, this._escKeyDownHandler);
   }
 }
