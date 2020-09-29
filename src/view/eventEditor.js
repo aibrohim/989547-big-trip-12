@@ -364,7 +364,6 @@ export default class EventEditor extends Smart {
       .from(this.getElement().querySelectorAll(`.event__offer-checkbox`))
       .filter((element) => element.checked)
       .map((element) => element.value);
-
     const offers = getOffers(this._offers, this._data.type)
                     .filter((offer) => checkedTitles.includes(offer.title));
 
