@@ -43,7 +43,7 @@ export default class Board {
 
     this._pointsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
-
+    console.log(`hello`);
     this._defaultRendering();
   }
 

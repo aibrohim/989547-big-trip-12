@@ -52,12 +52,12 @@ const filterPresenter = new FilterView(menuFilterWrapper, filterModel, pointsMod
 
 const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
-    case MenuItem.TASKS:
+    case MenuItem.POINTS:
       boardPresenter.init();
       break;
     case MenuItem.STATISTICS:
       boardPresenter.destroy();
-      const statsComponent = new Statistics();
+      const statsComponent = new Statistics(pointsModel.getPoints());
       render(allEvents, statsComponent, RenderPosition.AFTEREND);
       break;
   }

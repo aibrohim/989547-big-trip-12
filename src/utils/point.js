@@ -15,7 +15,7 @@ export const sortTime = (a, b) => {
   return firstDate - secondDate;
 };
 
-export const sortPrice = (a, b) => b.cost - a.cost;
+export const sortPrice = (a, b) => b.base_price - a.base_price;
 
 export const isDatesEqual = (dateA, dateB) => {
   if (dateA.toString === dateB.toString) {
