@@ -156,7 +156,10 @@ export default class Board {
         });
         break;
       case UserAction.ADD_POINT:
-        this._pointsModel.addPoint(updateType, update);
+        this._api.addPoint(update).then((response) => {
+          console.log(response);
+          this._pointsModel.addPoint(updateType, response);
+        });
         break;
       case UserAction.DELETE_POINT:
         this._pointsModel.deletePoint(updateType, update);
