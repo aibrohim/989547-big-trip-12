@@ -1,8 +1,7 @@
 import EventAdderView from "../view/event-editor.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
 import {UserAction, UpdateType} from "../consts.js";
-import offers from "../mock/offers.js";
-import {generateId} from "../mock/trip-point.js";
+import {generateId} from "../utils/point.js";
 
 export default class Point {
   constructor(parentElement, changeData) {
@@ -16,7 +15,7 @@ export default class Point {
     this._handleDeleteClick = this._handleDeleteClick.bind(this);
   }
 
-  init(destinations) {
+  init(destinations, offers) {
     this._offers = offers;
     this._destinations = destinations;
 
