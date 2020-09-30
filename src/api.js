@@ -48,7 +48,7 @@ export default class Api {
       headers: new Headers({"Content-Type": `application/json`})
     })
       .then(Api.toJSON)
-      .then(PointModel.adaptToServer);
+      .then(PointModel.adaptToClient);
   }
 
   _load({
