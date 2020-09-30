@@ -268,8 +268,6 @@ export default class EventEditor extends Smart {
     this._setInnerHandlers();
     this._setDateToPicker();
     this._setDateFromPicker();
-
-    console.log(data);
   }
 
   resetData(data) {

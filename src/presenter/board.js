@@ -152,7 +152,6 @@ export default class Board {
     switch (actionType) {
       case UserAction.UPDATE_POINT:
         this._api.updatePoint(update).then((response) => {
-          console.log(`hello`);
           this._pointsModel.updatePoint(updateType, response);
         });
         break;
