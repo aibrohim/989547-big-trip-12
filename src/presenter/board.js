@@ -13,11 +13,12 @@ import {filter} from "./../utils/filter.js";
 import LoadingView from "./../view/loading.js";
 
 export default class Board {
-  constructor(boardContainer, pointsModel, filterModel) {
+  constructor(boardContainer, pointsModel, filterModel, api) {
     this._boardContainer = boardContainer;
     this._pointsModel = pointsModel;
     this._filterModel = filterModel;
     this._defaultSortType = SortType.DEFAULT;
+    this._api = api;
 
     this._pointPresenters = {};
     this._daysPresenters = [];
@@ -149,7 +150,9 @@ export default class Board {
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.UPDATE_POINT:
-        this._pointsModel.updatePoint(updateType, update);
+        this._api.updatePoint().then((response) => {
+          this._pointsModel.updatePoint(updateType, response);
+        });
         break;
       case UserAction.ADD_POINT:
         this._pointsModel.addPoint(updateType, update);

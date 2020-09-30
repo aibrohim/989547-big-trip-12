@@ -1,6 +1,6 @@
 import LocationCostWrapperView from "./view/location-cost-wrapper.js";
 import MenuView from "./view/menu.js";
-import BoardView from "./presenter/board.js";
+import BoardPresenter from "./presenter/board.js";
 import FilterView from "./presenter/filter.js";
 import LocationCost from "./presenter/location-cost.js";
 import {render, RenderPosition} from "./utils/render.js";
@@ -25,7 +25,7 @@ const api = new Api(END_POINT, AUTHORIZATION);
 const pointsModel = new PointsModel();
 
 const filterModel = new FiltersModel();
-const boardPresenter = new BoardView(allEvents, pointsModel, filterModel);
+const board = new BoardPresenter(allEvents, pointsModel, filterModel, api);
 
 const locationCostWrapperComponent = new LocationCostWrapperView();
 
@@ -48,10 +48,10 @@ const menuClickHandler = (menuItem) => {
       if (statsComponent) {
         remove(statsComponent);
       }
-      boardPresenter.init();
+      board.init();
       break;
     case MenuItem.STATISTICS:
-      boardPresenter.destroy();
+      board.destroy();
       statsComponent = new Statistics(pointsModel.getPoints());
       render(allEvents, statsComponent, RenderPosition.AFTEREND);
       break;
@@ -61,11 +61,11 @@ const menuClickHandler = (menuItem) => {
 menuComponent.setMenuClickHandler(menuClickHandler);
 
 filterPresenter.init();
-boardPresenter.init();
+board.init();
 
 document.querySelector(`.trip-main__event-add-btn`).addEventListener(`click`, (evt) => {
   evt.preventDefault();
-  boardPresenter.createPoint();
+  board.createPoint();
 });
 
 api.getAllData()

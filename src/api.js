@@ -40,7 +40,7 @@ export default class Api {
       .then(Api.toJSON);
   }
 
-  updateTask(point) {
+  updatePoint(point) {
     return this._load({
       url: `points/${point.id}`,
       method: Method.PUT,

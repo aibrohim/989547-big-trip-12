@@ -110,7 +110,7 @@ const generateDestinationCities = (destinations) => {
   });
 
   return cities;
-}
+};
 
 const createEventAdder = (data, offers, destinations) => {
   const {type, city, dateFrom, dateTo, "base_price": basePrice, id} = data;
@@ -267,6 +267,8 @@ export default class EventEditor extends Smart {
     this._setInnerHandlers();
     this._setDateToPicker();
     this._setDateFromPicker();
+
+    console.log(data);
   }
 
   resetData(data) {
@@ -360,8 +362,7 @@ export default class EventEditor extends Smart {
   _cityChangeHandler() {
     const cityInputValue = this.getElement().querySelector(`#event-destination-1`).value;
     this.updateData({
-      city: he.encode(cityInputValue),
-      destination: this._destinations[cityInputValue]
+      destination: this._destinations[he.encode(cityInputValue)]
     });
   }
 
