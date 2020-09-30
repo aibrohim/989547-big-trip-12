@@ -17,7 +17,8 @@ export const UserAction = {
 export const UpdateType = {
   PATCH: `PATCH`,
   MINOR: `MINOR`,
-  MAJOR: `MAJOR`
+  MAJOR: `MAJOR`,
+  INIT: `INIT`
 };
 
 export const FilterType = {
@@ -27,7 +28,6 @@ export const FilterType = {
 };
 
 export const MenuItem = {
-  ADD_NEW_POINTS: `ADD_NEW_POINT`,
   POINTS: `POINTS`,
   STATISTICS: `STATISTICS`
 };

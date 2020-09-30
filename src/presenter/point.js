@@ -4,8 +4,6 @@ import {replace, render, RenderPosition, remove} from "./../utils/render.js";
 import TripPointsList from "../view/trip-points-list.js";
 import {UserAction, UpdateType} from "../consts.js";
 import {isDatesEqual} from "../utils/point.js";
-import offers from "./../mock/offers.js";
-import destinations from "./../mock/destination.js";
 
 const Mode = {
   DEFAULT: `DEFAULT`,
@@ -36,8 +34,8 @@ export default class Point {
     const prevPointComponent = this._tripPointComponent;
     const prevEditComponent = this._eventEditorComponent;
 
-    this._tripPointComponent = new TripPointView(data, offers);
-    this._eventEditorComponent = new EventEditorView(data, offers, destinations);
+    this._tripPointComponent = new TripPointView(data);
+    this._eventEditorComponent = new EventEditorView(data);
 
     this._tripPointComponent.setEditClickHandler(this._replacePointToEdit);
     this._eventEditorComponent.setPointOpenHandler(this._replaceEditToPoint);

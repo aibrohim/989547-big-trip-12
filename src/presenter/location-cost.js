@@ -8,15 +8,17 @@ export default class LocationCost {
     this._pointsModel = pointsModel;
 
     this._handleModelEvent = this._handleModelEvent.bind(this);
-    this._pointsModel.addObserver(this._handleModelEvent);
   }
 
   init() {
+    const pointsData = this._getPoints();
     const prevLocationComponent = this._locationInfoComponent;
     const prevCostInfoComponent = this._costInfoComponent;
 
-    this._locationInfoComponent = new LocationInfoView(this._getPoints());
-    this._costInfoComponent = new CostInfoView(this._getPoints());
+    this._pointsModel.addObserver(this._handleModelEvent);
+
+    this._locationInfoComponent = new LocationInfoView(pointsData);
+    this._costInfoComponent = new CostInfoView(pointsData);
 
     if (prevLocationComponent === undefined && prevCostInfoComponent === undefined) {
       render(this._parentElement, this._locationInfoComponent, RenderPosition.AFTERBEGIN);

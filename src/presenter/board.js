@@ -10,30 +10,33 @@ import {getSetDates} from "./../utils/point.js";
 import {SortType, UserAction, UpdateType, FilterType} from "./../consts.js";
 import {sortTime, sortPrice} from "./../utils/point.js";
 import {filter} from "./../utils/filter.js";
-import destinations from "../mock/destination.js";
+import LoadingView from "./../view/loading.js";
 
 export default class Board {
-  constructor(boardContainer, pointsModel, filterModel, offersModel) {
+  constructor(boardContainer, pointsModel, filterModel, api) {
     this._boardContainer = boardContainer;
     this._pointsModel = pointsModel;
     this._filterModel = filterModel;
     this._defaultSortType = SortType.DEFAULT;
-    this._offersModel = offersModel;
+    this._api = api;
 
     this._pointPresenters = {};
     this._daysPresenters = [];
     this._tripPointsLists = [];
     this._sortComponent = null;
     this._tripDays = [];
+    this._isLoading = true;
 
     this._currentSortType = SortType.DEFAULT;
     this._tripDaysListComponent = new TripDaysListView();
     this._noPointsComponent = new NoPointView();
     this._point = new Point();
+    this._loadingComponent = new LoadingView();
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
     this._handlePointChange = this._handlePointChange.bind(this);
+    this._pointData = this._getPoints();
+
     this._handleModelEvent = this._handleModelEvent.bind(this);
-    this._handleViewAction = this._handleViewAction.bind(this);
   }
 
   init() {
@@ -50,7 +53,7 @@ export default class Board {
     this._currentSortType = SortType.DEFAULT;
     this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this._pointAdderPresenter = new PointAdder(this._sortComponent, this._handleViewAction);
-    this._pointAdderPresenter.init(destinations);
+    this._pointAdderPresenter.init(this._destinations, this._offers);
   }
 
   _getPoints() {
@@ -64,7 +67,6 @@ export default class Board {
       case SortType.PRICE:
         return filtredPoints.sort(sortPrice);
     }
-
     return filtredPoints.sort((a, b) => a.dateFrom - b.dateTo);
   }
 
@@ -97,20 +99,21 @@ export default class Board {
     });
   }
 
-  _defaultRendering() {
-    if (this._getPoints().length === 0) {
-      this._renderNoPoints();
+  _defaultRendering(trips = this._getPoints().slice()) {
+    if (this._isLoading) {
+      this._renderLoading();
+      return;
     }
 
-    if (this._getPoints().length > 0) {
+    if (trips.length > 0) {
       this._renderTripDaysList();
     }
 
-    const data = this._getPoints().sort((a, b) => a.dateFrom - b.dateFrom);
+    const sortedData = trips.sort((a, b) => a.dateFrom - b.dateFrom);
 
-    getSetDates(data).forEach((date, index) => {
+    getSetDates(sortedData).forEach((date, index) => {
       const normalDate = new Date(date);
-      const filtredData = data.slice().filter((dataItem) => {
+      const filtredData = sortedData.slice().filter((dataItem) => {
         return dataItem.dateFrom.toDateString() === normalDate.toDateString();
       });
 
@@ -147,7 +150,9 @@ export default class Board {
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.UPDATE_POINT:
-        this._pointsModel.updatePoint(updateType, update);
+        this._api.updatePoint(update).then((response) => {
+          this._pointsModel.updatePoint(updateType, response);
+        });
         break;
       case UserAction.ADD_POINT:
         this._pointsModel.addPoint(updateType, update);
@@ -186,6 +191,11 @@ export default class Board {
         }
         this._defaultRendering();
         break;
+      case UpdateType.INIT:
+        this._isLoading = false;
+        remove(this._loadingComponent);
+        this._defaultRendering();
+        break;
     }
   }
 
@@ -214,6 +224,10 @@ export default class Board {
 
   _renderTripPointsList() {
     render(this._tripDayComponent, this._tripPointsListComponent, RenderPosition.BEFOREEND);
+  }
+
+  _renderLoading() {
+    render(this._boardContainer, this._loadingComponent, RenderPosition.BEFOREEND);
   }
 
   _clearBoard({resetSortType = false} = {}) {
