@@ -64,7 +64,7 @@ export default class Api {
       .then(PointModel.adaptToClient);
   }
 
-  deleteTask(point) {
+  deletePoint(point) {
     return this._load({
       url: `points/${point.id}`,
       method: Method.DELETE
