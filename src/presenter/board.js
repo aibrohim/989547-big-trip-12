@@ -37,6 +37,8 @@ export default class Board {
     this._handlePointChange = this._handlePointChange.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleViewAction = this._handleViewAction.bind(this);
+
+    this._pointData = this._getPoints();
   }
 
   init() {
@@ -67,8 +69,6 @@ export default class Board {
       case SortType.PRICE:
         return filtredPoints.sort(sortPrice);
     }
-
-    console.log(filtredPoints);
     return filtredPoints.sort((a, b) => a.dateFrom - b.dateTo);
   }
 
@@ -102,25 +102,28 @@ export default class Board {
   }
 
   _defaultRendering() {
+    if (this._pointData.length === 0) {
+      this._pointData = this._getPoints();
+    }
     if (this._isLoading) {
       this._renderLoading();
       return;
     }
-    if (this._getPoints().length === 0) {
+    if (this._pointData.length === 0) {
       this._renderNoPoints();
     }
 
-    if (this._getPoints().length > 0) {
+    if (this._pointData.length > 0) {
       this._renderTripDaysList();
     }
 
-    const data = this._getPoints().sort((a, b) => a.dateFrom - b.dateFrom);
+    console.log(this._pointData);
 
-    console.log(data);
+    const sortedData = this._pointData.sort((a, b) => a.dateFrom - b.dateFrom);
 
-    getSetDates(data).forEach((date, index) => {
+    getSetDates(sortedData).forEach((date, index) => {
       const normalDate = new Date(date);
-      const filtredData = data.slice().filter((dataItem) => {
+      const filtredData = sortedData.slice().filter((dataItem) => {
         return dataItem.dateFrom.toDateString() === normalDate.toDateString();
       });
 
@@ -197,9 +200,10 @@ export default class Board {
         this._defaultRendering();
         break;
       case UpdateType.INIT:
+        console.log(`salom`);
         this._isLoading = false;
         remove(this._loadingComponent);
-        this._defaultRendering();
+        this.init();
         break;
     }
   }

@@ -34,7 +34,7 @@ export default class Point {
     const prevPointComponent = this._tripPointComponent;
     const prevEditComponent = this._eventEditorComponent;
 
-    this._tripPointComponent = new TripPointView(data, offers);
+    this._tripPointComponent = new TripPointView(data);
     this._eventEditorComponent = new EventEditorView(data, offers, destinations);
 
     this._tripPointComponent.setEditClickHandler(this._replacePointToEdit);
