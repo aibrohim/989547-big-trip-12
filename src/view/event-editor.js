@@ -103,6 +103,15 @@ const createNewOfferTemplate = (offer, isChecked) => {
   );
 };
 
+const generateDestinationCities = (destinations) => {
+  const cities = [];
+  destinations.forEach((destination) => {
+    cities.push(destination.name);
+  });
+
+  return cities;
+}
+
 const createEventAdder = (data, offers, destinations) => {
   const {type, city, dateFrom, dateTo, "base_price": basePrice, id} = data;
   const createOffersList = createListOffersTemplate(getOffers(offers, type), data.offers);
@@ -111,6 +120,7 @@ const createEventAdder = (data, offers, destinations) => {
   const favouriteIconTemplate = createFavoriteInputTemplate(data);
   const rollUpButtonTemplate = createRollupButtonTemplate(data);
 
+  const CITIES = generateDestinationCities(destinations);
 
   return `<form class="event  event--edit ${id ? `` : `trip-events__item`}" action="#" method="post">
   <header class="event__header">
@@ -188,7 +198,7 @@ const createEventAdder = (data, offers, destinations) => {
       </label>
       <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${city}" list="destination-list-1">
       <datalist id="destination-list-1">
-        ${Object.keys(destinations).map((key) => `<option value="${key}"></option>`)}
+        ${CITIES.map((key) => `<option value="${key}"></option>`)}
       </datalist>
     </div>
 
