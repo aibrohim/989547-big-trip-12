@@ -49,6 +49,22 @@ export default class Point {
     this.destroy();
   }
 
+  setAborting() {
+    const resetFormState = () => {
+      this._taskEditComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false
+      });
+    };
+
+    this._taskEditComponent.shake(resetFormState);
+  }
+
+  setSaving() {
+    this._eventAdderComponent.updateData({isSaving: true, isDisabled: true});
+  }
+
   destroy() {
     if (this._eventAdderComponent === null) {
       return;
