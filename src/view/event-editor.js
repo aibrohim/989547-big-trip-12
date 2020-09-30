@@ -110,7 +110,7 @@ const generateDestinationCities = (destinations) => {
   });
 
   return cities;
-}
+};
 
 const createEventAdder = (data, offers, destinations) => {
   const {type, city, dateFrom, dateTo, "base_price": basePrice, id} = data;
