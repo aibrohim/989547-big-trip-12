@@ -51,14 +51,14 @@ export default class Point {
 
   setAborting() {
     const resetFormState = () => {
-      this._taskEditComponent.updateData({
+      this._eventAdderComponent.updateData({
         isDisabled: false,
         isSaving: false,
         isDeleting: false
       });
     };
 
-    this._taskEditComponent.shake(resetFormState);
+    this._eventAdderComponent.shake(resetFormState);
   }
 
   setSaving() {
