@@ -263,6 +263,7 @@ export default class EventEditor extends Smart {
     this._priceChangeHandler = this._priceChangeHandler.bind(this);
     this._cityChangeHandler = this._cityChangeHandler.bind(this);
     this._pointEscPress = this._pointEscPress.bind(this);
+    this._offerClickHandler = this._offerClickHandler.bind(this);
 
     this._setInnerHandlers();
     this._setDateToPicker();
@@ -295,7 +296,9 @@ export default class EventEditor extends Smart {
       return;
     }
 
-    this.updateData({type: evt.target.dataset.type});
+    const changableTypeValue = evt.target.dataset.type;
+
+    this.updateData({type: changableTypeValue.toLowerCase()});
   }
 
   _setDateFromPicker() {
@@ -358,10 +361,11 @@ export default class EventEditor extends Smart {
   }
 
   _cityChangeHandler() {
-    const cityInputValue = this.getElement().querySelector(`#event-destination-1`).value;
+    const destinationInputValue = this.getElement().querySelector(`#event-destination-1`).value;
+    const mustShowDestination = this._destinations.find((destination) => destination.name === he.encode(destinationInputValue));
     this.updateData({
-      city: he.encode(cityInputValue),
-      destination: this._destinations[cityInputValue]
+      city: destinationInputValue,
+      destination: mustShowDestination
     });
   }
 

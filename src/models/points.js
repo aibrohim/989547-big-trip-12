@@ -56,7 +56,7 @@ export default class Points extends Observer {
     this._notify(updateType, update);
   }
 
-  static adapToClient(data) {
+  static adaptToClient(data) {
     const adaptedPoint = Object.assign(
         {},
         data,
@@ -83,6 +83,7 @@ export default class Points extends Observer {
         }
     );
 
+    delete adaptedToServer.city;
     delete adaptedToServer.dateFrom;
     delete adaptedToServer.dateTo;
 

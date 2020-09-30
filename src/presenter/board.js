@@ -37,6 +37,7 @@ export default class Board {
     this._pointData = this._getPoints();
 
     this._handleModelEvent = this._handleModelEvent.bind(this);
+    this._handleViewAction = this._handleViewAction.bind(this);
   }
 
   init() {
