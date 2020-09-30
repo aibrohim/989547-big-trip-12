@@ -18,8 +18,6 @@ export default class Board {
     this._pointsModel = pointsModel;
     this._filterModel = filterModel;
     this._defaultSortType = SortType.DEFAULT;
-    // this._destinations = destinations.getDestinations();
-    // this._offers = offers.getOffers();
 
     this._pointPresenters = {};
     this._daysPresenters = [];
@@ -35,10 +33,9 @@ export default class Board {
     this._loadingComponent = new LoadingView();
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
     this._handlePointChange = this._handlePointChange.bind(this);
-    this._handleModelEvent = this._handleModelEvent.bind(this);
-    this._handleViewAction = this._handleViewAction.bind(this);
-
     this._pointData = this._getPoints();
+
+    this._handleModelEvent = this._handleModelEvent.bind(this);
   }
 
   init() {
@@ -101,24 +98,17 @@ export default class Board {
     });
   }
 
-  _defaultRendering() {
+  _defaultRendering(trips = this._getPoints().slice()) {
     if (this._isLoading) {
       this._renderLoading();
       return;
     }
 
-    if (this._pointData) {
-      this._pointData = this._getPoints();
-    }
-    if (this._pointData.length === 0) {
-      this._renderNoPoints();
-    }
-
-    if (this._pointData.length > 0) {
+    if (trips.length > 0) {
       this._renderTripDaysList();
     }
 
-    const sortedData = this._pointData.sort((a, b) => a.dateFrom - b.dateFrom);
+    const sortedData = trips.sort((a, b) => a.dateFrom - b.dateFrom);
 
     getSetDates(sortedData).forEach((date, index) => {
       const normalDate = new Date(date);

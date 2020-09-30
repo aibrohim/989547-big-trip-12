@@ -153,7 +153,7 @@ export default class Stats extends AbstractView {
   constructor(events) {
     super();
 
-    this._events = events.getPoints();
+    this._events = events;
 
     this._moneyChart = null;
     this._transportChart = null;

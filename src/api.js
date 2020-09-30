@@ -21,7 +21,7 @@ export default class Api {
       this.getOffers(),
       this.getDestinations(),
       this.getPoints()
-    ]).then((responses) => responses[2]);
+    ]).then((responses) => responses);
   }
 
   getPoints() {

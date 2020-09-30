@@ -1,6 +1,7 @@
 import Smart from "./smart.js";
 import flatpickr from "flatpickr";
 import he from "he";
+import StoreModels from "./../models/store.js";
 
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 
@@ -231,11 +232,11 @@ const createEventAdder = (data, offers, destinations) => {
 };
 
 export default class EventEditor extends Smart {
-  constructor(data, offers, destinations) {
+  constructor(data) {
     super();
     this._data = data || BLANK_POINT;
-    this._offers = offers;
-    this._destinations = destinations;
+    this._offers = StoreModels.getOffers();
+    this._destinations = StoreModels.getDestinations();
     this._dateFromPicker = null;
     this._dateToPicker = null;
 

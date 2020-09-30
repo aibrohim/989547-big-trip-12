@@ -6,8 +6,7 @@ import LocationCost from "./presenter/location-cost.js";
 import {render, RenderPosition} from "./utils/render.js";
 import PointsModel from "./models/points.js";
 import FiltersModel from "./models/filter.js";
-import DestinationsModel from "./models/offers.js";
-import OffersModel from "./models/destinations.js";
+import StoreModel from "./models/store.js";
 import Statistics from "./view/statistics.js";
 import {MenuItem, UpdateType} from "./consts.js";
 import {remove} from "./utils/render.js";
@@ -24,18 +23,15 @@ const tripInfo = siteHeader.querySelector(`.trip-main`);
 const api = new Api(END_POINT, AUTHORIZATION);
 
 const pointsModel = new PointsModel();
-// const destinationsModel = new DestinationsModel();
-// const offersModel = new OffersModel();
 
 const filterModel = new FiltersModel();
 const boardPresenter = new BoardView(allEvents, pointsModel, filterModel); // , api.getDestinations(), api.getOffers()
 
 const locationCostWrapperComponent = new LocationCostWrapperView();
 
-if (api.getPoints().length > 0) {
-  const locationCost = new LocationCost(locationCostWrapperComponent, pointsModel);
-  locationCost.init();
-}
+render(tripInfo, locationCostWrapperComponent, RenderPosition.AFTERBEGIN);
+
+const locationCost = new LocationCost(locationCostWrapperComponent, pointsModel);
 
 const menuFilterWrapper = tripInfo.querySelector(`.trip-main__trip-controls`);
 const menuFilterFirstTitle = menuFilterWrapper.querySelector(`h2`);
@@ -43,9 +39,10 @@ const menuFilterFirstTitle = menuFilterWrapper.querySelector(`h2`);
 const menuComponent = new MenuView();
 render(menuFilterFirstTitle, menuComponent, RenderPosition.AFTEREND);
 const filterPresenter = new FilterView(menuFilterWrapper, filterModel, pointsModel);
-const statsComponent = new Statistics(pointsModel);
 
-const handleSiteMenuClick = (menuItem) => {
+let statsComponent = null;
+
+const menuClickHandler = (menuItem) => {
   switch (menuItem) {
     case MenuItem.POINTS:
       if (statsComponent) {
@@ -55,12 +52,13 @@ const handleSiteMenuClick = (menuItem) => {
       break;
     case MenuItem.STATISTICS:
       boardPresenter.destroy();
+      statsComponent = new Statistics(pointsModel.getPoints());
       render(allEvents, statsComponent, RenderPosition.AFTEREND);
       break;
   }
 };
 
-menuComponent.setMenuClickHandler(handleSiteMenuClick);
+menuComponent.setMenuClickHandler(menuClickHandler);
 
 filterPresenter.init();
 boardPresenter.init();
@@ -71,9 +69,14 @@ document.querySelector(`.trip-main__event-add-btn`).addEventListener(`click`, (e
 });
 
 api.getAllData()
-  .then((points) => {
-    pointsModel.setPoints(UpdateType.INIT, points);
-    render(tripInfo, locationCostWrapperComponent, RenderPosition.AFTERBEGIN);
+  .then((responses) => {
+    const OFFERS = responses[0];
+    const DESTINATIONS = responses[1];
+    const POINTS = responses[2];
+    StoreModel.setOffers(OFFERS);
+    StoreModel.setDestinations(DESTINATIONS);
+    pointsModel.setPoints(UpdateType.INIT, POINTS);
+    locationCost.init();
   })
   .catch(() => {
     pointsModel.setPoints(UpdateType.INIT, []);

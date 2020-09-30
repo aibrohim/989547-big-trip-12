@@ -11,7 +11,8 @@ const createLocationInfo = (data) => {
   };
 
   const minDate = sortedData[0].dateFrom;
-  const maxDate = sortedData.slice(-1)[0].dateTo;
+  const dataFinishIndex = sortedData.length - 1;
+  const maxDate = sortedData[dataFinishIndex].dateTo;
   const monthBoolean = minDate.getMonth() === maxDate.getMonth();
 
   return `<div class="trip-info__main">

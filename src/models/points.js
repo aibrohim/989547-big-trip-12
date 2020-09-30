@@ -63,7 +63,7 @@ export default class Points extends Observer {
         {
           city: data.destination.name,
           dateFrom: new Date(data.date_from),
-          dataTo: new Date(data.date_to)
+          dateTo: new Date(data.date_to)
         }
     );
 
@@ -79,7 +79,7 @@ export default class Points extends Observer {
         data,
         {
           "date_from": data.dateFrom.toISOString(),
-          "date_to": data.dateFrom.toISOString()
+          "date_to": data.dateTo.toISOString()
         }
     );
 
