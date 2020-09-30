@@ -304,8 +304,6 @@ export default class EventEditor extends Smart {
 
     const changableTypeValue = evt.target.dataset.type.toLowerCase();
 
-    console.log(changableTypeValue);
-
     this.updateData({type: changableTypeValue});
   }
 
