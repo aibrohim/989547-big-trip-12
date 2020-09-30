@@ -37,6 +37,7 @@ export default class Board {
     this._pointData = this._getPoints();
 
     this._handleModelEvent = this._handleModelEvent.bind(this);
+    this._handleViewAction = this._handleViewAction.bind(this);
   }
 
   init() {
@@ -150,8 +151,8 @@ export default class Board {
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.UPDATE_POINT:
-        console.log(this._api);
         this._api.updatePoint(update).then((response) => {
+          console.log(`hello`);
           this._pointsModel.updatePoint(updateType, response);
         });
         break;

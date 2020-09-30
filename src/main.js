@@ -13,7 +13,7 @@ import {remove} from "./utils/render.js";
 import Api from "./api.js";
 
 const AUTHORIZATION = `Basic ib99ali`;
-const END_POINT = `https://12.ecmascript.pages.academy/big-trip/`;
+const END_POINT = `https://12.ecmascript.pages.academy/big-trip`;
 
 const pageMain = document.querySelector(`.page-body__page-main`);
 const allEvents = pageMain.querySelector(`.trip-events`);
