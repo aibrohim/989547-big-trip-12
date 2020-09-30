@@ -1,7 +1,9 @@
 import {getRandomInteger} from "../utils/common.js";
-import {OFFERS, SENTENCES, TYPES_LIST, CITIES} from "../data.js";
+import {TYPES_LIST, CITIES} from "../data.js";
+import destinations from "./destination.js";
+import offers from "./offers.js";
 
-const generateId = () => Date.now() + parseInt(Math.random() * 1000, 10);
+export const generateId = () => Date.now() + parseInt(Math.random() * 1000, 10);
 
 const generateType = () => {
 
@@ -14,27 +16,6 @@ const generateCity = () => {
   const randomIndex = getRandomInteger(0, CITIES.length - 1);
 
   return CITIES[randomIndex];
-};
-
-const generateDescription = () => {
-  const randomIndex = getRandomInteger(1, SENTENCES.length - 1);
-
-  const randomSentences = SENTENCES.slice(0, randomIndex).reduce((total, sentence) => total + ` ` + sentence);
-
-  return randomSentences;
-};
-
-const generateImgLinks = () => {
-  const MIN_IMAGES_NUMBER = 1;
-  const MAX_IMAGES_NUMBER = 10;
-  const images = [];
-
-  for (let i = 0; i < getRandomInteger(MIN_IMAGES_NUMBER, MAX_IMAGES_NUMBER); i++) {
-    let image = `http://picsum.photos/248/152?r=${Math.random()}`;
-    images.push(image);
-  }
-
-  return images;
 };
 
 const generateFromDate = () => {
@@ -68,27 +49,39 @@ const generateCost = () => {
   return getRandomInteger(20, 200);
 };
 
+const generateAvailableOffers = (type) => {
+  const MIN_OFFERS_NUMBER = 1;
+  const arrayType = offers.find((it) => it.type === type).offers;
+  const MAX_OFFERS_NUMBER = arrayType.length - 1 === -1 ? 99 : arrayType.length - 1;
+  const checkedOffers = [];
+
+  if (MAX_OFFERS_NUMBER !== 99) {
+    for (let i = 0; i < getRandomInteger(MIN_OFFERS_NUMBER, MAX_OFFERS_NUMBER); i++) {
+      checkedOffers.push(arrayType[i]);
+    }
+  }
+
+  return checkedOffers;
+};
+
 export const generateTripPoint = () => {
   const id = generateId();
   const type = generateType();
   const city = generateCity();
-  const description = generateDescription();
-  const images = generateImgLinks();
   const dateFrom = generateFromDate();
   const dateTo = generateToDate();
+  const destination = destinations[city];
+  const checkedOffers = generateAvailableOffers(type.toLowerCase());
 
   return {
     id,
     type,
     city,
-    offers: OFFERS.get(type),
-    about: {
-      description,
-      images
-    },
     dateFrom,
     dateTo,
-    cost: generateCost(),
-    isFavourite: Boolean(getRandomInteger(0, 1))
+    "base_price": generateCost(),
+    "is_favorite": Boolean(getRandomInteger(0, 1)),
+    destination,
+    "offers": checkedOffers
   };
 };

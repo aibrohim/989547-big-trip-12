@@ -8,3 +8,19 @@ export const getSetDates = (data) => {
 
   return sortedDates;
 };
+
+export const sortTime = (a, b) => {
+  const firstDate = a.dateFrom - a.dateTo;
+  const secondDate = b.dateFrom - b.dateTo;
+  return firstDate - secondDate;
+};
+
+export const sortPrice = (a, b) => b.base_price - a.base_price;
+
+export const isDatesEqual = (dateA, dateB) => {
+  if (dateA.toString === dateB.toString) {
+    return true;
+  }
+
+  return false;
+};

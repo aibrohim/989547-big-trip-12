@@ -1,7 +1,11 @@
-import TripPointView from "./../view/tripPoint.js";
-import EventEditorView from "./../view/eventEditor.js";
+import TripPointView from "./../view/trip-point.js";
+import EventEditorView from "./../view/event-editor.js";
 import {replace, render, RenderPosition, remove} from "./../utils/render.js";
-import TripPointsList from "../view/tripPointsList.js";
+import TripPointsList from "../view/trip-points-list.js";
+import {UserAction, UpdateType} from "../consts.js";
+import {isDatesEqual} from "../utils/point.js";
+import offers from "./../mock/offers.js";
+import destinations from "./../mock/destination.js";
 
 const Mode = {
   DEFAULT: `DEFAULT`,
@@ -23,7 +27,8 @@ export default class Point {
     this._replaceEditToPoint = this._replaceEditToPoint.bind(this);
     this._onEscPress = this._onEscPress.bind(this);
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
-    this._changeFavouriteHandler = this._changeFavouriteHandler.bind(this);
+    this._changeFavoriteHandler = this._changeFavoriteHandler.bind(this);
+    this._handleDeleteClick = this._handleDeleteClick.bind(this);
   }
 
   init(data) {
@@ -31,14 +36,15 @@ export default class Point {
     const prevPointComponent = this._tripPointComponent;
     const prevEditComponent = this._eventEditorComponent;
 
-    this._tripPointComponent = new TripPointView(data);
-    this._eventEditorComponent = new EventEditorView(data);
+    this._tripPointComponent = new TripPointView(data, offers);
+    this._eventEditorComponent = new EventEditorView(data, offers, destinations);
 
     this._tripPointComponent.setEditClickHandler(this._replacePointToEdit);
     this._eventEditorComponent.setPointOpenHandler(this._replaceEditToPoint);
     this._eventEditorComponent.setEscPressHandler(this._replaceEditToPoint);
-    this._eventEditorComponent.setFavouriteClick(this._changeFavouriteHandler);
+    this._eventEditorComponent.setFavoriteClick(this._changeFavoriteHandler);
     this._eventEditorComponent.setSubmitHandler(this._handleFormSubmit);
+    this._eventEditorComponent.setDeleteHandler(this._handleDeleteClick);
 
     if (prevPointComponent === null || prevEditComponent === null) {
       render(this._parentElement, this._tripPointComponent, RenderPosition.BEFOREEND);
@@ -76,21 +82,44 @@ export default class Point {
     }
   }
 
-  _changeFavouriteHandler() {
+  changeTypeHandler(callback) {
+    this._updateType = callback;
+  }
+
+  _changeFavoriteHandler() {
     this._changeData(
+        UserAction.UPDATE_POINT,
+        UpdateType.PATCH,
         Object.assign(
             {},
             this._data,
             {
-              isFavourite: !this._data.isFavourite
+              "is_favorite": !this._data.is_favorite
             }
         )
     );
   }
 
   _handleFormSubmit(data) {
-    this._changeData(data);
+    const isMinorUpdate = isDatesEqual(this._data.dateFrom, data.dateFrom)
+    || isDatesEqual(this._data.dateTo, data.dateTo)
+    || this._data.cost === data.cost;
+
+    this._changeData(
+        UserAction.UPDATE_POINT,
+        isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
+        data
+    );
     this._replaceEditToPoint();
+  }
+
+  _handleDeleteClick(data) {
+    this._changeData(
+        UserAction.DELETE_POINT,
+        this._updateType ? this._updateType : UpdateType.PATCH,
+        data
+    );
+    remove(this._eventEditorComponent);
   }
 
   resetView() {

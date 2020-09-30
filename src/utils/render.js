@@ -1,8 +1,9 @@
-import Abstract from "./../view/Abstract.js";
+import Abstract from "../view/abstract.js";
 
 export const RenderPosition = {
   AFTERBEGIN: `afterbegin`,
-  BEFOREEND: `beforeend`
+  BEFOREEND: `beforeend`,
+  AFTEREND: `afterend`
 };
 
 export const render = (container, child, place) => {
@@ -23,6 +24,9 @@ export const render = (container, child, place) => {
       break;
     case RenderPosition.AFTEREND:
       container.after(child);
+      break;
+    case RenderPosition.BEFOREBEGIN:
+      container.prepend(child);
       break;
   }
 };
@@ -50,7 +54,7 @@ export const replace = (newChild, oldChild) => {
   const parent = oldChild.parentElement;
 
   if (parent === null || oldChild === null || newChild === null) {
-    throw new Error(`Can't replace unexisting elements`);
+    throw new Error(`Can"t replace unexisting elements`);
   }
 
   parent.replaceChild(newChild, oldChild);

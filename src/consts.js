@@ -8,8 +8,56 @@ export const SortType = {
   PRICE: `price`,
 };
 
-// const firstDate = a.date.finish - a.date.start;
-//     const secondDate = b.date.finish - b.date.start;
-//     return secondDate - firstDate;
+export const UserAction = {
+  UPDATE_POINT: `UPDATE_POINT`,
+  ADD_POINT: `ADD_POINT`,
+  DELETE_POINT: `DELETE_POINT`,
+};
 
-//     return b.cost - a.cost;
+export const UpdateType = {
+  PATCH: `PATCH`,
+  MINOR: `MINOR`,
+  MAJOR: `MAJOR`
+};
+
+export const FilterType = {
+  EVERYTHING: `everything`,
+  FUTURE: `future`,
+  PAST: `past`
+};
+
+export const MenuItem = {
+  ADD_NEW_POINTS: `ADD_NEW_POINT`,
+  POINTS: `POINTS`,
+  STATISTICS: `STATISTICS`
+};
+
+export const EVENT_ACTION = {
+  types: [
+    `Taxi`,
+    `Bus`,
+    `Train`,
+    `Ship`,
+    `Transport`,
+    `Drive`,
+    `Flight`,
+  ],
+  activities: [
+    `Check-in`,
+    `Sightseeing`,
+    `Restaurant`,
+  ],
+};
+
+export const typeToEmoji = {
+  'TAXI': `🚕`,
+  'BUS': `🚌`,
+  'TRAIN': `🚂`,
+  'SHIP': `🛳`,
+  'TRANSPORT': `🚊`,
+  'DRIVE': `🚗`,
+  'FLIGHT': `✈️`,
+  'CHECK-IN': `🏨`,
+  'SIGHTSEEING': `🏛`,
+  'RESTAURANT': `🍴`,
+};

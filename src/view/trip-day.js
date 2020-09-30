@@ -1,4 +1,4 @@
-import AbstractView from "./Abstract.js";
+import AbstractView from "./abstract.js";
 
 const createTripDay = (date, index) => {
   return `<li class="trip-days__item  day">

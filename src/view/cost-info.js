@@ -1,4 +1,4 @@
-import AbstractView from "./Abstract.js";
+import AbstractView from "./abstract.js";
 
 const createCostInfo = (data) => {
   const totalPrice = data.reduce((total, currentData) => {
@@ -13,13 +13,13 @@ const createCostInfo = (data) => {
 };
 
 export default class Cost extends AbstractView {
-  constructor(info) {
+  constructor(data) {
     super();
-    this._info = info;
+    this._data = data;
   }
 
   getTemplate() {
-    return createCostInfo(this._info);
+    return createCostInfo(this._data);
   }
 }
 
