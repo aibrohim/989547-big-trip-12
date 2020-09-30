@@ -19,6 +19,7 @@ const pageMain = document.querySelector(`.page-body__page-main`);
 const allEvents = pageMain.querySelector(`.trip-events`);
 const siteHeader = document.querySelector(`.page-header`);
 const tripInfo = siteHeader.querySelector(`.trip-main`);
+const addNewEventButton = document.querySelector(`.trip-main__event-add-btn`);
 
 const api = new Api(END_POINT, AUTHORIZATION);
 
@@ -49,8 +50,10 @@ const menuClickHandler = (menuItem) => {
         remove(statsComponent);
       }
       board.init();
+      addNewEventButton.disabled = false;
       break;
     case MenuItem.STATISTICS:
+      addNewEventButton.disabled = true;
       board.destroy();
       statsComponent = new Statistics(pointsModel.getPoints());
       render(allEvents, statsComponent, RenderPosition.AFTEREND);
@@ -63,7 +66,7 @@ menuComponent.setMenuClickHandler(menuClickHandler);
 filterPresenter.init();
 board.init();
 
-document.querySelector(`.trip-main__event-add-btn`).addEventListener(`click`, (evt) => {
+addNewEventButton.addEventListener(`click`, (evt) => {
   evt.preventDefault();
   board.createPoint();
 });

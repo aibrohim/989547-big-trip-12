@@ -28,7 +28,6 @@ export const FilterType = {
 };
 
 export const MenuItem = {
-  ADD_NEW_POINTS: `ADD_NEW_POINT`,
   POINTS: `POINTS`,
   STATISTICS: `STATISTICS`
 };
