@@ -138,37 +138,37 @@ const createEventAdder = (data, offers, destinations) => {
 
           <div class="event__type-item">
             <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi" ${type.toLowerCase() === `taxi` ? `checked` : ``}>
-            <label class="event__type-label  event__type-label--taxi" data-type="Taxi" for="event-type-taxi-1">Taxi</label>
+            <label class="event__type-label  event__type-label--taxi" data-type="taxi" for="event-type-taxi-1">Taxi</label>
           </div>
 
           <div class="event__type-item">
             <input id="event-type-bus-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus" ${type.toLowerCase() === `bus` ? `checked` : ``}>
-            <label class="event__type-label  event__type-label--bus" data-type="Bus" for="event-type-bus-1">Bus</label>
+            <label class="event__type-label  event__type-label--bus" data-type="bus" for="event-type-bus-1">Bus</label>
           </div>
 
           <div class="event__type-item">
             <input id="event-type-train-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train" ${type.toLowerCase() === `train` ? `checked` : ``}>
-            <label class="event__type-label  event__type-label--train" data-type="Train" for="event-type-train-1">Train</label>
+            <label class="event__type-label  event__type-label--train" data-type="train" for="event-type-train-1">Train</label>
           </div>
 
           <div class="event__type-item">
             <input id="event-type-ship-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="ship" ${type.toLowerCase() === `ship` ? `checked` : ``}>
-            <label class="event__type-label  event__type-label--ship" data-type="Ship" for="event-type-ship-1">Ship</label>
+            <label class="event__type-label  event__type-label--ship" data-type="ship" for="event-type-ship-1">Ship</label>
           </div>
 
           <div class="event__type-item">
             <input id="event-type-transport-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="transport" ${type.toLowerCase() === `transport` ? `checked` : ``}>
-            <label class="event__type-label  event__type-label--transport" data-type="Transport" for="event-type-transport-1">Transport</label>
+            <label class="event__type-label  event__type-label--transport" data-type="transport" for="event-type-transport-1">Transport</label>
           </div>
 
           <div class="event__type-item">
             <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive" ${type.toLowerCase() === `drive` ? `checked` : ``}>
-            <label class="event__type-label  event__type-label--drive" data-type="Drive" for="event-type-drive-1">Drive</label>
+            <label class="event__type-label  event__type-label--drive" data-type="drive" for="event-type-drive-1">Drive</label>
           </div>
 
           <div class="event__type-item">
             <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" ${type.toLowerCase() === `flight` ? `checked` : ``}>
-            <label class="event__type-label  event__type-label--flight" data-type="Flight" for="event-type-flight-1">Flight</label>
+            <label class="event__type-label  event__type-label--flight" data-type="flight" for="event-type-flight-1">Flight</label>
           </div>
         </fieldset>
 
@@ -177,17 +177,17 @@ const createEventAdder = (data, offers, destinations) => {
 
           <div class="event__type-item">
             <input id="event-type-check-in-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="check-in" ${type.toLowerCase() === `check-in` ? `checked` : ``}>
-            <label class="event__type-label  event__type-label--check-in" data-type="Check-in"  for="event-type-check-in-1">Check-in</label>
+            <label class="event__type-label  event__type-label--check-in" data-type="check-in"  for="event-type-check-in-1">Check-in</label>
           </div>
 
           <div class="event__type-item">
             <input id="event-type-sightseeing-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="sightseeing" ${type.toLowerCase() === `sightseeeing` ? `checked` : ``}>
-            <label class="event__type-label  event__type-label--sightseeing" data-type="Sightseeing" for="event-type-sightseeing-1">Sightseeing</label>
+            <label class="event__type-label  event__type-label--sightseeing" data-type="sightseeing" for="event-type-sightseeing-1">Sightseeing</label>
           </div>
 
           <div class="event__type-item">
             <input id="event-type-restaurant-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="restaurant" ${type.toLowerCase() === `restaurant` ? `checked` : ``}>
-            <label class="event__type-label  event__type-label--restaurant" data-type="Restaurant" for="event-type-restaurant-1">Restaurant</label>
+            <label class="event__type-label  event__type-label--restaurant" data-type="restaurant" for="event-type-restaurant-1">Restaurant</label>
           </div>
         </fieldset>
       </div>
@@ -195,7 +195,7 @@ const createEventAdder = (data, offers, destinations) => {
 
     <div class="event__field-group  event__field-group--destination">
       <label class="event__label  event__type-output" for="event-destination-1">
-        ${type} ${type === `Sightseeing` || type === `Check-in` || type === `Restaurant` ? `in` : `to`}
+        ${type.toLowerCase()} ${type === `sightseeing` || type === `check-in` || type === `restaurant` ? `in` : `to`}
       </label>
       <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${city}" list="destination-list-1" ${isDisabled ? `disabled` : ``}>
       <datalist id="destination-list-1">
@@ -228,7 +228,7 @@ const createEventAdder = (data, offers, destinations) => {
       ${isSaving ? `Saving...` : `Save`}
     </button>
     <button class="event__reset-btn" ${isDisabled ? `disabled` : ``} type="reset">
-      ${id ? `Cancel` : deleteButtonText}
+      ${!id ? `Cancel` : deleteButtonText}
     </button>
 
     ${favouriteIconTemplate}
@@ -302,9 +302,11 @@ export default class EventEditor extends Smart {
       return;
     }
 
-    const changableTypeValue = evt.target.dataset.type;
+    const changableTypeValue = evt.target.dataset.type.toLowerCase();
 
-    this.updateData({type: changableTypeValue.toLowerCase()});
+    console.log(changableTypeValue);
+
+    this.updateData({type: changableTypeValue});
   }
 
   _setDateFromPicker() {
