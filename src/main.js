@@ -12,6 +12,10 @@ import offersMocks from "./mock/offers.js";
 import Statistics from "./view/statistics.js";
 import {MenuItem} from "./consts.js";
 import {remove} from "./utils/render.js";
+import Api from "./api.js";
+
+const AUTHORIZATION = `Basic ib99ali`;
+const END_POINT = `https://12.ecmascript.pages.academy/big-trip/`;
 
 const MAX_TRIPS = 15;
 
@@ -19,6 +23,20 @@ const tripPointsData = new Array(MAX_TRIPS)
   .fill()
   .map(generateTripPoint)
   .sort((a, b) => a.dateFrom - b.dateTo);
+
+const api = new Api(END_POINT, AUTHORIZATION);
+
+api.getPoints().then((points) => {
+  console.log(points);
+});
+
+api.getDestinations().then((destinations) => {
+  console.log(destinations);
+});
+
+api.getOffers().then((offers) => {
+  console.log(offers);
+});
 
 const pointsModel = new PointsModel();
 pointsModel.setPoints(tripPointsData);
