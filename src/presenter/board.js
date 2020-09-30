@@ -102,12 +102,13 @@ export default class Board {
   }
 
   _defaultRendering() {
-    if (this._pointData.length === 0) {
-      this._pointData = this._getPoints();
-    }
     if (this._isLoading) {
       this._renderLoading();
       return;
+    }
+
+    if (this._pointData) {
+      this._pointData = this._getPoints();
     }
     if (this._pointData.length === 0) {
       this._renderNoPoints();
@@ -116,8 +117,6 @@ export default class Board {
     if (this._pointData.length > 0) {
       this._renderTripDaysList();
     }
-
-    console.log(this._pointData);
 
     const sortedData = this._pointData.sort((a, b) => a.dateFrom - b.dateFrom);
 
@@ -200,10 +199,9 @@ export default class Board {
         this._defaultRendering();
         break;
       case UpdateType.INIT:
-        console.log(`salom`);
         this._isLoading = false;
         remove(this._loadingComponent);
-        this.init();
+        this._defaultRendering();
         break;
     }
   }
