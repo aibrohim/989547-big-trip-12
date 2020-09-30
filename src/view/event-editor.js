@@ -87,13 +87,13 @@ const createListOffersTemplate = (offers, isChecked) => {
   );
 };
 
-const createNewOfferTemplate = (offer, isChecked) => {
+const createNewOfferTemplate = (offer, isChecked, isDisabled) => {
   const offerNameId = offer.title.split(` `).join(`-`).toLowerCase();
 
 
   return (
     `<div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offerNameId}" type="checkbox" name="event-offer-${offerNameId}" ${isChecked ? `checked` : ``} value="${offer.title}">
+      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offerNameId}" type="checkbox" name="event-offer-${offerNameId}" ${isChecked ? `checked` : ``} value="${offer.title}" ${isDisabled ? `disabled` : ``}>
       <label class="event__offer-label" for="event-offer-${offerNameId}">
         <span class="event__offer-title">${offer.title}</span>
         &plus;
@@ -113,12 +113,13 @@ const generateDestinationCities = (destinations) => {
 };
 
 const createEventAdder = (data, offers, destinations) => {
-  const {type, city, dateFrom, dateTo, "base_price": basePrice, id} = data;
-  const createOffersList = createListOffersTemplate(getOffers(offers, type), data.offers);
+  const {type, city, dateFrom, dateTo, "base_price": basePrice, id, isDisabled, isSaving, isDeleting} = data;
 
+  const createOffersList = createListOffersTemplate(getOffers(offers, type), data.offers, isDisabled);
   const destinationTemplate = createDestinationTemplate(data);
   const favouriteIconTemplate = createFavoriteInputTemplate(data);
   const rollUpButtonTemplate = createRollupButtonTemplate(data);
+  const deleteButtonText = isDeleting ? `Deleting...` : `Delete`;
 
   const CITIES = generateDestinationCities(destinations);
 
@@ -129,7 +130,7 @@ const createEventAdder = (data, offers, destinations) => {
         <span class="visually-hidden">Choose event type</span>
         <img class="event__type-icon" width="17" height="17" src="img/icons/${type.toLowerCase()}.png" alt="Event type icon">
       </label>
-      <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
+      <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox" ${isDisabled ? `disabled` : ``}>
 
       <div class="event__type-list">
         <fieldset class="event__type-group">
@@ -137,37 +138,37 @@ const createEventAdder = (data, offers, destinations) => {
 
           <div class="event__type-item">
             <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi" ${type.toLowerCase() === `taxi` ? `checked` : ``}>
-            <label class="event__type-label  event__type-label--taxi" data-type="Taxi" for="event-type-taxi-1">Taxi</label>
+            <label class="event__type-label  event__type-label--taxi" data-type="taxi" for="event-type-taxi-1">Taxi</label>
           </div>
 
           <div class="event__type-item">
             <input id="event-type-bus-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus" ${type.toLowerCase() === `bus` ? `checked` : ``}>
-            <label class="event__type-label  event__type-label--bus" data-type="Bus" for="event-type-bus-1">Bus</label>
+            <label class="event__type-label  event__type-label--bus" data-type="bus" for="event-type-bus-1">Bus</label>
           </div>
 
           <div class="event__type-item">
             <input id="event-type-train-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train" ${type.toLowerCase() === `train` ? `checked` : ``}>
-            <label class="event__type-label  event__type-label--train" data-type="Train" for="event-type-train-1">Train</label>
+            <label class="event__type-label  event__type-label--train" data-type="train" for="event-type-train-1">Train</label>
           </div>
 
           <div class="event__type-item">
             <input id="event-type-ship-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="ship" ${type.toLowerCase() === `ship` ? `checked` : ``}>
-            <label class="event__type-label  event__type-label--ship" data-type="Ship" for="event-type-ship-1">Ship</label>
+            <label class="event__type-label  event__type-label--ship" data-type="ship" for="event-type-ship-1">Ship</label>
           </div>
 
           <div class="event__type-item">
             <input id="event-type-transport-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="transport" ${type.toLowerCase() === `transport` ? `checked` : ``}>
-            <label class="event__type-label  event__type-label--transport" data-type="Transport" for="event-type-transport-1">Transport</label>
+            <label class="event__type-label  event__type-label--transport" data-type="transport" for="event-type-transport-1">Transport</label>
           </div>
 
           <div class="event__type-item">
             <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive" ${type.toLowerCase() === `drive` ? `checked` : ``}>
-            <label class="event__type-label  event__type-label--drive" data-type="Drive" for="event-type-drive-1">Drive</label>
+            <label class="event__type-label  event__type-label--drive" data-type="drive" for="event-type-drive-1">Drive</label>
           </div>
 
           <div class="event__type-item">
             <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" ${type.toLowerCase() === `flight` ? `checked` : ``}>
-            <label class="event__type-label  event__type-label--flight" data-type="Flight" for="event-type-flight-1">Flight</label>
+            <label class="event__type-label  event__type-label--flight" data-type="flight" for="event-type-flight-1">Flight</label>
           </div>
         </fieldset>
 
@@ -176,17 +177,17 @@ const createEventAdder = (data, offers, destinations) => {
 
           <div class="event__type-item">
             <input id="event-type-check-in-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="check-in" ${type.toLowerCase() === `check-in` ? `checked` : ``}>
-            <label class="event__type-label  event__type-label--check-in" data-type="Check-in"  for="event-type-check-in-1">Check-in</label>
+            <label class="event__type-label  event__type-label--check-in" data-type="check-in"  for="event-type-check-in-1">Check-in</label>
           </div>
 
           <div class="event__type-item">
             <input id="event-type-sightseeing-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="sightseeing" ${type.toLowerCase() === `sightseeeing` ? `checked` : ``}>
-            <label class="event__type-label  event__type-label--sightseeing" data-type="Sightseeing" for="event-type-sightseeing-1">Sightseeing</label>
+            <label class="event__type-label  event__type-label--sightseeing" data-type="sightseeing" for="event-type-sightseeing-1">Sightseeing</label>
           </div>
 
           <div class="event__type-item">
             <input id="event-type-restaurant-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="restaurant" ${type.toLowerCase() === `restaurant` ? `checked` : ``}>
-            <label class="event__type-label  event__type-label--restaurant" data-type="Restaurant" for="event-type-restaurant-1">Restaurant</label>
+            <label class="event__type-label  event__type-label--restaurant" data-type="restaurant" for="event-type-restaurant-1">Restaurant</label>
           </div>
         </fieldset>
       </div>
@@ -194,9 +195,9 @@ const createEventAdder = (data, offers, destinations) => {
 
     <div class="event__field-group  event__field-group--destination">
       <label class="event__label  event__type-output" for="event-destination-1">
-        ${type} ${type === `Sightseeing` || type === `Check-in` || type === `Restaurant` ? `in` : `to`}
+        ${type.toLowerCase()} ${type === `sightseeing` || type === `check-in` || type === `restaurant` ? `in` : `to`}
       </label>
-      <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${city}" list="destination-list-1">
+      <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${city}" list="destination-list-1" ${isDisabled ? `disabled` : ``}>
       <datalist id="destination-list-1">
         ${CITIES.map((key) => `<option value="${key}"></option>`)}
       </datalist>
@@ -206,12 +207,12 @@ const createEventAdder = (data, offers, destinations) => {
         <label class="visually-hidden" for="event-start-time-1">
           From
         </label>
-        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dateFrom.getDate()}/${dateFrom.getMonth() + 1}/${dateFrom.getFullYear().toString().slice(2, 4)} ${dateFrom.getHours()}:${dateFrom.getMinutes()}">
+        <input class="event__input  event__input--time" id="event-start-time-1" type="text" ${isDisabled ? `disabled` : ``} name="event-start-time" value="${dateFrom.getDate()}/${dateFrom.getMonth() + 1}/${dateFrom.getFullYear().toString().slice(2, 4)} ${dateFrom.getHours()}:${dateFrom.getMinutes()}">
         &mdash;
         <label class="visually-hidden" for="event-end-time-1">
           To
         </label>
-        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dateTo.getDate()}/${dateTo.getMonth() + 1}/${dateTo.getFullYear().toString().slice(2, 4)} ${dateTo.getHours()}:${dateTo.getMinutes()}">
+        <input class="event__input  event__input--time" id="event-end-time-1" type="text" ${isDisabled ? `disabled` : ``} name="event-end-time" value="${dateTo.getDate()}/${dateTo.getMonth() + 1}/${dateTo.getFullYear().toString().slice(2, 4)} ${dateTo.getHours()}:${dateTo.getMinutes()}">
       </div>
 
     <div class="event__field-group  event__field-group--price">
@@ -219,11 +220,16 @@ const createEventAdder = (data, offers, destinations) => {
         <span class="visually-hidden">Price</span>
         &euro;
       </label>
-      <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${basePrice}">
+      <input class="event__input  event__input--price" ${isDisabled ? `disabled` : ``} id="event-price-1" type="number" name="event-price" value="${basePrice}">
     </div>
 
-    <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-    <button class="event__reset-btn" type="reset">${id ? `Delete` : `Cancel`}</button>
+    <button class="event__save-btn  btn  btn--blue" type="submit"
+      ${isDisabled ? `disabled` : ``}>
+      ${isSaving ? `Saving...` : `Save`}
+    </button>
+    <button class="event__reset-btn" ${isDisabled ? `disabled` : ``} type="reset">
+      ${!id ? `Cancel` : deleteButtonText}
+    </button>
 
     ${favouriteIconTemplate}
 
@@ -296,9 +302,9 @@ export default class EventEditor extends Smart {
       return;
     }
 
-    const changableTypeValue = evt.target.dataset.type;
+    const changableTypeValue = evt.target.dataset.type.toLowerCase();
 
-    this.updateData({type: changableTypeValue.toLowerCase()});
+    this.updateData({type: changableTypeValue});
   }
 
   _setDateFromPicker() {

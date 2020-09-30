@@ -10,6 +10,12 @@ const Mode = {
   EDITING: `EDITING`
 };
 
+export const State = {
+  SAVING: `SAVING`,
+  DELETING: `DELETING`,
+  ABORTING: `ABORTING`,
+};
+
 export default class Point {
   constructor(parentElement, changeData, changeMode) {
     this._changeData = changeData;
@@ -114,10 +120,29 @@ export default class Point {
   _handleDeleteClick(data) {
     this._changeData(
         UserAction.DELETE_POINT,
-        this._updateType ? this._updateType : UpdateType.PATCH,
+        UpdateType.MINOR,
         data
     );
     remove(this._eventEditorComponent);
+  }
+
+  setViewState(state) {
+    const resetFormState = () => {
+      this._eventEditorComponent.updateData({isSaving: false, isDisabled: false, isDeleting: false});
+    };
+
+    switch (state) {
+      case State.SAVING:
+        this._eventEditorComponent.updateData({isSaving: true, isDisabled: true});
+        break;
+      case State.DELETING:
+        this._eventEditorComponent.updateData({isDeleting: true, isDisabled: true});
+        break;
+      case State.ABORTING:
+        this._tripPointComponent.shake(resetFormState);
+        this._eventEditorComponent.shake(resetFormState);
+        break;
+    }
   }
 
   resetView() {

@@ -3,7 +3,7 @@ import TripDaysListView from "./../view/trip-days-list.js";
 import TripDayView from "./../view/trip-day.js";
 import TripPointsListView from "./../view/trip-points-list.js";
 import NoPointView from "./../view/no-point.js";
-import Point from "./point.js";
+import Point, {State as PointPresenterViewState} from "./point.js";
 import PointAdder from "./new-point.js";
 import {render, RenderPosition, remove} from "./../utils/render.js";
 import {getSetDates} from "./../utils/point.js";
@@ -151,15 +151,30 @@ export default class Board {
   _handleViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.UPDATE_POINT:
+        this._pointPresenters[update.id].setViewState(PointPresenterViewState.SAVING);
         this._api.updatePoint(update).then((response) => {
           this._pointsModel.updatePoint(updateType, response);
+        }).catch(() => {
+          this._taskPresenter[update.id].setViewState(PointPresenterViewState.ABORTING);
         });
         break;
       case UserAction.ADD_POINT:
-        this._pointsModel.addPoint(updateType, update);
+        this._pointAdderPresenter.setSaving();
+        this._api.addPoint(update)
+          .then((response) => {
+            this._pointsModel.addPoint(updateType, response);
+          })
+          .catch(() => {
+            this._pointAdderPresenter.setAborting();
+          });
         break;
       case UserAction.DELETE_POINT:
-        this._pointsModel.deletePoint(updateType, update);
+        this._pointPresenters[update.id].setViewState(PointPresenterViewState.DELETING);
+        this._api.deletePoint(update).then(() => {
+          this._pointsModel.deletePoint(updateType, update);
+        }).catch(() => {
+          this._taskPresenter[update.id].setViewState(PointPresenterViewState.ABORTING);
+        });
         break;
     }
   }

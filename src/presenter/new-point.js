@@ -1,7 +1,6 @@
 import EventAdderView from "../view/event-editor.js";
 import {render, RenderPosition, remove} from "../utils/render.js";
 import {UserAction, UpdateType} from "../consts.js";
-import {generateId} from "../utils/point.js";
 
 export default class Point {
   constructor(parentElement, changeData) {
@@ -40,7 +39,7 @@ export default class Point {
     this._changeData(
         UserAction.ADD_POINT,
         UpdateType.MAJOR,
-        Object.assign({id: generateId()}, data)
+        data
     );
     this.destroy();
   }
@@ -48,6 +47,22 @@ export default class Point {
   _handleDeleteClick() {
     remove(this._eventAdderComponent);
     this.destroy();
+  }
+
+  setAborting() {
+    const resetFormState = () => {
+      this._eventAdderComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false
+      });
+    };
+
+    this._eventAdderComponent.shake(resetFormState);
+  }
+
+  setSaving() {
+    this._eventAdderComponent.updateData({isSaving: true, isDisabled: true});
   }
 
   destroy() {
