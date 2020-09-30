@@ -13,7 +13,7 @@ import {filter} from "./../utils/filter.js";
 import LoadingView from "./../view/loading.js";
 
 export default class Board {
-  constructor(boardContainer, pointsModel, filterModel, destinations, offers) {
+  constructor(boardContainer, pointsModel, filterModel) {
     this._boardContainer = boardContainer;
     this._pointsModel = pointsModel;
     this._filterModel = filterModel;

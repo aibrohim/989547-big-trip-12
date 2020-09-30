@@ -25,7 +25,7 @@ const api = new Api(END_POINT, AUTHORIZATION);
 const pointsModel = new PointsModel();
 
 const filterModel = new FiltersModel();
-const boardPresenter = new BoardView(allEvents, pointsModel, filterModel); // , api.getDestinations(), api.getOffers()
+const boardPresenter = new BoardView(allEvents, pointsModel, filterModel);
 
 const locationCostWrapperComponent = new LocationCostWrapperView();
 
@@ -82,10 +82,3 @@ api.getAllData()
     pointsModel.setPoints(UpdateType.INIT, []);
   });
 
-// api.getDestinations().then((destinations) => {
-//   destinationsModel.setDestinations(destinations);
-// });
-
-// api.getOffers().then((offers) => {
-//   offersModel.setOffers(offers);
-// });

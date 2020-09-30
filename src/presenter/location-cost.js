@@ -17,8 +17,6 @@ export default class LocationCost {
 
     this._pointsModel.addObserver(this._handleModelEvent);
 
-    console.log(this._parentElement);
-
     this._locationInfoComponent = new LocationInfoView(pointsData);
     this._costInfoComponent = new CostInfoView(pointsData);
 
