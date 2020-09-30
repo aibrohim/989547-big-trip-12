@@ -116,6 +116,8 @@ export default class Board {
 
     const data = this._getPoints().sort((a, b) => a.dateFrom - b.dateFrom);
 
+    console.log(data);
+
     getSetDates(data).forEach((date, index) => {
       const normalDate = new Date(date);
       const filtredData = data.slice().filter((dataItem) => {
