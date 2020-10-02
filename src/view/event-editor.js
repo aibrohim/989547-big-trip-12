@@ -434,7 +434,7 @@ export default class EventEditor extends Smart {
 
   setSubmitHandler(callback) {
     this._callback.saveHandler = callback;
-    this.getElement().addEventListener(`submit`, this._saveHandler);
+    this.getElement().querySelector(`.event__save-btn`).addEventListener(`click`, this._saveHandler);
   }
 
   _deleteHandler(evt) {

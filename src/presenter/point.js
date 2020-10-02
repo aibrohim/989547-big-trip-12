@@ -137,7 +137,6 @@ export default class Point {
         isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
         data
     );
-    this._replaceEditToPoint();
   }
 
   _handleDeleteClick(data) {
