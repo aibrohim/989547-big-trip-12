@@ -2,8 +2,6 @@ import AbstractView from "./abstract.js";
 import moment from "moment";
 
 const createLocationInfo = (data) => {
-  const firstMonthLetterOfString = 3;
-  const lastMonthLetterOfString = 7;
   const sortedData = data.slice().sort((a, b) => a.dateFrom - b.dateFrom);
 
   const directions = () => {

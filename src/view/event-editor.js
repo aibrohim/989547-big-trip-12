@@ -1,6 +1,5 @@
 import flatpickr from "flatpickr";
 import he from "he";
-import moment from "moment";
 import Smart from "./smart.js";
 import StoreModels from "./../models/store.js";
 
@@ -114,7 +113,7 @@ const generateDestinationCities = (destinations) => {
 };
 
 const createEventAdder = (data, offers, destinations) => {
-  const {type, city, dateFrom, dateTo, "base_price": basePrice, id, isDisabled, isSaving, isDeleting} = data;
+  const {type, city, "base_price": basePrice, id, isDisabled, isSaving, isDeleting} = data;
 
   const createOffersList = createListOffersTemplate(getOffers(offers, type), data.offers, isDisabled);
   const destinationTemplate = createDestinationTemplate(data);
@@ -304,7 +303,6 @@ export default class EventEditor extends Smart {
     }
 
     const changableTypeValue = evt.target.dataset.type;
-    console.log(changableTypeValue);
 
     this.updateData({type: changableTypeValue});
   }
