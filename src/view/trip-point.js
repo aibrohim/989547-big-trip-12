@@ -1,11 +1,14 @@
 import AbstractView from "./abstract.js";
 
+const MIN_OFFERS_COUNT = 0;
+const MAX_OFFERS_COUNT = 3;
+
 const createListOffersTemplate = (offers) => {
   if (offers === null || offers.length === 0) {
     return ``;
   }
 
-  return offers.slice(0, 3).map((offer) => {
+  return offers.slice(MIN_OFFERS_COUNT, MAX_OFFERS_COUNT).map((offer) => {
     return `<li class="event__offer">
           <span class="event__offer-title">${offer.title}</span>
           &plus;
