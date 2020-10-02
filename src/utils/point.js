@@ -1,6 +1,6 @@
-export const getSetDates = (data) => {
+export const getSetDates = (points) => {
   const unsortedDatesMap = new Map();
-  data.forEach((item) => {
+  points.forEach((item) => {
     const startDate = item.dateFrom;
     unsortedDatesMap.set(new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate()).toString(), item);
   });

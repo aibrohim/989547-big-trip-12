@@ -1,12 +1,13 @@
-import Smart from "./smart.js";
 import flatpickr from "flatpickr";
 import he from "he";
+import moment from "moment";
+import Smart from "./smart.js";
 import StoreModels from "./../models/store.js";
 
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 
 const BLANK_POINT = {
-  "type": `Taxi`,
+  "type": `taxi`,
   "city": ``,
   "price": 0,
   "offers": [],
@@ -207,12 +208,12 @@ const createEventAdder = (data, offers, destinations) => {
         <label class="visually-hidden" for="event-start-time-1">
           From
         </label>
-        <input class="event__input  event__input--time" id="event-start-time-1" type="text" ${isDisabled ? `disabled` : ``} name="event-start-time" value="${dateFrom.getDate()}/${dateFrom.getMonth() + 1}/${dateFrom.getFullYear().toString().slice(2, 4)} ${dateFrom.getHours()}:${dateFrom.getMinutes()}">
+        <input class="event__input  event__input--time" id="event-start-time-1" type="text" ${isDisabled ? `disabled` : ``} name="event-start-time">
         &mdash;
         <label class="visually-hidden" for="event-end-time-1">
           To
         </label>
-        <input class="event__input  event__input--time" id="event-end-time-1" type="text" ${isDisabled ? `disabled` : ``} name="event-end-time" value="${dateTo.getDate()}/${dateTo.getMonth() + 1}/${dateTo.getFullYear().toString().slice(2, 4)} ${dateTo.getHours()}:${dateTo.getMinutes()}">
+        <input class="event__input  event__input--time" id="event-end-time-1" type="text" ${isDisabled ? `disabled` : ``} name="event-end-time">
       </div>
 
     <div class="event__field-group  event__field-group--price">
@@ -302,7 +303,8 @@ export default class EventEditor extends Smart {
       return;
     }
 
-    const changableTypeValue = evt.target.dataset.type.toLowerCase();
+    const changableTypeValue = evt.target.dataset.type;
+    console.log(changableTypeValue);
 
     this.updateData({type: changableTypeValue});
   }
@@ -316,10 +318,11 @@ export default class EventEditor extends Smart {
     this._dateFromPicker = flatpickr(
         this.getElement().querySelector(`#event-start-time-1`),
         {
-          enableTime: true,
-          defaultDate: this._data.dateFrom,
-          dateFormat: `d/m/y H:i`,
-          onChange: this._startDateChangeHandler
+          "enableTime": true,
+          "maxDate": this._data.dateTo,
+          "defaultDate": this._data.dateFrom,
+          "dateFormat": `d/m/y H:i`,
+          "onChange": this._startDateChangeHandler
         }
     );
   }
@@ -333,10 +336,11 @@ export default class EventEditor extends Smart {
     this._dateToPicker = flatpickr(
         this.getElement().querySelector(`#event-end-time-1`),
         {
-          enableTime: true,
-          defaultDate: this._data.dateTo,
-          dateFormat: `d/m/y H:i`,
-          onChange: this._endDateChangeHandler
+          "enableTime": true,
+          "defaultDate": this._data.dateTo,
+          "minDate": this._data.dateFrom,
+          "dateFormat": `d/m/y H:i`,
+          "onChange": this._endDateChangeHandler
         }
     );
   }

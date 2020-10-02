@@ -1,6 +1,9 @@
 import AbstractView from "./abstract.js";
+import moment from "moment";
 
 const createLocationInfo = (data) => {
+  const firstMonthLetterOfString = 3;
+  const lastMonthLetterOfString = 7;
   const sortedData = data.slice().sort((a, b) => a.dateFrom - b.dateFrom);
 
   const directions = () => {
@@ -18,7 +21,7 @@ const createLocationInfo = (data) => {
   return `<div class="trip-info__main">
               <h1 class="trip-info__title">${directions()}</h1>
 
-              <p class="trip-info__dates">${minDate.toString().slice(3, 7)} ${minDate.getDate()}&nbsp;&mdash;&nbsp;${monthBoolean ? `` : maxDate.toString().slice(3, 7)}&nbsp;${maxDate.getDate()}</p>
+              <p class="trip-info__dates">${moment(minDate).format(`MMM`)} ${minDate.getDate()}&nbsp;&mdash;&nbsp;${monthBoolean ? `` : moment(maxDate).format(`MMM`)}&nbsp;${maxDate.getDate()}</p>
             </div>`;
 };
 
