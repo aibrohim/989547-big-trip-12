@@ -145,7 +145,6 @@ export default class Point {
         UpdateType.MINOR,
         data
     );
-    remove(this._eventEditorComponent);
   }
 
   resetView() {

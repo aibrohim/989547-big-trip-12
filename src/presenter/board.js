@@ -172,11 +172,12 @@ export default class Board {
         break;
       case UserAction.DELETE_POINT:
         this._pointPresenters[update.id].setViewState(PointPresenterViewState.DELETING);
-        this._api.deletePoint(update).then(() => {
-          this._pointsModel.deletePoint(updateType, update);
-        }).catch(() => {
-          this._taskPresenter[update.id].setViewState(PointPresenterViewState.ABORTING);
-        });
+        this._api.deletePoint(update)
+          .then(() => {
+            this._pointsModel.deletePoint(updateType, update);
+          }).catch(() => {
+            this._taskPresenter[update.id].setViewState(PointPresenterViewState.ABORTING);
+          });
         break;
     }
   }

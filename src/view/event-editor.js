@@ -248,9 +248,9 @@ const createEventAdder = (data, offers, destinations) => {
 };
 
 export default class EventEditor extends Smart {
-  constructor(point = BLANK_POINT) {
+  constructor(point) {
     super();
-    this._data = point;
+    this._data = point || BLANK_POINT;
     this._offers = StoreModels.getOffers();
     this._destinations = StoreModels.getDestinations();
     this._dateFromPicker = null;
