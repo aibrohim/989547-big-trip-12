@@ -153,21 +153,21 @@ export default class Board {
       case UserAction.UPDATE_POINT:
         this._pointPresenters[update.id].setViewState(PointPresenterViewState.SAVING);
         this._api.updatePoint(update)
-          .catch(() => {
-            this._taskPresenter[update.id].setViewState(PointPresenterViewState.ABORTING);
-          })
           .then((response) => {
             this._pointsModel.updatePoint(updateType, response);
+          })
+          .catch(() => {
+            this._taskPresenter[update.id].setViewState(PointPresenterViewState.ABORTING);
           });
         break;
       case UserAction.ADD_POINT:
         this._pointAdderPresenter.setSaving();
         this._api.addPoint(update)
-          .catch(() => {
-            this._pointAdderPresenter.setAborting();
-          })
           .then((response) => {
             this._pointsModel.addPoint(updateType, response);
+          })
+          .catch(() => {
+            this._pointAdderPresenter.setAborting();
           });
         break;
       case UserAction.DELETE_POINT:
