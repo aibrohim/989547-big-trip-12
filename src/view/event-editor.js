@@ -248,9 +248,9 @@ const createEventAdder = (data, offers, destinations) => {
 };
 
 export default class EventEditor extends Smart {
-  constructor(data) {
+  constructor(point = BLANK_POINT) {
     super();
-    this._data = data || BLANK_POINT;
+    this._data = point;
     this._offers = StoreModels.getOffers();
     this._destinations = StoreModels.getDestinations();
     this._dateFromPicker = null;
@@ -426,16 +426,6 @@ export default class EventEditor extends Smart {
     this.getElement().addEventListener(`submit`, this._pointEscPress);
   }
 
-  static parsePointToData(point, offers) {
-    return Object.assign(
-        {},
-        point,
-        {
-          "offers": getOffers(offers, point.type)
-        }
-    );
-  }
-
   _saveHandler(evt) {
     evt.preventDefault();
     this._offerClickHandler();
@@ -444,7 +434,7 @@ export default class EventEditor extends Smart {
 
   setSubmitHandler(callback) {
     this._callback.saveHandler = callback;
-    this.getElement().querySelector(`.event__save-btn`).addEventListener(`click`, this._saveHandler);
+    this.getElement().addEventListener(`submit`, this._saveHandler);
   }
 
   _deleteHandler(evt) {

@@ -60,7 +60,30 @@ export default class Point {
     }
 
     if (this._mode === Mode.EDITING) {
-      replace(this._eventEditorComponent, prevEditComponent);
+      replace(this._tripPointComponent, prevEditComponent);
+      this._mode = Mode.DEFAULT;
+    }
+
+    remove(prevPointComponent);
+    remove(prevEditComponent);
+  }
+
+  setViewState(state) {
+    const resetFormState = () => {
+      this._eventEditorComponent.updateData({isSaving: false, isDisabled: false, isDeleting: false});
+    };
+
+    switch (state) {
+      case State.SAVING:
+        this._eventEditorComponent.updateData({isSaving: true, isDisabled: true});
+        break;
+      case State.DELETING:
+        this._eventEditorComponent.updateData({isDeleting: true, isDisabled: true});
+        break;
+      case State.ABORTING:
+        this._tripPointComponent.shake(resetFormState);
+        this._eventEditorComponent.shake(resetFormState);
+        break;
     }
   }
 
@@ -124,25 +147,6 @@ export default class Point {
         data
     );
     remove(this._eventEditorComponent);
-  }
-
-  setViewState(state) {
-    const resetFormState = () => {
-      this._eventEditorComponent.updateData({isSaving: false, isDisabled: false, isDeleting: false});
-    };
-
-    switch (state) {
-      case State.SAVING:
-        this._eventEditorComponent.updateData({isSaving: true, isDisabled: true});
-        break;
-      case State.DELETING:
-        this._eventEditorComponent.updateData({isDeleting: true, isDisabled: true});
-        break;
-      case State.ABORTING:
-        this._tripPointComponent.shake(resetFormState);
-        this._eventEditorComponent.shake(resetFormState);
-        break;
-    }
   }
 
   resetView() {
